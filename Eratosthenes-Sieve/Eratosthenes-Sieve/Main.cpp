@@ -1,5 +1,4 @@
 #include <iostream>
-#include "Eratosthenes.h"
 #include "BitContainer.h"
 
 
