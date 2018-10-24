@@ -85,6 +85,13 @@ BitContainer::BitProxy::BitProxy(size_t* data, size_t index) :
 {}
 
 
+BitContainer::BitProxy& BitContainer::BitProxy::operator=(const BitProxy& other)
+{
+	operator=((const bool)other);
+	return *this;
+}
+
+
 BitContainer::BitProxy& BitContainer::BitProxy::operator=(bool bit)
 {
 	if (!bit)

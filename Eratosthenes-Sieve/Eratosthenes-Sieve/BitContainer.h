@@ -6,6 +6,7 @@ private:
 	class BitProxy {
 	public:
 		BitProxy(size_t* data, size_t index);
+		BitProxy& operator=(const BitProxy& other);
 		BitProxy& operator=(bool bit);
 		operator const bool() const;
 
