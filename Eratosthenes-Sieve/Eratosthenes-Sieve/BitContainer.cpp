@@ -5,7 +5,11 @@
 const size_t BITS_IN_SIZE_T = sizeof(size_t) << 3;
 
 
-BitContainer::BitContainer() : data(nullptr), size(0), bitCount(0) {}
+BitContainer::BitContainer() : 
+	data(nullptr), 
+	size(0), 
+	bitCount(0) 
+{}
 
 
 BitContainer::BitContainer(const BitContainer& other)
@@ -28,7 +32,10 @@ BitContainer::~BitContainer()
 }
 
 
-BitContainer::BitContainer(size_t size) : data(nullptr), size(0), bitCount(0)
+BitContainer::BitContainer(size_t size) : 
+	data(nullptr), 
+	size(0), 
+	bitCount(0)
 {
 	this->setCapacity(size);
 }
@@ -46,35 +53,11 @@ BitContainer& BitContainer::setCapacity(size_t numOfBits)
 }
 
 
-BitContainer& BitContainer::setBit(size_t index, bool bit)
+BitContainer::BitProxy BitContainer::operator[](size_t index)
 {
-	if (index >= bitCount)
-		throw std::out_of_range("[BitContainer]: Accessing index out of bounds!");
-
-	size_t element = (index + 1) / BITS_IN_SIZE_T;
-	index %= BITS_IN_SIZE_T;
-	size_t mask = 1 << (BITS_IN_SIZE_T - index);
-
-	if (!bit) {
-		mask = ~mask;
-		this->data[element] &= mask;
-	} else {
-		this->data[element] |= mask;
-	}
-
-	return *this;
-}
-
-
-const bool BitContainer::operator[](size_t index) const
-{
-	if (index >= bitCount)
-		throw std::out_of_range("[BitContainer]: Accessing index out of bounds!");
-
-	size_t element = (index + 1) / BITS_IN_SIZE_T;
-	index %= BITS_IN_SIZE_T;
-	size_t mask = 1 << (BITS_IN_SIZE_T - index);
-	return this->data[element] & mask;
+	if (index < bitCount)
+		return BitProxy(&this->data[(index + 1) / BITS_IN_SIZE_T], index % BITS_IN_SIZE_T);
+	throw std::out_of_range("[BitContainer]: Accessing bit out of range!");
 }
 
 
@@ -93,4 +76,27 @@ void BitContainer::clear()
 	delete[] this->data;
 	this->data = nullptr;
 	this->size = 0;
+}
+
+
+BitContainer::BitProxy::BitProxy(size_t* data, size_t index) : 
+	data(data), 
+	mask(1 << (BITS_IN_SIZE_T - index))
+{}
+
+
+BitContainer::BitProxy& BitContainer::BitProxy::operator=(bool bit)
+{
+	if (!bit)
+		*data &= ~mask;
+	else
+		*data |= mask;
+
+	return *this;
+}
+
+
+BitContainer::BitProxy::operator const bool() const
+{
+	return (mask & *data);
 }

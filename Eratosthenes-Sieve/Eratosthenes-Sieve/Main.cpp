@@ -15,7 +15,7 @@ int main() {
 	BitContainer composite(maxNum + 1);
 	for (size_t i = 2; i <= maxNum; ++i)
 		for (size_t j = i * i; !composite[i] && j <= maxNum; j += i)
-			composite.setBit(j, 1);
+			composite[j] = 1;
 
 	std::cout << "\nAll primes up to " << maxNum << " are:\n";
 	for (size_t i = 2; i <= maxNum; ++i)
