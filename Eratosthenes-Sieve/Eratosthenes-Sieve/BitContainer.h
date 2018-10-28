@@ -2,7 +2,19 @@
 #define __BIT_CONTAINER_INCLUDED__
 
 class BitContainer {
+private:
+	class BitProxy {
+	public:
+		BitProxy(size_t* data, size_t index);
+		BitProxy& operator=(const BitProxy& other);
+		BitProxy& operator=(bool bit);
+		operator const bool() const;
 
+	private:
+		size_t* data;
+		size_t mask;
+	};
+	
 public:
 	BitContainer();
 	BitContainer(const BitContainer& other);
@@ -15,17 +27,13 @@ public:
 	// Changing the capacity of the container
 	BitContainer& setCapacity(size_t numOfBits);
 
-	// Setting a bit
-	BitContainer& setBit(size_t index, bool bit);
-
-	// Reading from the Container
-	const bool operator[](size_t index) const;
+	// Setting and Getting bits via the Proxy
+	BitProxy operator[](size_t index);
 
 private:
 	size_t* data;
 	size_t size;
 	size_t bitCount;
-
 
 	void copy(const BitContainer& other);
 	void clear();
