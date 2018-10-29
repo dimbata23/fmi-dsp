@@ -36,10 +36,11 @@ public:
 	private:
 
 		Node* pNode;
+		bool isFwdIter;
 
 	public:
 
-		Iterator(Node* pNode) : pNode(pNode) {}
+		Iterator(Node* pNode, bool isFwdIter = true) : pNode(pNode), isFwdIter(isFwdIter) {}
 
 		T& operator*() { 
 			if (pNode)
@@ -53,12 +54,29 @@ public:
 			throw std::logic_error("[List::Iterator]: Iterator was a nullptr!");
 		}
 
-		Iterator& operator++() { 
-			pNode = pNode->pNext; 
-			return *this; 
+		Iterator& operator++() {
+			if (isFwdIter)
+				pNode = pNode->pNext;
+			else
+				pNode = pNode->pPrev;
+			return *this;
 		}
 
 		Iterator operator++(int) {
+			Iterator result(*this);
+			++(*this);
+			return result;
+		}
+
+		Iterator& operator--() {
+			if (isFwdIter)
+				pNode = pNode->pPrev;
+			else
+				pNode = pNode->pNext;
+			return *this;
+		}
+
+		Iterator operator--(int) {
 			Iterator result(*this);
 			++(*this);
 			return result;
@@ -73,6 +91,9 @@ public:
 
 	Iterator begin() const { return Iterator(head); }
 	Iterator end() const { return Iterator(nullptr); }
+
+	Iterator rbegin() const { return Iterator(tail, false); }
+	Iterator rend() const { return Iterator(nullptr); }
 
 	void pushBack(const T& elem);
 	void pushFront(const T& elem);
