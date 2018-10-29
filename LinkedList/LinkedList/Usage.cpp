@@ -4,11 +4,8 @@
 int main() {
 
 	// Create list
-	List<int> list;
+	List<int> list = { 4, 7, 2, 8 };
 	list.pushBack(5);
-	list.pushBack(2);
-	list.pushBack(10);
-	list.pushFront(-5);
 	list.pushFront(-10);
 
 	std::cout << "Elements: \n";
@@ -22,12 +19,12 @@ int main() {
 	}
 	std::cout << '\n';
 	
-	// Get an Iterator to the element 5
-	List<int>::Iterator it = list.find(5);
+	// Get an Iterator to the element 2
+	List<int>::Iterator it = list.find(2);
 
-	std::cout << "\nRemoving all elements after 5 (including 5):\n";
+	std::cout << "\nRemoving all elements after 2 (including 2):\n";
 
-	// Remove every element after it (including 5)
+	// Remove every element after it (including 2)
 	List<int>::Iterator lastIt = list.end();
 	while (it != lastIt)
 		list.remove(it);
