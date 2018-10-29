@@ -132,6 +132,15 @@ public:
 	// returns an Iterator bointing to the new element
 	Iterator insertAt(size_t index, const T& elem);
 
+	// Executes a function on each and every element of the list
+	// returns the list
+	template <typename Pred>
+	List<T>& forEach(Pred func);
+
+	// returns a new list with the all the elements from the list that fulfill the Predicate
+	template <typename Pred>
+	List<T> filter(Pred func) const;
+
 private:
 
 	void copy(const List<T>& other);
@@ -161,7 +170,10 @@ List<T>::List() :
 
 
 template<class T>
-List<T>::List(const List<T>& other)
+List<T>::List(const List<T>& other) :
+	head(nullptr),
+	tail(nullptr),
+	size(0)
 {
 	copy(other);
 }
@@ -171,6 +183,28 @@ template<class T>
 List<T>::~List()
 {
 	clear();
+}
+
+
+template<class T>
+template<typename Pred>
+List<T>& List<T>::forEach(Pred func)
+{
+	for (T& i : *this)
+		i = func(i);
+	return *this;
+}
+
+
+template<class T>
+template<typename Pred>
+List<T> List<T>::filter(Pred func) const
+{
+	List<T> result;
+	for (const T& i : *this)
+		if (func(i))
+			result.pushBack(i);
+	return result;
 }
 
 
@@ -403,7 +437,8 @@ void List<T>::copy(const List<T>& other)
 {
 	try {
 		List<T>::Iterator ptr = other.begin();
-		while (ptr) {
+		List<T>::Iterator ptrEnd = other.end();
+		while (ptr != ptrEnd) {
 			this->pushBack(*ptr);
 			++ptr;
 		}

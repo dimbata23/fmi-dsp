@@ -14,11 +14,11 @@ int main() {
 	std::cout << "Elements: \n";
 
 	// First way of Printing
-	List<int>::Iterator startIt = list.begin();
+	List<int>::Iterator cIt = list.begin();
 	List<int>::Iterator endIt = list.end();
-	while (startIt != endIt) {
-		std::cout << *startIt << '\t';
-		++startIt;
+	while (cIt != endIt) {
+		std::cout << *cIt << '\t';
+		++cIt;
 	}
 	std::cout << '\n';
 	
@@ -58,6 +58,28 @@ int main() {
 		std::cout << *iter << '\t';
 		++iter;
 	}
+	std::cout << '\n';
+
+	// Filter usage
+	List<int> oddList = list.filter([](int x) { return x % 2 != 0; });
+
+	std::cout << "\nOnly odd numbers:\n";
+
+	// Print the new list
+	for (int i : oddList)
+		std::cout << i << '\t';
+	std::cout << '\n';
+
+	std::cout << "\nAll numbers squared:\n";
+
+	// forEach usage
+	list.forEach([](int x) { return x * x; });
+
+	// Print List
+	for (int p : list)
+		std::cout << p << '\t';
+	std::cout << '\n';
+
 	std::cout << '\n';
 
 	return 0;
