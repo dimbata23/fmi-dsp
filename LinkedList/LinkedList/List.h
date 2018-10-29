@@ -113,7 +113,7 @@ public:
 
 private:
 
-	void copy(const List<T> other);
+	void copy(const List<T>& other);
 	void clear();
 	Iterator remove(const Iterator& it, bool moveIt);
 
@@ -156,8 +156,11 @@ List<T>::~List()
 template<class T>
 List<T>& List<T>::operator=(const List<T> other)
 {
-	clear();
-	copy(other);
+	if (this != &other) {
+		clear();
+		copy(other);
+	}
+	return *this;
 }
 
 
@@ -375,7 +378,7 @@ typename List<T>::Iterator List<T>::insertAt(size_t index, const T& elem)
 
 
 template<class T>
-void List<T>::copy(const List<T> other)
+void List<T>::copy(const List<T>& other)
 {
 	try {
 		List<T>::Iterator ptr = other.begin();
