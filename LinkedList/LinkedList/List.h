@@ -11,6 +11,8 @@ public:
 	List<T>& operator=(const List<T> other);
 	~List<T>();
 
+	List<T>(const std::initializer_list<T>& l);
+
 private:
 
 	struct Node {
@@ -183,6 +185,17 @@ template<class T>
 List<T>::~List()
 {
 	clear();
+}
+
+
+template<class T>
+List<T>::List(const std::initializer_list<T>& l) :
+	head(nullptr),
+	tail(nullptr),
+	size(0)
+{
+	for (const T& i : l)
+		pushBack(i);
 }
 
 
