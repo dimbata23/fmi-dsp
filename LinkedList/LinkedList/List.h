@@ -97,18 +97,18 @@ public:
 	Iterator rbegin() const { return Iterator(tail, false); }
 	Iterator rend() const { return Iterator(nullptr); }
 
-	void pushBack(const T& elem);
-	void pushFront(const T& elem);
-	void popBack();
-	void popFront();
+	void push_back(const T& elem);
+	void push_front(const T& elem);
+	void pop_back();
+	void pop_front();
 
 	T& front();
 	const T& front() const;
 	T& back();
 	const T& back() const;
 
-	size_t getSize() const { return size; }
-	bool isEmpty() const { return size == 0; }
+	size_t size() const { return length; }
+	bool empty() const { return length == 0; }
 
 	// Searches the list for a given element, if found
 	// returns an Iterator to that element, else Iterator to nullptr
@@ -137,7 +137,7 @@ public:
 	// Executes a function on each and every element of the list
 	// returns the list
 	template <typename Pred>
-	List<T>& forEach(Pred func);
+	List<T>& for_each(Pred func);
 
 	// returns a new list with the all the elements from the list that fulfill the Predicate
 	template <typename Pred>
@@ -153,7 +153,7 @@ private:
 
 	Node* head;
 	Node* tail;
-	size_t size;
+	size_t length;
 
 };
 
@@ -167,7 +167,7 @@ template<class T>
 List<T>::List() : 
 	head(nullptr), 
 	tail(nullptr), 
-	size(0)
+	length(0)
 {}
 
 
@@ -175,7 +175,7 @@ template<class T>
 List<T>::List(const List<T>& other) :
 	head(nullptr),
 	tail(nullptr),
-	size(0)
+	length(0)
 {
 	copy(other);
 }
@@ -192,16 +192,16 @@ template<class T>
 List<T>::List(const std::initializer_list<T>& l) :
 	head(nullptr),
 	tail(nullptr),
-	size(0)
+	length(0)
 {
 	for (const T& i : l)
-		pushBack(i);
+		push_back(i);
 }
 
 
 template<class T>
 template<typename Pred>
-List<T>& List<T>::forEach(Pred func)
+List<T>& List<T>::for_each(Pred func)
 {
 	for (T& i : *this)
 		i = func(i);
@@ -216,7 +216,7 @@ List<T> List<T>::filter(Pred func) const
 	List<T> result;
 	for (const T& i : *this)
 		if (func(i))
-			result.pushBack(i);
+			result.push_back(i);
 	return result;
 }
 
@@ -233,7 +233,7 @@ List<T>& List<T>::operator=(const List<T>& other)
 
 
 template<class T>
-void List<T>::pushBack(const T& elem)
+void List<T>::push_back(const T& elem)
 {
 	if (tail != nullptr) {
 		tail->pNext = new Node(elem, tail);
@@ -242,12 +242,12 @@ void List<T>::pushBack(const T& elem)
 		tail = new Node(elem);
 		head = tail;
 	}
-	++size;
+	++length;
 }
 
 
 template<class T>
-void List<T>::pushFront(const T& elem)
+void List<T>::push_front(const T& elem)
 {
 	if (head != nullptr) {
 		head->pPrev = new Node(elem, nullptr, head);
@@ -256,17 +256,17 @@ void List<T>::pushFront(const T& elem)
 		head = new Node(elem);
 		tail = head;
 	}
-	++size;
+	++length;
 }
 
 
 template<class T>
-void List<T>::popBack()
+void List<T>::pop_back()
 {
-	if (isEmpty())
-		throw std::logic_error("[List]: Can not execute popBack() on an empty list!");
+	if (empty())
+		throw std::logic_error("[List]: Can not execute pop_back() on an empty list!");
 
-	if (size == 1) {
+	if (length == 1) {
 		clear();
 		return;
 	}
@@ -274,17 +274,17 @@ void List<T>::popBack()
 	tail = tail->pPrev;
 	delete tail->pNext;
 	tail->pNext = nullptr;
-	--size;
+	--length;
 }
 
 
 template<class T>
-inline void List<T>::popFront()
+inline void List<T>::pop_front()
 {
-	if (isEmpty())
-		throw std::logic_error("[List]: Can not execute popFront() on an empty list!");
+	if (empty())
+		throw std::logic_error("[List]: Can not execute pop_front() on an empty list!");
 
-	if (size == 1) {
+	if (length == 1) {
 		clear();
 		return;
 	}
@@ -292,7 +292,7 @@ inline void List<T>::popFront()
 	head = head->pNext;
 	delete head->pPrev;
 	head->pPrev = nullptr;
-	--size;
+	--length;
 }
 
 
@@ -341,7 +341,7 @@ template<class T>
 typename List<T>::Iterator List<T>::insertAfter(const Iterator& it, const T& elem)
 {
 	if (it == Iterator(tail) || it == nullptr) {
-		pushBack(elem);
+		push_back(elem);
 		return tail;
 	}
 
@@ -350,7 +350,7 @@ typename List<T>::Iterator List<T>::insertAfter(const Iterator& it, const T& ele
 	newNode->pPrev = it.pNode;
 	it.pNode->pNext = newNode;
 	newNode->pNext->pPrev = newNode;
-	++size;
+	++length;
 	return newNode;
 }
 
@@ -359,7 +359,7 @@ template<class T>
 typename List<T>::Iterator List<T>::insertBefore(const Iterator& it, const T& elem)
 {
 	if (it == begin() || it == nullptr) {
-		pushFront(elem);
+		push_front(elem);
 		return head;
 	}
 
@@ -368,7 +368,7 @@ typename List<T>::Iterator List<T>::insertBefore(const Iterator& it, const T& el
 	newNode->pPrev = it.pNode->pPrev;
 	it.pNode->pPrev = newNode;
 	newNode->pPrev->pNext = newNode;
-	++size;
+	++length;
 	return newNode;
 }
 
@@ -380,13 +380,13 @@ typename List<T>::Iterator List<T>::remove(const Iterator& it, bool moveIt)
 		return nullptr;
 
 	if (it.pNode == tail) {
-		popBack();
+		pop_back();
 		if (moveIt)
 			const_cast<Iterator&>(it) = nullptr;
 		return tail;
 	}
 	if (it.pNode == head) {
-		popFront();
+		pop_front();
 		if (moveIt)
 			const_cast<Iterator&>(it) = head;
 		return head;
@@ -397,7 +397,7 @@ typename List<T>::Iterator List<T>::remove(const Iterator& it, bool moveIt)
 	Iterator result(it.pNode->pNext);
 	if (moveIt)
 		const_cast<Iterator&>(it).pNode = it.pNode->pNext;
-	--size;
+	--length;
 	delete toDel;
 	return result;
 }
@@ -421,14 +421,14 @@ template<class T>
 typename List<T>::Iterator List<T>::insertAt(size_t index, const T& elem)
 {
 	if (index == 0) {
-		pushFront(elem);
+		push_front(elem);
 		return head;
 	}
-	if (index == size) {
-		pushBack(elem);
+	if (index == length) {
+		push_back(elem);
 		return tail;
 	}
-	if (index > size)
+	if (index > length)
 		throw std::logic_error("[List]: Inserting at position larger than the list!");
 	
 	Iterator it = begin();
@@ -448,7 +448,7 @@ void List<T>::copy(const List<T>& other)
 		List<T>::Iterator ptr = other.begin();
 		List<T>::Iterator ptrEnd = other.end();
 		while (ptr != ptrEnd) {
-			this->pushBack(*ptr);
+			this->push_back(*ptr);
 			++ptr;
 		}
 	} catch (const std::bad_alloc&) {
@@ -468,5 +468,5 @@ void List<T>::clear()
 	delete tail;
 	head = nullptr;
 	tail = nullptr;
-	size = 0;
+	length = 0;
 }

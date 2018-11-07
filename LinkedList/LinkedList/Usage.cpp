@@ -5,8 +5,8 @@ int main() {
 
 	// Create list
 	List<int> list = { 4, 7, 2, 8 };
-	list.pushBack(5);
-	list.pushFront(-10);
+	list.push_back(5);
+	list.push_front(-10);
 
 	std::cout << "Elements: \n";
 
@@ -35,9 +35,9 @@ int main() {
 	std::cout << '\n';
 
 	// Adding  elements
-	list.pushBack(8);
-	list.pushBack(13);
-	list.pushBack(45);
+	list.push_back(8);
+	list.push_back(13);
+	list.push_back(45);
 
 	std::cout << "\nNew elements:\n";
 
@@ -70,7 +70,7 @@ int main() {
 	std::cout << "\nAll numbers squared:\n";
 
 	// forEach usage
-	list.forEach([](int x) { return x * x; });
+	list.for_each([](int x) { return x * x; });
 
 	// Print List
 	for (int p : list)
