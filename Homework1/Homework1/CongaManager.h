@@ -15,8 +15,11 @@ public:
 	void append(const std::string& name, const std::string& uni, int index);
 	void removeFirst(int index);
 	void removeLast(int index);
+	// TODO: finish remove() method
 	void remove(const std::string& name, int index);
 	void print() const;
+	// TODO:
+	// void merge(int index1, int index2);
 
 private:
 

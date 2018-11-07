@@ -6,8 +6,8 @@ class List {
 public:
 
 	List();
-	List(const List&) = default;	//
-	List& operator=(List&);			// Just moving the object
+	List(const List&) = default;	// In this case we just want to move
+	List& operator=(List&);			// the line of people, no need of copying
 	~List();
 
 public:
