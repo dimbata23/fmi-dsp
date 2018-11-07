@@ -23,6 +23,7 @@ public:
 	Student(const std::string& name, const std::string& uni);
 	Student(const Student& other) = default;
 	Student& operator=(const Student& other) = default;
+	~Student() = default;
 
 	bool canTolerate(const University& uni);
 	void setName(const std::string& name);
