@@ -20,16 +20,20 @@ class Student {
 public:
 
 	Student() : name(""), uni(UNI_NOT_SET) {}
-	Student(const std::string& name, const std::string& uni);
+	Student(const std::string& name, const std::string& uni = "");
 	Student(const Student& other) = default;
 	Student& operator=(const Student& other) = default;
 	~Student() = default;
 
-	bool canTolerate(const University& uni);
+	bool canBeToleratedBy(const std::string& uni) const;
 	void setName(const std::string& name);
 	void setUni(const std::string& uni);
 	std::string getName() const;
 	std::string getUni() const;
+
+private:
+
+	University convertToUni(const std::string& uni) const;
 
 private:
 

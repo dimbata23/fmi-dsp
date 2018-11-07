@@ -13,20 +13,14 @@ const bool TABLE_OF_TOLERANCE[][3] = {
 
 
 Student::Student(const std::string& name, const std::string& uni) :
-	name(name)
-{
-	for (int i = 0; i < UNI_COUNT; ++i) {
-		if (!uni.compare(UNI_NAMES[i])) {
-			this->uni = University(i);
-			break;
-		}
-	}
-}
+	name(name),
+	uni(convertToUni(uni))
+{}
 
 
-inline bool Student::canTolerate(const University& uni)
+bool Student::canBeToleratedBy(const std::string& uni) const
 {
-	return TABLE_OF_TOLERANCE[uni, this->uni];
+	return TABLE_OF_TOLERANCE[convertToUni(uni)][this->uni];
 }
 
 
@@ -56,6 +50,15 @@ std::string Student::getName() const
 std::string Student::getUni() const
 {
 	return (uni!=-1) ? UNI_NAMES[uni] : "unknown";
+}
+
+
+University Student::convertToUni(const std::string& uni) const
+{
+	for (int i = 0; i < UNI_COUNT; ++i)
+		if (!uni.compare(UNI_NAMES[i]))
+			return University(i);
+	return University(-1);
 }
 
 
