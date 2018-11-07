@@ -267,7 +267,7 @@ void List<T>::popBack()
 		throw std::logic_error("[List]: Can not execute popBack() on an empty list!");
 
 	if (size == 1) {
-		clear()
+		clear();
 		return;
 	}
 
