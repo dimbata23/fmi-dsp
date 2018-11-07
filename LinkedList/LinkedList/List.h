@@ -267,9 +267,7 @@ void List<T>::popBack()
 		throw std::logic_error("[List]: Can not execute popBack() on an empty list!");
 
 	if (size == 1) {
-		delete tail;
-		tail = nullptr;
-		head = nullptr;
+		clear()
 		return;
 	}
 
@@ -287,9 +285,7 @@ inline void List<T>::popFront()
 		throw std::logic_error("[List]: Can not execute popFront() on an empty list!");
 
 	if (size == 1) {
-		delete head;
-		head = nullptr;
-		tail = nullptr;
+		clear();
 		return;
 	}
 
