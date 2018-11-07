@@ -8,8 +8,10 @@ public:
 
 	List<T>();
 	List<T>(const List<T>& other);
-	List<T>& operator=(const List<T> other);
+	List<T>& operator=(const List<T>& other);
 	~List<T>();
+
+	List<T>(const std::initializer_list<T>& l);
 
 private:
 
@@ -36,10 +38,11 @@ public:
 	private:
 
 		Node* pNode;
+		bool isFwdIter;
 
 	public:
 
-		Iterator(Node* pNode) : pNode(pNode) {}
+		Iterator(Node* pNode, bool isFwdIter = true) : pNode(pNode), isFwdIter(isFwdIter) {}
 
 		T& operator*() { 
 			if (pNode)
@@ -53,12 +56,29 @@ public:
 			throw std::logic_error("[List::Iterator]: Iterator was a nullptr!");
 		}
 
-		Iterator& operator++() { 
-			pNode = pNode->pNext; 
-			return *this; 
+		Iterator& operator++() {
+			if (isFwdIter)
+				pNode = pNode->pNext;
+			else
+				pNode = pNode->pPrev;
+			return *this;
 		}
 
 		Iterator operator++(int) {
+			Iterator result(*this);
+			++(*this);
+			return result;
+		}
+
+		Iterator& operator--() {
+			if (isFwdIter)
+				pNode = pNode->pPrev;
+			else
+				pNode = pNode->pNext;
+			return *this;
+		}
+
+		Iterator operator--(int) {
 			Iterator result(*this);
 			++(*this);
 			return result;
@@ -73,6 +93,9 @@ public:
 
 	Iterator begin() const { return Iterator(head); }
 	Iterator end() const { return Iterator(nullptr); }
+
+	Iterator rbegin() const { return Iterator(tail, false); }
+	Iterator rend() const { return Iterator(nullptr); }
 
 	void pushBack(const T& elem);
 	void pushFront(const T& elem);
@@ -111,9 +134,18 @@ public:
 	// returns an Iterator bointing to the new element
 	Iterator insertAt(size_t index, const T& elem);
 
+	// Executes a function on each and every element of the list
+	// returns the list
+	template <typename Pred>
+	List<T>& forEach(Pred func);
+
+	// returns a new list with the all the elements from the list that fulfill the Predicate
+	template <typename Pred>
+	List<T> filter(Pred func) const;
+
 private:
 
-	void copy(const List<T> other);
+	void copy(const List<T>& other);
 	void clear();
 	Iterator remove(const Iterator& it, bool moveIt);
 
@@ -140,7 +172,10 @@ List<T>::List() :
 
 
 template<class T>
-List<T>::List(const List<T>& other)
+List<T>::List(const List<T>& other) :
+	head(nullptr),
+	tail(nullptr),
+	size(0)
 {
 	copy(other);
 }
@@ -154,10 +189,46 @@ List<T>::~List()
 
 
 template<class T>
-List<T>& List<T>::operator=(const List<T> other)
+List<T>::List(const std::initializer_list<T>& l) :
+	head(nullptr),
+	tail(nullptr),
+	size(0)
 {
-	clear();
-	copy(other);
+	for (const T& i : l)
+		pushBack(i);
+}
+
+
+template<class T>
+template<typename Pred>
+List<T>& List<T>::forEach(Pred func)
+{
+	for (T& i : *this)
+		i = func(i);
+	return *this;
+}
+
+
+template<class T>
+template<typename Pred>
+List<T> List<T>::filter(Pred func) const
+{
+	List<T> result;
+	for (const T& i : *this)
+		if (func(i))
+			result.pushBack(i);
+	return result;
+}
+
+
+template<class T>
+List<T>& List<T>::operator=(const List<T>& other)
+{
+	if (this != &other) {
+		clear();
+		copy(other);
+	}
+	return *this;
 }
 
 
@@ -196,9 +267,7 @@ void List<T>::popBack()
 		throw std::logic_error("[List]: Can not execute popBack() on an empty list!");
 
 	if (size == 1) {
-		delete tail;
-		tail = nullptr;
-		head = nullptr;
+		clear()
 		return;
 	}
 
@@ -216,9 +285,7 @@ inline void List<T>::popFront()
 		throw std::logic_error("[List]: Can not execute popFront() on an empty list!");
 
 	if (size == 1) {
-		delete head;
-		head = nullptr;
-		tail = nullptr;
+		clear();
 		return;
 	}
 
@@ -375,11 +442,12 @@ typename List<T>::Iterator List<T>::insertAt(size_t index, const T& elem)
 
 
 template<class T>
-void List<T>::copy(const List<T> other)
+void List<T>::copy(const List<T>& other)
 {
 	try {
 		List<T>::Iterator ptr = other.begin();
-		while (ptr) {
+		List<T>::Iterator ptrEnd = other.end();
+		while (ptr != ptrEnd) {
 			this->pushBack(*ptr);
 			++ptr;
 		}
