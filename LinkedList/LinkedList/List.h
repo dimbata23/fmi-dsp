@@ -8,7 +8,7 @@ public:
 
 	List<T>();
 	List<T>(const List<T>& other);
-	List<T>& operator=(const List<T> other);
+	List<T>& operator=(const List<T>& other);
 	~List<T>();
 
 	List<T>(const std::initializer_list<T>& l);
@@ -222,7 +222,7 @@ List<T> List<T>::filter(Pred func) const
 
 
 template<class T>
-List<T>& List<T>::operator=(const List<T> other)
+List<T>& List<T>::operator=(const List<T>& other)
 {
 	if (this != &other) {
 		clear();
