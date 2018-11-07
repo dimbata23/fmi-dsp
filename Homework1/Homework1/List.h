@@ -1,14 +1,16 @@
 #pragma once
 #include "Student.h"
 
-struct List {
+class List {
+
+public:
 
 	List();
 	List(const List&) = default;	//
 	List& operator=(List&);			// Just moving the object
 	~List();
 
-
+public:
 
 	struct Node {
 
@@ -24,7 +26,7 @@ struct List {
 
 	};
 
-
+public:
 
 	Node* begin() const { return head; }
 	Node* end() const { return nullptr; }
@@ -43,9 +45,11 @@ struct List {
 	//Node* remove(Node* node);
 	//Node* find(const Student& elem);
 
+private:
+
 	void clear();
 
-
+private:
 
 	Node* head;
 	Node* tail;
