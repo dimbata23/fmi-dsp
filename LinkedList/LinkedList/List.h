@@ -279,7 +279,7 @@ void List<T>::pop_back()
 
 
 template<class T>
-inline void List<T>::pop_front()
+void List<T>::pop_front()
 {
 	if (empty())
 		throw std::logic_error("[List]: Can not execute pop_front() on an empty list!");
