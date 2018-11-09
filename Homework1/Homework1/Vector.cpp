@@ -45,7 +45,7 @@ void Vector::push_back_empty_list()
 void Vector::removeAt(size_t index)
 {
 	delete data[index];
-	if (index < length - 1 && index != 0)
+	if (index < length - 1)
 		data[index] = data[length - 1];
 	--length;
 }

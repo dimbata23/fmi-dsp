@@ -68,7 +68,7 @@ const Student& List::back() const
 void List::print() const
 {
 	for (List::Node* node = this->begin(); node != nullptr; node = node->pNext)
-		std::cout << node->data << ((node != this->tail) ? (" - ") : ("\n"));
+		std::cout << node->data << ((node != this->tail) ? (" - ") : (""));
 }
 
 

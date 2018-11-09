@@ -50,18 +50,28 @@ void CongaManager::remove(const std::string& name, int index)
 	List::Node* curr = line->begin();
 	if (!curr->data.getName().compare(name)) {
 		line->pop_front();
+		std::cout << "Removed " << name << " from Line" << index;
+		if (line->empty()) {
+			removeLine(index);
+			std::cout << "\nLine" << index << " is now empty and was removed!\n" << "Line" << size << " is now Line" << index << "!\n";
+		}
 		return;
 	}
 
 	if (!line->back().getName().compare(name)) {
 		line->pop_back();
+		std::cout << "Removed " << name << " from Line" << index;
+		if (line->empty()) {
+			removeLine(index);
+			std::cout << "\nLine" << index << " is now empty and was removed!\n" << "Line" << size << " is now Line" << index << "!\n";
+		}
 		return;
 	}
 
 	while (curr->pNext != nullptr) {
 		if (!curr->pNext->data.getName().compare(name)) {
 			line->remove(curr->pNext);
-			std::cout << "Removed first " << name << " from Line " << index;
+			std::cout << "Removed first " << name << " from Line" << index;
 			if (!curr->data.canBeToleratedBy(curr->pNext->data.getUni())) {
 				lines.push_back_empty_list();
 				++size;
@@ -84,8 +94,11 @@ void CongaManager::remove(const std::string& name, int index)
 void CongaManager::print() const
 {
 	size_t len = lines.size();
-	for (size_t i = 0; i < len; ++i)
+	for (size_t i = 0; i < len; ++i) {
+		std::cout << "\nLine" << i << ": ";
 		lines[i]->print();
+	}
+	std::cout << "\n\n";
 }
 
 
@@ -110,6 +123,7 @@ void CongaManager::merge(int index1, int index2)
 	line2->setFirst(nullptr);
 	line2->setLast(nullptr);
 	removeLine(index2);
+	std::cout << "Merged Line" << index1 << " and Line" << index2 << "\nLine" << size << " is now Line" << index2 << "!\n";
 }
 
 
@@ -127,13 +141,15 @@ void CongaManager::removePerson(int index, bool first)
 
 	if (first) {
 		lines[index]->pop_front();
-		std::cout << "Removed first person from Line" << index << '\n';
+		std::cout << "Removed first person from Line" << index << "\n";
 	} else {
 		lines[index]->pop_back();
-		std::cout << "Removed last person from Line" << index << '\n';
+		std::cout << "Removed last person from Line" << index << "\n";
 	}
-	if (lines[index]->empty())
+	if (lines[index]->empty() && size > 1) {
 		removeLine(index);
+		std::cout << "Line" << index << " is now empty and was removed!\n" << "Line" << size << " is now Line" << index << "!\n";
+	}
 }
 
 

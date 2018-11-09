@@ -8,7 +8,7 @@ public:
 
 	Vector();
 	Vector(const Vector&) = delete;				// Copy ctor and operator=
-	Vector operator=(const Vector&) = delete;	// aren't really used
+	Vector& operator=(const Vector&) = delete;	// aren't really used
 	~Vector();
 
 public:
