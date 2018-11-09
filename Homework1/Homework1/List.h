@@ -6,8 +6,8 @@ class List {
 public:
 
 	List();
-	List(const List&) = default;	// In this case we just want to move
-	List& operator=(List&);			// the line of people, no need of copying
+	List(const List&) = delete;					// In this case we just want to move
+	List& operator=(const List&) = delete;		// the line of people, no need of copying
 	~List();
 
 public:
@@ -29,7 +29,7 @@ public:
 public:
 
 	Node* begin() const { return head; }
-	Node* end() const { return nullptr; }
+	Node* end() const { return tail; }
 
 	void push_back(const Student& elem);
 	void pop_back();
@@ -38,12 +38,12 @@ public:
 	const Student& front() const;
 	const Student& back() const;
 
-	bool empty() const { return size == 0; }
+	bool empty() const { return head == nullptr; }
 	void print() const;
 
-	// TODO:
-	//Node* remove(Node* node);
-	//Node* find(const Student& elem);
+	void remove(Node* node);
+	void setLast(Node* node) { tail = node; }
+	void setFirst(Node* node) { head = node; }
 
 private:
 
@@ -53,6 +53,5 @@ private:
 
 	Node* head;
 	Node* tail;
-	size_t size;
 
 };

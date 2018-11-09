@@ -4,21 +4,8 @@
 
 List::List() :
 	head(nullptr),
-	tail(nullptr),
-	size(0)
+	tail(nullptr)
 {}
-
-
-List& List::operator=(List& other)
-{
-	clear();
-	head = other.head;
-	tail = other.tail;
-	size = other.size;
-	other.head = nullptr;
-	other.tail = nullptr;
-	return *this;
-}
 
 
 List::~List()
@@ -37,13 +24,12 @@ void List::push_back(const Student& elem)
 		tail = new Node(elem);
 		head = tail;
 	}
-	++size;
 }
 
 
 void List::pop_back()
 {
-	if (size == 1) {
+	if (head == tail) {
 		clear();
 		return;
 	}
@@ -51,13 +37,12 @@ void List::pop_back()
 	tail = tail->pPrev;
 	delete tail->pNext;
 	tail->pNext = nullptr;
-	--size;
 }
 
 
 void List::pop_front()
 {
-	if (size == 1) {
+	if (head == tail) {
 		clear();
 		return;
 	}
@@ -65,7 +50,6 @@ void List::pop_front()
 	head = head->pNext;
 	delete head->pPrev;
 	head->pPrev = nullptr;
-	--size;
 }
 
 
@@ -83,8 +67,16 @@ const Student& List::back() const
 
 void List::print() const
 {
-	for (List::Node* node = this->begin(); node != this->end(); node = node->pNext)
+	for (List::Node* node = this->begin(); node != nullptr; node = node->pNext)
 		std::cout << node->data << ((node != this->tail) ? (" - ") : ("\n"));
+}
+
+
+void List::remove(Node* node)
+{
+	node->pPrev->pNext = node->pNext;
+	node->pNext->pPrev = node->pPrev;
+	delete node;
 }
 
 
@@ -97,5 +89,4 @@ void List::clear()
 	delete tail;
 	head = nullptr;
 	tail = nullptr;
-	size = 0;
 }
