@@ -64,6 +64,7 @@ void CongaManager::remove(const std::string& name, int index)
 			std::cout << "Removed first " << name << " from Line " << index;
 			if (!curr->data.canBeToleratedBy(curr->pNext->data.getUni())) {
 				lines.push_back_empty_list();
+				++size;
 				curr->pNext->pPrev = nullptr;
 				lines.back()->setFirst(curr->pNext);
 				lines.back()->setLast(line->end());
@@ -85,6 +86,30 @@ void CongaManager::print() const
 	size_t len = lines.size();
 	for (size_t i = 0; i < len; ++i)
 		lines[i]->print();
+}
+
+
+void CongaManager::merge(int index1, int index2)
+{
+	if (index1 < 0 || index1 >= size || index2 < 0 || index2 >= size) {
+		std::cout << "A line with one of the indexes doesn't exist!\n";
+		return;
+	}
+
+	List* line1 = lines[index1];
+	List* line2 = lines[index2];
+
+	if (!line1->back().canBeToleratedBy(line2->front().getUni())) {
+		std::cout << "Incompatible people!\n";
+		return;
+	}
+
+	line1->end()->pNext = line2->begin();
+	line2->begin()->pPrev = line1->end();
+	line1->setLast(line2->end());
+	line2->setFirst(nullptr);
+	line2->setLast(nullptr);
+	removeLine(index2);
 }
 
 

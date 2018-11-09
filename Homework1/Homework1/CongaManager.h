@@ -17,8 +17,7 @@ public:
 	void removeLast(int index);
 	void remove(const std::string& name, int index);
 	void print() const;
-	// TODO:
-	// void merge(int index1, int index2);
+	void merge(int index1, int index2);
 
 private:
 

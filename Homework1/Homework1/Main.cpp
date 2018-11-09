@@ -13,6 +13,9 @@ int main() {
 	sys.print();
 	sys.remove("gesho", 0);
 	sys.print();
+	sys.append("grosho", "unss", 0);
+	sys.merge(0, 1);
+	sys.print();
 
 	return 0;
 }
