@@ -1,5 +1,5 @@
 /*
-	A solution to the Challenge #1 of the SDP course 2018/19
+	A solution to the Challenge #1 of the DSP course 2018/19
 	
 	Start time: 05:29PM
 	End time: 06:16PM
