@@ -71,18 +71,14 @@ void CongaManager::remove(const std::string& name, int index)
 	while (curr->pNext != nullptr) {
 		if (!curr->pNext->data.getName().compare(name)) {
 			line->remove(curr->pNext);
-			std::cout << "Removed first " << name << " from Line" << index;
-			if (!curr->data.canBeToleratedBy(curr->pNext->data.getUni())) {
-				lines.push_back_empty_list();
-				++size;
-				curr->pNext->pPrev = nullptr;
-				lines.back()->setFirst(curr->pNext);
-				lines.back()->setLast(line->end());
-				curr->pNext = nullptr;
-				line->setLast(curr);
-				std::cout << " and created a new Line with index " << lines.size() - 1;
-			}
-			std::cout << '\n';
+			lines.push_back_empty_list();
+			++size;
+			curr->pNext->pPrev = nullptr;
+			lines.back()->setFirst(curr->pNext);
+			lines.back()->setLast(line->end());
+			curr->pNext = nullptr;
+			line->setLast(curr);
+			std::cout << "Removed first " << name << " from Line" << index <<  " and created a new Line with index " << lines.size() - 1 << '\n';
 			return;
 		}
 		curr = curr->pNext;
