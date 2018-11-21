@@ -6,7 +6,8 @@ class Student {
 public:
 
 	Student() = delete;
-	Student(const std::string& name, size_t group);
+	Student(const std::string& name, size_t group) : 
+		name(name), group(group), timeSpent(0) {}
 	Student(const Student&) = default;
 	Student& operator=(const Student&) = default;
 	~Student() = default;
@@ -23,11 +24,3 @@ private:
 	size_t timeSpent;
 
 };
-
-
-
-Student::Student(const std::string& name, size_t group) :
-	name(name),
-	group(group),
-	timeSpent(0)
-{}
