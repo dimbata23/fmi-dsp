@@ -42,6 +42,13 @@ public:
 
 	public:
 
+		typedef Iterator                    self_type;
+		typedef T                           value_type;
+		typedef T&                          reference;
+		typedef T*                          pointer;
+		typedef std::bidirectional_iterator_tag
+		                                    iterator_category;
+
 		Iterator(Node* pNode, bool isFwdIter = true) : pNode(pNode), isFwdIter(isFwdIter) {}
 
 		T& operator*() { 
