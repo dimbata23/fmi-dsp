@@ -123,11 +123,11 @@ public:
 
 	// Inserts an element after the element pointed by an Iterator
 	// returns Iterator pointing to the new element
-	Iterator insertAfter(const Iterator& it, const T& elem);
+	Iterator insert_after(const Iterator& it, const T& elem);
 
 	// Inserts an element before the element pointed by an Iterator
 	// returns an Iterator pointing to the new element
-	Iterator insertBefore(const Iterator& it, const T& elem);
+	Iterator insert_before(const Iterator& it, const T& elem);
 
 	// Removes the element pointed by the Iterator
 	// Points the given Iterator to the new element in its position (or nullptr if it was the last element)
@@ -139,7 +139,7 @@ public:
 
 	// Inserts an element at given position
 	// returns an Iterator bointing to the new element
-	Iterator insertAt(size_t index, const T& elem);
+	Iterator insert_at(size_t index, const T& elem);
 
 	// Executes a function on each and every element of the list
 	// returns the list
@@ -345,7 +345,7 @@ typename List<T>::Iterator List<T>::find(const T& elem) const
 
 
 template<class T>
-typename List<T>::Iterator List<T>::insertAfter(const Iterator& it, const T& elem)
+typename List<T>::Iterator List<T>::insert_after(const Iterator& it, const T& elem)
 {
 	if (it == Iterator(tail) || it == nullptr) {
 		push_back(elem);
@@ -363,7 +363,7 @@ typename List<T>::Iterator List<T>::insertAfter(const Iterator& it, const T& ele
 
 
 template<class T>
-typename List<T>::Iterator List<T>::insertBefore(const Iterator& it, const T& elem)
+typename List<T>::Iterator List<T>::insert_before(const Iterator& it, const T& elem)
 {
 	if (it == begin() || it == nullptr) {
 		push_front(elem);
@@ -425,7 +425,7 @@ typename List<T>::Iterator List<T>::remove(const Iterator& it)
 
 
 template<class T>
-typename List<T>::Iterator List<T>::insertAt(size_t index, const T& elem)
+typename List<T>::Iterator List<T>::insert_at(size_t index, const T& elem)
 {
 	if (index == 0) {
 		push_front(elem);
