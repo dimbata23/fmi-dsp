@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "horo.hpp"
+#include "Horo.hpp"
 
 
 const int DEFAULT_SIZES[] = { 17, 31, 67, 127, 277, 541, 1373, 2539, 4721, 8581, 16447, 32749 };
