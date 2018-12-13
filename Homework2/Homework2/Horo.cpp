@@ -50,10 +50,14 @@ size_t dsp::Horo::hash(const std::string str) const {
 
 dsp::Horo::Participant* dsp::Horo::insert(const std::string name) {
 
+	if (get(name))
+		return nullptr;
+
 	++size;
 	if (size > 2*capacity)
 		if (!resize())
 			return nullptr;
+
 	int index = hash(name) % capacity;
 	ListNode* newN = new ListNode(name);
 	return insertAt(arr[index], newN);
@@ -74,11 +78,12 @@ dsp::Horo::Participant* dsp::Horo::insertAt(ListNode*& place, ListNode* node) {
 }
 
 
-void dsp::Horo::insert(const std::string name, Participant* leftNeighbor, Participant* rightNeighbor) {
+bool dsp::Horo::insert(const std::string name, Participant* leftNeighbor, Participant* rightNeighbor) {
 
 	Participant* inserted = insert(name);
 	if (!inserted)
-		return;
+		return false;
+
 	inserted->pLeft = leftNeighbor;
 	inserted->pRight = rightNeighbor;
 	inserted->isHoldingLeft = true;
@@ -87,6 +92,8 @@ void dsp::Horo::insert(const std::string name, Participant* leftNeighbor, Partic
 	leftNeighbor->isHoldingRight = true;
 	rightNeighbor->pLeft = inserted;
 	rightNeighbor->isHoldingLeft = true;
+
+	return true;
 
 }
 
@@ -219,12 +226,14 @@ bool dsp::Horo::resize() {
 
 
 void dsp::Horo::fill(std::ifstream& in) {
-
+	
 	std::string name;
 	std::getline(in, name);
 	insert(name);
 	std::getline(in, name);
 	dsp::Horo::Participant* prev = insert(name);
+	while(!prev && !in.eof())
+		prev = insert(name);
 	first->pRight = prev;
 	first->isHoldingRight = true;
 	prev->pLeft = first;
@@ -237,7 +246,7 @@ void dsp::Horo::fill(std::ifstream& in) {
 			continue;
 		curr = insert(name);
 		if (!curr)
-			return;
+			continue;
 		prev->pRight = curr;
 		prev->isHoldingRight = true;
 		curr->pLeft = prev;
@@ -245,6 +254,8 @@ void dsp::Horo::fill(std::ifstream& in) {
 		prev = curr;
 	}
 
+	if (!curr)
+		curr = prev;
 	curr->pRight = first;
 	curr->isHoldingRight = true;
 	first->pLeft = curr;
@@ -325,8 +336,10 @@ void dsp::Horo::add(const std::string& who, const std::string& neighbor1, const 
 		return;
 	}
 
-	insert(who, leftPerson, rightPerson);
-	std::cout << who << " is now inbetween " << leftPerson->name << " and " << rightPerson->name << '.' << std::endl;
+	if (insert(who, leftPerson, rightPerson))
+		std::cout << who << " is now inbetween " << leftPerson->name << " and " << rightPerson->name << '.' << std::endl;
+	else
+		std::cout << who << " is already participating in the horo!" << std::endl;
 
 }
 

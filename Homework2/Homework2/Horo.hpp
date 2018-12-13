@@ -67,7 +67,7 @@ namespace dsp {
 		size_t hash(const std::string str) const;
 		Participant* insert(const std::string name);
 		Participant* insertAt(ListNode*& place, ListNode* node);
-		void insert(const std::string name, Participant* leftNeighbor, Participant* rightNeighbor);
+		bool insert(const std::string name, Participant* leftNeighbor, Participant* rightNeighbor);
 		ListNode* get(const std::string& name) const;
 		void changeRelation(const std::string& who, char dir, bool grab);
 		void checkToRemove(Participant* who);
