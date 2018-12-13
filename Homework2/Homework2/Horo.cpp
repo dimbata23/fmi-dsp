@@ -51,7 +51,7 @@ size_t dsp::Horo::hash(const std::string str) const {
 dsp::Horo::Participant* dsp::Horo::insert(const std::string name) {
 
 	++size;
-	if (size > capacity)
+	if (size > 2*capacity)
 		if (!resize())
 			return nullptr;
 	int index = hash(name) % capacity;
