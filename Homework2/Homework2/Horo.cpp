@@ -229,7 +229,7 @@ void dsp::Horo::fill(std::ifstream& in) {
 	first->isHoldingRight = true;
 	prev->pLeft = first;
 	prev->isHoldingLeft = true;
-	dsp::Horo::Participant* curr;
+	dsp::Horo::Participant* curr = nullptr;
 
 	while (!in.eof()) {
 		std::getline(in, name);
