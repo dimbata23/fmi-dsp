@@ -20,7 +20,12 @@ int main() {
 	Queue queue;
 	size_t group;
 	size_t globalTime = 0;
-
+	
+	if (!in) {
+        	std::cout << "Couldn't find file \"students.txt\"!\n";
+        	return -1;
+	}
+	
 	do {
 
 		if (!in.eof()) {
