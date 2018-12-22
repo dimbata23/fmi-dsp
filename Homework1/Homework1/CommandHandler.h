@@ -1,12 +1,13 @@
 #pragma once
 
+#include <algorithm>
 #include "CongaManager.h"
 CongaManager sys;
 
 namespace CommandHandler {
 
 	void handleCommand(const std::string& command) {
-	
+
 		size_t numOfArguments = std::count(command.begin(), command.end(), ' ') + 1;
 		std::string* arguments = new std::string[numOfArguments];
 
@@ -31,14 +32,14 @@ namespace CommandHandler {
 				sys.append(arguments[1], arguments[2], atoi(arguments[3].c_str()));
 
 		} else if (!arguments[0].compare("removeLast")) {
-			
+
 			if (numOfArguments != 2)
 				std::cout << "Wrong number of arguments!\nUsage: removeLast LINEINDEX\n";
 			else
 				sys.removeLast(atoi(arguments[1].c_str()));
 
 		} else if (!arguments[0].compare("removeFirst")) {
-		
+
 			if (numOfArguments != 2)
 				std::cout << "Wrong number of arguments!\nUsage: removeFirst LINEINDEX\n";
 			else
@@ -52,21 +53,21 @@ namespace CommandHandler {
 				sys.remove(arguments[1], atoi(arguments[2].c_str()));
 
 		} else if (!arguments[0].compare("merge")) {
-		
+
 			if (numOfArguments != 3)
 				std::cout << "Wrong number of arguments!\nUsage: merge LINEINDEX1 LINEINDEX2\n";
 			else
 				sys.merge(atoi(arguments[1].c_str()), atoi(arguments[2].c_str()));
 
 		} else if (!arguments[0].compare("print")) {
-			
+
 			if (numOfArguments != 1)
 				std::cout << "Wrong number of arguments!\nUsage: print\n";
 			else
 				sys.print();
 
 		} else if (!arguments[0].compare("help")) {
-		
+
 			if (numOfArguments != 1)
 				std::cout << "Wrong number of arguments!\nUsage: help\n";
 			else

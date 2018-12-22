@@ -1,6 +1,6 @@
 #pragma once
 
-#include <iosfwd>
+#include <iostream>
 #include <string>
 
 const std::string UNI_NAMES[] = {"fmi", "tu", "unss"};
