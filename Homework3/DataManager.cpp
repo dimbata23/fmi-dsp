@@ -31,10 +31,9 @@ void DataManager::fillZones(std::ifstream& in) {
     std::string zoneName1;
     std::string zoneName2;
     std::string keyName;
-    std::string buffer;
     char ch;
 
-    for (;!in.eof();) {
+    while (!in.eof()) {
 
         if (in.peek() == '\n')
             break;
@@ -43,41 +42,15 @@ void DataManager::fillZones(std::ifstream& in) {
         zoneName2.clear();
         keyName.clear();
 
-        in >> zoneName1;
+        readFirstLabel(in, zoneName1);
+        readSecondLabel(in, zoneName2);
 
-        for (;;) {
-            in >> buffer;
-
-            if (!buffer.compare("->"))
-                break;
-
-            zoneName1 += ' ';
-            zoneName1 += buffer;
-        }
+        if (in.peek() == '[')
+            readBracketsLabel(in, keyName);
 
         do {
             in.get(ch);
-        } while(ch == ' ');
-
-        zoneName2 += ch;
-        do {
-            in.get(ch);
-            zoneName2 += ch;
-        } while(ch != '[' && ch != '\n');
-        zoneName2.pop_back();
-
-        if (ch == '[') {
-            zoneName2.pop_back();
-            do {
-                in.get(ch);
-                keyName += ch;
-            } while(ch != ']');
-            keyName.pop_back();
-
-            do {
-                in.get(ch);
-            } while(ch != '\n');
-        }
+        } while (ch != '\n');
 
         auto result = dict.insert(std::make_pair(zoneName1, Zone())).first;
         dict.insert(std::make_pair(zoneName2, Zone()));
@@ -90,12 +63,11 @@ void DataManager::fillZones(std::ifstream& in) {
 
 void DataManager::fillKeys(std::ifstream& in) {
 
-    std::string zoneName;
     std::string keyName;
+    std::string zoneName;
     std::string buffer;
-    char ch;
 
-    for (;!in.eof();) {
+    while (!in.eof()) {
 
         if (in.peek() == '\n')
             break;
@@ -103,21 +75,7 @@ void DataManager::fillKeys(std::ifstream& in) {
         zoneName.clear();
         keyName.clear();
 
-        in >> keyName;
-
-        for (;;) {
-            in >> buffer;
-
-            if (!buffer.compare("->"))
-                break;
-
-            keyName += ' ';
-            keyName += buffer;
-        }
-
-        do {
-            in.get(ch);
-        } while(in.peek() == ' ');
+        readFirstLabel(in, keyName);
 
         std::getline(in, zoneName);
 
@@ -160,9 +118,9 @@ void DataManager::BFS(std::queue<std::string>& startingPoints, std::unordered_se
         auto elem = dict.find(curr);
         elem->second.reachable = true;
 
-        // get all the keys in the current zone
+        // Get all the keys in the current zone
         for (const std::string& key : elem->second.keys) {
-            // Maybe this will break the algorithm
+            // This might break the algorithm
             if (inventory.find(key) == inventory.end())
                 startingPoints.push(curr);
             inventory.insert(key);
@@ -172,7 +130,7 @@ void DataManager::BFS(std::queue<std::string>& startingPoints, std::unordered_se
 
             // If it hasn't been visited
             if (visited.find(child.first) == visited.end()) {
-                // If it doesn't require key or it requires key and we have the key
+                // If it doesn't require a key or it requires a key and we have the key
                 if ((child.second == NO_KEY) ||
                     (child.second != NO_KEY && inventory.find(child.second) != inventory.end())) {
 
@@ -187,6 +145,7 @@ void DataManager::BFS(std::queue<std::string>& startingPoints, std::unordered_se
         wave.pop();
     }
 
+    // Start the algorithm again from the next zone where a key was obtained
     startingPoints.pop();
     if (!startingPoints.empty())
         BFS(startingPoints, inventory);
@@ -202,14 +161,14 @@ void DataManager::generateDotFile() const {
         return;
     }
 
-    out << "digraph {" << std::endl;
+    out << "digraph {" << std::endl << std::endl;
     for ( const std::pair<std::string, Zone>& curr : dict ) {
 
         if (!curr.second.reachable || curr.second.keys.size() > 0) {
-            out << curr.first << " [";
+            out << '\t' << curr.first << " [";
 
             if (curr.second.keys.size() > 0) {
-                out << "label=\"" << curr.first;
+                out << "label = \"" << curr.first;
                 for ( const std::string& key : curr.second.keys )
                     out << "\\n" << key;
                 out << '\"';
@@ -217,25 +176,76 @@ void DataManager::generateDotFile() const {
 
             if (!curr.second.reachable) {
                 if (curr.second.keys.size() > 0)
-                    out << ',';
-                out << "color=red,style=filled,fillcolor=\"#ffefef\"";
+                    out << ", ";
+                out << "color = red, style = filled, fillcolor = \"#ffefef\"";
             }
-            out << ']' << std::endl;
+            out << "];" << std::endl;
 
         }
 
         if (curr.second.children.size() > 0) {
             for ( const std::pair<std::string, std::string>& child : curr.second.children ) {
-                out << curr.first << " -> " << child.first;
+                out << '\t' << curr.first << " -> " << child.first;
                 if (child.second != NO_KEY)
-                    out << " [label=\"" << child.second << "\"]";
+                    out << " [label = \"" << child.second << "\"]";
                 out << ';' << std::endl;
             }
         }
+
+        out << std::endl;
 
     }
 
     out << '}';
     out.close();
+
+}
+
+
+void DataManager::readFirstLabel(std::ifstream& in, std::string& name) const {
+
+    std::string buffer;
+
+    in >> name;
+    for (;;) {
+        in >> buffer;
+
+        if (!buffer.compare("->"))
+            break;
+
+        name += ' ';
+        name += buffer;
+    }
+
+    while(in.peek() == ' ') {
+        in.get();
+    }
+
+}
+
+
+void DataManager::readSecondLabel(std::ifstream& in, std::string& name) const {
+
+    char ch;
+    do {
+        in.get(ch);
+        name += ch;
+    } while(in.peek() != '[' && in.peek() != '\n');
+
+    if (name[name.length()-1] == ' ')
+        name.pop_back();
+
+}
+
+
+void DataManager::readBracketsLabel(std::ifstream& in, std::string& name) const {
+
+    char ch;
+    in.get(); // get rid of '['
+    do {
+        in.get(ch);
+        name += ch;
+    } while(ch != ']');
+    name.pop_back();
 
 }

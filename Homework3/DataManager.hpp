@@ -32,6 +32,10 @@ private:
     void fillKeys(std::ifstream& in);
     void BFS(std::queue<std::string>& startingPoints, std::unordered_set<std::string>& inventory);
 
+    void readFirstLabel(std::ifstream& in, std::string& name) const;
+    void readSecondLabel(std::ifstream& in, std::string& name) const;
+    void readBracketsLabel(std::ifstream& in, std::string& name) const;
+
 private:
 
     std::unordered_map<std::string, Zone> dict;
