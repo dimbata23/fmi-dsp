@@ -340,3 +340,9 @@ ASALocalRun/
 *.cbp
 bin/
 obj/
+
+
+# Netbeans
+nbproject/
+Makefile
+.dep.inc
