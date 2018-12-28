@@ -141,8 +141,8 @@ void DataManager::BFS(std::queue<std::string>& startingPoints, std::unordered_se
                 if ((child.second == NO_KEY) ||
                     (child.second != NO_KEY && inventory.find(child.second) != inventory.end())) {
 
-                   visited.insert(child.first);
-                   wave.push(child.first);
+		visited.insert(child.first);
+		wave.push(child.first);
 
                 }
 
