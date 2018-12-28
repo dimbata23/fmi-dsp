@@ -7,7 +7,7 @@ int main() {
 
     std::string name;
     std::cout << "Filepath: ";
-    std::cin >> name;
+    std::getline(std::cin, name);
     std::ifstream in(name);
     if (!in) {
         std::cerr << "Couldn't open/find file \"" << name << "\"!" << std::endl;
@@ -19,7 +19,9 @@ int main() {
     in.close();
 
     std::cout << "Enter starting point: ";
-    std::cin >> name;
+    std::getline(std::cin, name);
+    if (name[0] == '\"')
+        name = name.substr(1, name.length() - 2);
 
     if (!sys.zoneExists(name)) {
         std::cerr << "Zone \"" << name << "\" doesn't exist in the file!" << std::endl;

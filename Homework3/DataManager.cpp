@@ -31,7 +31,7 @@ void DataManager::fillZones(std::ifstream& in) {
     std::string zoneName1;
     std::string zoneName2;
     std::string keyName;
-    char ch;
+    std::string buffer;
 
     while (!in.eof()) {
 
@@ -47,10 +47,8 @@ void DataManager::fillZones(std::ifstream& in) {
 
         if (in.peek() == '[')
             readBracketsLabel(in, keyName);
-
-        do {
-            in.get(ch);
-        } while (ch != '\n');
+        
+        std::getline(in, buffer);
 
         auto result = dict.insert(std::make_pair(zoneName1, Zone())).first;
         dict.insert(std::make_pair(zoneName2, Zone()));
@@ -65,19 +63,28 @@ void DataManager::fillKeys(std::ifstream& in) {
 
     std::string keyName;
     std::string zoneName;
-    std::string buffer;
+    char ch;
 
     while (!in.eof()) {
 
         if (in.peek() == '\n')
             break;
+        
+        if (in.eof())
+            break;
 
-        zoneName.clear();
         keyName.clear();
+        zoneName.clear();
 
         readFirstLabel(in, keyName);
-
-        std::getline(in, zoneName);
+        
+        std::getline(in, zoneName, ';');
+        if (zoneName[0] == '\"')
+            zoneName = zoneName.substr(1, zoneName.length() - 2);
+        
+        do {
+            in.get(ch);
+        } while (ch != '\n');
 
         auto result = dict.find(zoneName);
         if (result != dict.end())
@@ -160,12 +167,12 @@ void DataManager::generateDotFile() const {
         std::cout << "Couldn't create file output.gv!" << std::endl;
         return;
     }
-
+    
     out << "digraph {" << std::endl << std::endl;
     for ( const std::pair<std::string, Zone>& curr : dict ) {
 
         if (!curr.second.reachable || curr.second.keys.size() > 0) {
-            out << '\t' << curr.first << " [";
+            out << "\t\"" << curr.first << "\" [";
 
             if (curr.second.keys.size() > 0) {
                 out << "label = \"" << curr.first;
@@ -185,7 +192,7 @@ void DataManager::generateDotFile() const {
 
         if (curr.second.children.size() > 0) {
             for ( const std::pair<std::string, std::string>& child : curr.second.children ) {
-                out << '\t' << curr.first << " -> " << child.first;
+                out << "\t\"" << curr.first << "\" -> \"" << child.first << '\"';
                 if (child.second != NO_KEY)
                     out << " [label = \"" << child.second << "\"]";
                 out << ';' << std::endl;
@@ -206,7 +213,13 @@ void DataManager::readFirstLabel(std::ifstream& in, std::string& name) const {
 
     std::string buffer;
 
-    in >> name;
+    if (in.peek() == '\"') {
+        in.get();
+        std::getline(in, name, '\"');
+    } else {
+        in >> name;
+    }
+    
     for (;;) {
         in >> buffer;
 
@@ -225,12 +238,24 @@ void DataManager::readFirstLabel(std::ifstream& in, std::string& name) const {
 
 
 void DataManager::readSecondLabel(std::ifstream& in, std::string& name) const {
-
+    
     char ch;
+    
+    if (in.peek() == '\"') {
+        in.get();
+        std::getline(in, name, '\"');
+        
+        do {
+            in.get();
+        } while(in.peek() != '[' && in.peek() != '\n');
+        
+        return;
+    }
+                
     do {
         in.get(ch);
         name += ch;
-    } while(in.peek() != '[' && in.peek() != '\n');
+    } while(in.peek() != '[' && in.peek() != ';');
 
     if (name[name.length()-1] == ' ')
         name.pop_back();
@@ -240,12 +265,7 @@ void DataManager::readSecondLabel(std::ifstream& in, std::string& name) const {
 
 void DataManager::readBracketsLabel(std::ifstream& in, std::string& name) const {
 
-    char ch;
-    in.get(); // get rid of '['
-    do {
-        in.get(ch);
-        name += ch;
-    } while(ch != ']');
-    name.pop_back();
+    in.get(); // Getting rid of '['
+    std::getline(in, name, ']');
 
 }
