@@ -351,7 +351,7 @@ Makefile
 .cproject
 .project
 
-.settings.xml
+*.settings.xml
 launch.json
 settings.json
 tasks.json
