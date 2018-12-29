@@ -346,3 +346,6 @@ obj/
 nbproject/
 Makefile
 .dep.inc
+
+.cproject
+.project
