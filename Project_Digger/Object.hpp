@@ -1,6 +1,11 @@
 #pragma once
 
+#ifdef _MSC_VER
+#include <SDL.h>
+#undef main
+#else
 #include <SDL2/SDL.h>
+#endif
 
 enum ObjectType {
     ANY = -1,

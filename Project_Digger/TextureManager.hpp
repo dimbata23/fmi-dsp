@@ -1,6 +1,10 @@
 #pragma once
 
+#ifdef _MSC_VER
+#include <SDL_image.h>
+#else
 #include <SDL2/SDL_image.h>
+#endif
 #include <unordered_map>
 
 using TexturesPoolType = std::unordered_map<const char*, SDL_Texture*>;

@@ -162,13 +162,14 @@ void GameEngine::clean() {
 
 void GameEngine::generateNextLevel() {
 
-    std::ifstream in(std::string("Levels/level") + std::to_string(++level));
+	std::string levelName = "Levels/level" + std::to_string(++level);
+	std::cout << "Loading level: " << levelName << std::endl;
+    std::ifstream in(levelName);
     if (!in) {
         std::cout << "No next level!" << std::endl;
         return;
     }
 
-    /// TODO: Save the * objects to a matrix for the BFS
     char ch;
     for ( int y = GRID_START; !in.eof(); y += GRID_SIZE ) {
         in.get(ch);
@@ -214,13 +215,13 @@ void GameEngine::setupTunnels() {
 
 	for (int i = 0; i < GRID_ROWS; ++i) {
 		for (int j = 0; j < GRID_COLS; ++j) {
-			if (field[i][j] && field[i - 1][j] && i > 0 && field[i - 1][j]->getType() == TUNNEL)
+			if (field[i][j] && i > 0 && field[i - 1][j] && field[i - 1][j]->getType() == TUNNEL)
 				field[i][j]->setPassable(TOP_SIDE, true);
-			if (field[i][j] && field[i][j - 1] && j > 0 && field[i][j - 1]->getType() == TUNNEL)
+			if (field[i][j] && j > 0 && field[i][j - 1] && field[i][j - 1]->getType() == TUNNEL)
 				field[i][j]->setPassable(LEFT_SIDE, true);
-			if (field[i][j] && field[i + 1][j] && i < GRID_ROWS - 1 && field[i + 1][j]->getType() == TUNNEL)
+			if (field[i][j] && i < GRID_ROWS - 1 && field[i + 1][j] && field[i + 1][j]->getType() == TUNNEL)
 				field[i][j]->setPassable(BOTTOM_SIDE, true);
-			if (field[i][j] && field[i][j + 1] && j < GRID_COLS - 1 && field[i][j + 1]->getType() == TUNNEL)
+			if (field[i][j] && j < GRID_COLS - 1 && field[i][j + 1] && field[i][j + 1]->getType() == TUNNEL)
 				field[i][j]->setPassable(RIGHT_SIDE, true);
 		}
 	}

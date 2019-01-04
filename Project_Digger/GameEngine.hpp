@@ -1,8 +1,14 @@
 #pragma once
+#ifdef _MSC_VER
+#include <SDL.h>
+#undef main
+#else
 #include <SDL2/SDL.h>
+#endif
 #include <vector>
 #include <array>
 #include <list>
+#include <string>
 #include "ObjectDirt.hpp"
 #include "Object.hpp"
 #include "TextureManager.hpp"
