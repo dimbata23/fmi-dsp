@@ -3,13 +3,6 @@
 #include <string>
 #include "DataManager.hpp"
 
-
-/***
-    WARNING!
-        Make sure there are no spaces on the new lines of the input file!
-***/
-
-
 int main() {
 
 	std::string name;
