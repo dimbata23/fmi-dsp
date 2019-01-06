@@ -9,8 +9,8 @@
 #include <array>
 #include <list>
 #include <string>
-#include "ObjectDirt.hpp"
-#include "Object.hpp"
+#include "Objects/Object.hpp"
+#include "Objects/Dirt.hpp"
 #include "TextureManager.hpp"
 
 using ObjectPoolType = std::list<Object*>;
@@ -42,7 +42,7 @@ private:
 
 private:
 
-    std::array<std::array<ObjectDirt*, GRID_COLS>, GRID_ROWS> field;
+    std::array<std::array<Dirt*, GRID_COLS>, GRID_ROWS> field;
     TextureManager texManager;
     ObjectPoolType objects;
     SDL_Window* window;

@@ -1,8 +1,8 @@
-#include "ObjectDirt.hpp"
+#include "Dirt.hpp"
 
 const int IMAGE_SIZE = 64;
 
-ObjectDirt::ObjectDirt(int x, int y, bool empty, SDL_Texture* sprite, SDL_Texture* wallSprite, SDL_Renderer* ren) :
+Dirt::Dirt(int x, int y, bool empty, SDL_Texture* sprite, SDL_Texture* wallSprite, SDL_Renderer* ren) :
     Object(x, y, IMAGE_SIZE, IMAGE_SIZE, 0, 0, sprite, ren, empty ? TUNNEL : DIRT),
 	wallSprite(wallSprite),
     passable{false, },
@@ -15,20 +15,20 @@ ObjectDirt::ObjectDirt(int x, int y, bool empty, SDL_Texture* sprite, SDL_Textur
 }
 
 
-ObjectDirt::~ObjectDirt() {}
+Dirt::~Dirt() {}
 
 
-void ObjectDirt::handleEvents(const SDL_Event& event) {}
+void Dirt::handleEvents(const SDL_Event& event) {}
 
 
-void ObjectDirt::update() {
+void Dirt::update() {
 
     Object::update();
 
 }
 
 
-void ObjectDirt::draw() {
+void Dirt::draw() {
 
 	SDL_SetTextureAlphaMod(sprite, 90);
 	Object::draw();

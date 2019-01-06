@@ -9,12 +9,12 @@ enum Direction {
 	D_UP
 };
 
-class ObjectDigger : public Object {
+class Digger : public Object {
 
 public:
 
-	ObjectDigger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer);
-	virtual ~ObjectDigger();
+	Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer);
+	virtual ~Digger();
 
 	virtual void handleEvents(const SDL_Event& event);
 	virtual void update();

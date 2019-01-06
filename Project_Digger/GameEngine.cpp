@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include "GameEngine.hpp"
-#include "ObjectDigger.hpp"
+#include "Objects/Digger.hpp"
 
 const int GRID_SIZE = 64;
 const int GRID_START = 40;
@@ -110,15 +110,15 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, int width
         break;
 
     case DIRT:
-        result = new ObjectDirt(x, y, false, tex, tex2, renderer);
+        result = new Dirt(x, y, false, tex, tex2, renderer);
         break;
 
     case TUNNEL:
-    	result = new ObjectDirt(x, y, true, tex, tex2, renderer);
+    	result = new Dirt(x, y, true, tex, tex2, renderer);
     	break;
 
     case DIGGER:
-        result = new ObjectDigger(x, y, tex, renderer);
+        result = new Digger(x, y, tex, renderer);
         break;
 
     case GEM:
@@ -174,26 +174,26 @@ void GameEngine::generateNextLevel() {
         for ( int x = 0; ch != '\n'; x += GRID_SIZE ) {
             switch (ch) {
             case 'd':
-                field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<ObjectDirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
+                field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
                 break;
             case '0':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<ObjectDirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
 				break;
             case 'g':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<ObjectDirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
                 // gem
                 break;
             case 'b':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<ObjectDirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
                 // create bag
                 break;
             case 'e':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<ObjectDirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
                 // create enemy spawner
             	break;
             case 'p':
             	createObject(DIGGER, x, y, GRID_SIZE, GRID_SIZE, "Sprites/digger.png");
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<ObjectDirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
                 // create player obj
             	break;
             default:

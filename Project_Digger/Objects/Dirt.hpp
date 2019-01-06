@@ -10,12 +10,12 @@ enum Side {
 };
 
 
-class ObjectDirt : public Object {
+class Dirt : public Object {
 
 public:
 
-    ObjectDirt(int x, int y, bool empty, SDL_Texture* sprite, SDL_Texture* wallSprite, SDL_Renderer* ren);
-    virtual ~ObjectDirt();
+    Dirt(int x, int y, bool empty, SDL_Texture* sprite, SDL_Texture* wallSprite, SDL_Renderer* ren);
+    virtual ~Dirt();
 
     virtual void handleEvents(const SDL_Event& event);
     virtual void update();

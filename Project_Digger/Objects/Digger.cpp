@@ -1,18 +1,18 @@
-#include "ObjectDigger.hpp"
+#include "Digger.hpp"
 
 const int IMAGE_SIZE = 64;
 const int SPEED = 5;
 
-ObjectDigger::ObjectDigger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
+Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
 	Object(x, y, IMAGE_SIZE, IMAGE_SIZE, IMAGE_SIZE/2, IMAGE_SIZE/2, texture, renderer, DIGGER),
 	dir(D_RIGHT)
 {}
 
 
-ObjectDigger::~ObjectDigger() {}
+Digger::~Digger() {}
 
 
-void ObjectDigger::handleEvents(const SDL_Event& event) {
+void Digger::handleEvents(const SDL_Event& event) {
 
 	switch (event.type) {
 
@@ -43,11 +43,11 @@ void ObjectDigger::handleEvents(const SDL_Event& event) {
 }
 
 
-void ObjectDigger::update() {
+void Digger::update() {
 	Object::update();
 }
 
 
-void ObjectDigger::draw() {
-	SDL_RenderCopyEx(renderer, sprite, &srcRect, &destRect, dir * 90, &origin, SDL_FLIP_NONE);
+void Digger::draw() {
+	SDL_RenderCopyEx(renderer, sprite, &srcRect, &destRect, dir * 90.0, &origin, SDL_FLIP_NONE);
 }
