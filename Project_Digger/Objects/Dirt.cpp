@@ -18,9 +18,6 @@ Dirt::Dirt(int x, int y, bool empty, SDL_Texture* sprite, SDL_Texture* wallSprit
 Dirt::~Dirt() {}
 
 
-void Dirt::handleEvents(const SDL_Event& event) {}
-
-
 void Dirt::update() {
 
     Object::update();

@@ -28,9 +28,6 @@ Object::~Object() {
 }
 
 
-void Object::handleEvents(const SDL_Event& event) {}
-
-
 void Object::update() {
     destRect.x = x;
     destRect.y = y;

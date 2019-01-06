@@ -11,7 +11,9 @@
 #include <string>
 #include "Objects/Object.hpp"
 #include "Objects/Dirt.hpp"
+#include "Objects/Digger.hpp"
 #include "TextureManager.hpp"
+#include "InputHandler.hpp"
 
 using ObjectPoolType = std::list<Object*>;
 
@@ -47,6 +49,7 @@ private:
     ObjectPoolType objects;
     SDL_Window* window;
     SDL_Renderer* renderer;
+	Digger* player;
     unsigned short level;
     bool running;
 

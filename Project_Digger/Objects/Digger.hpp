@@ -16,7 +16,6 @@ public:
 	Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer);
 	virtual ~Digger();
 
-	virtual void handleEvents(const SDL_Event& event);
 	virtual void update();
 	virtual void draw();
 

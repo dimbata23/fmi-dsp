@@ -17,9 +17,8 @@ public:
     Dirt(int x, int y, bool empty, SDL_Texture* sprite, SDL_Texture* wallSprite, SDL_Renderer* ren);
     virtual ~Dirt();
 
-    virtual void handleEvents(const SDL_Event& event);
-    virtual void update();
-    virtual void draw();
+    virtual void update() override;
+    virtual void draw() override;
 
     void setPassable(const Side& dir, bool b) { passable[dir] = b; }
 

@@ -10,6 +10,7 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
 	field({nullptr, }),
     window(nullptr),
     renderer(nullptr),
+	player(nullptr),
     level(0),
     running(false)
 {
@@ -55,30 +56,30 @@ GameEngine::~GameEngine() {
 
 void GameEngine::handleEvents() {
 
-    SDL_Event event;
-    SDL_PollEvent(&event);
-	
-	for (Object* obj : objects)
-        obj->handleEvents(event);
-	
-    switch (event.type) {
+	SDL_Event event;
+	SDL_PollEvent(&event);
 
-    case SDL_QUIT:
-        running = false;
-        break;
+	switch (event.type) {
 
-    default:
-        break;
+	case SDL_QUIT:
+		running = false;
+		break;
 
-    }
+	default:
+		break;
+
+	}
 
 }
 
 
 void GameEngine::update() {
 
-    for (Object* obj: objects)
+	InputHandler::update();
+
+    for (Object* obj : objects)
         obj->update();
+	player->update();
 
 }
 
@@ -88,6 +89,7 @@ void GameEngine::draw() {
     SDL_RenderClear(renderer);
     for (Object* obj: objects)
         obj->draw();
+	player->draw();
     SDL_RenderPresent(renderer);
 
 }
@@ -118,7 +120,7 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, int width
     	break;
 
     case DIGGER:
-        result = new Digger(x, y, tex, renderer);
+        result = player = new Digger(x, y, tex, renderer);
         break;
 
     case GEM:
@@ -135,7 +137,9 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, int width
 
     }
 
-    objects.push_front(result);
+	if (result != player)
+		objects.push_front(result);
+
     return result;
 
 }
@@ -147,9 +151,12 @@ void GameEngine::clean() {
     size_t count = 0;
     for (Object* obj : objects) {
         delete obj;
+		obj = nullptr;
         ++count;
     }
-    std::cout << "Deleted " << count << " objects." << std::endl;
+	delete player;
+	player = nullptr;
+    std::cout << "Deleted " << count + 1 << " objects." << std::endl;
 
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
