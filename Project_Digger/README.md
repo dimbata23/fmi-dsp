@@ -1,5 +1,7 @@
 # Project Digger
 
+*Tested with g++ as well as VC++, either with -std=c++11 and -std=c++14*
+
 ## Initial setup instructions
 **[Linux]**
  - Install **SDL2**, as stated in [their site](https://wiki.libsdl.org/Installation)
