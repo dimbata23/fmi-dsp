@@ -1,10 +1,23 @@
 #include <iostream>
 #include <fstream>
 #include "GameEngine.hpp"
-#include "Objects/Digger.hpp"
 
 const int GRID_SIZE = 64;
 const int GRID_START = 40;
+
+const int WIDTH = 960;
+const int HEIGHT = 680;
+
+const char* WINDOW_TITLE = "Project Digger";
+
+
+GameEngine* GameEngine::instance = nullptr;
+
+
+GameEngine* GameEngine::i() {
+	return (instance ? instance : instance = new GameEngine(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT));
+}
+
 
 GameEngine::GameEngine(const char* title, int x, int y, int width, int height, bool fullscreen) :
 	field({nullptr, }),
@@ -81,6 +94,12 @@ void GameEngine::update() {
         obj->update();
 	player->update();
 
+	// DEBUG
+	//int mx;
+	//int my;
+	//if (SDL_GetMouseState(&mx, &my) & SDL_BUTTON(SDL_BUTTON_LEFT))
+	//	field[(my - GRID_START) / GRID_SIZE][mx / GRID_SIZE]->print();
+
 }
 
 
@@ -92,6 +111,12 @@ void GameEngine::draw() {
 	player->draw();
     SDL_RenderPresent(renderer);
 
+}
+
+
+void GameEngine::release() {
+	delete instance;
+	instance = nullptr;
 }
 
 

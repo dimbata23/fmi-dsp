@@ -7,7 +7,7 @@ bool InputHandler::keyDown(const SDL_Scancode& sc) {
 }
 
 bool InputHandler::mouseButton(const MouseButtons& mb) {
-	return false;
+	return (SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(mb));
 }
 
 void InputHandler::update() {

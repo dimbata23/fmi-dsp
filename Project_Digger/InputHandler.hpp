@@ -7,7 +7,7 @@
 #endif
 
 enum MouseButtons {
-	MB_LEFT,
+	MB_LEFT = 1,
 	MB_RIGHT,
 	MB_MIDDLE
 };

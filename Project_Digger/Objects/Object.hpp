@@ -7,6 +7,9 @@
 #include <SDL2/SDL.h>
 #endif
 
+extern const int GRID_SIZE;
+extern const int GRID_START;
+
 enum ObjectType {
     ANY = -1,
     DIGGER,

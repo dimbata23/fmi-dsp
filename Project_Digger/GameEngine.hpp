@@ -24,7 +24,8 @@ class GameEngine {
 
 public:
 
-    GameEngine(const char* title, int x, int y, int width, int height, bool fullscreen = false);
+	// Get the GameEngine instance
+	static GameEngine* i();
     GameEngine(const GameEngine& other) = delete;
     GameEngine& operator=(const GameEngine& other) = delete;
     ~GameEngine();
@@ -32,12 +33,16 @@ public:
     void handleEvents();
     void update();
     void draw();
+	void release();
 
     bool isRunning() const { return running; }
     Object* createObject(const ObjectType& type, int x, int y, int width, int height, const char* sprite, const char* sprite2 = nullptr);
 
+	Dirt* getDirtAt(int row, int col) const { return field[row][col]; }
+
 private:
 
+	GameEngine(const char* title, int x, int y, int width, int height, bool fullscreen = false);
     void clean();
     void generateNextLevel();
     void setupTunnels();
@@ -50,6 +55,7 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
 	Digger* player;
+	static GameEngine* instance;
     unsigned short level;
     bool running;
 
