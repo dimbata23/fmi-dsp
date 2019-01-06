@@ -7,14 +7,12 @@ const int GRID_SIZE = 64;
 const int GRID_START = 40;
 
 GameEngine::GameEngine(const char* title, int x, int y, int width, int height, bool fullscreen) :
+	field({nullptr, }),
     window(nullptr),
     renderer(nullptr),
     level(0),
     running(false)
 {
-
-	for(auto& t : field)
-		t.fill(nullptr);
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         std::cerr << "Couldn't initialize SDL! Error: " << SDL_GetError() << std::endl;
