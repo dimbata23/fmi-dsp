@@ -44,12 +44,31 @@ void DataManager::fillZones(std::ifstream& in) {
             in.get();
         }
 
-        zoneName1.clear();
-        zoneName2.clear();
-        keyName.clear();
+        // In case there is no new line between the zones and [keys]
+        if (in.peek() == '[') {
+            in >> zoneName1;
+            if (!zoneName1.compare("[keys]")) {
+                std::getline(in, zoneName1); // Getting rid of anything else on the line
+                fillKeys(in);
+                return;
+            }
+        }
 
-        readFirstLabel(in, zoneName1);
-        readSecondLabel(in, zoneName2);
+        // If the zone started with a '[', we've already read it's name
+        if (zoneName1[0] == '[') {
+            std::string buffer;
+            in >> buffer;   // Getting rid of ->
+            zoneName2.clear();
+            keyName.clear();
+            readSecondLabel(in, zoneName2);
+        } else {
+            zoneName1.clear();
+            zoneName2.clear();
+            keyName.clear();
+
+            readFirstLabel(in, zoneName1);
+            readSecondLabel(in, zoneName2);
+        }
 
         // If there is a key needed for the zone
         if (in.peek() == '[')
