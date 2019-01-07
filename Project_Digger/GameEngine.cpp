@@ -90,9 +90,9 @@ void GameEngine::update() {
 
 	InputHandler::update();
 
+	player->update();
     for (Object* obj : objects)
         obj->update();
-	player->update();
 
 	// DEBUG
 	//int mx;

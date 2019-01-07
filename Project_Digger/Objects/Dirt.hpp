@@ -34,8 +34,9 @@ public:
 
 private:
 
-	SDL_Rect borderRect[4];
+	SDL_Rect borderSrcRect[4];
 	SDL_Rect borderDestRect[4];
+	SDL_Rect defaultBorderSrcRect[4];
 	SDL_Rect defaultDestRect;
 	SDL_Rect defaultSrcRect;
     SDL_Texture* wallSprite;

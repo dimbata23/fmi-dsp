@@ -100,29 +100,31 @@ void Digger::update() {
 		if (!d->isEmpty()) {
 			SDL_Rect* dSrcRect = &d->getSrcRect();
 			SDL_Rect* dDestRect = &d->getDestRect();
-			if (moved == D_UP && dSrcRect->h > (y - GRID_START) % GRID_SIZE) {
-				dDestRect->h = dSrcRect->h = (y - GRID_START) % GRID_SIZE;
-				if (dDestRect->h == 0)
+			if (moved == D_UP && dDestRect->y + dDestRect->h > y) {
+				dDestRect->h -= SPEED;
+				dSrcRect->h -= SPEED;
+				if (dDestRect->h <= SPEED)
 					d->setEmpty();
 			}
-			if (moved == D_LEFT && dSrcRect->w > x % GRID_SIZE) {
-				dDestRect->w = dSrcRect->w = x % GRID_SIZE;
-				if (dDestRect->w == 0)
+			if (moved == D_LEFT && dDestRect-> x + dSrcRect->w > x) {
+				dDestRect->w -= SPEED;
+				dSrcRect->w -= SPEED;
+				if (dDestRect->w <= SPEED)
 					d->setEmpty();
 			}
 		}
 	}
-	else
 	if (moved == D_DOWN) {
 		if ((y - GRID_START) / GRID_SIZE < (GRID_ROWS - 1)) {
 			Dirt* d = GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE + 1, x / GRID_SIZE);
 			if (!d->isEmpty()) {
 				SDL_Rect* dSrcRect = &d->getSrcRect();
 				SDL_Rect* dDestRect = &d->getDestRect();
-				if (dSrcRect->y < (y - GRID_START) % GRID_SIZE) {
+				if (dDestRect->y < y + GRID_SIZE) {
 					dSrcRect->y = (y - GRID_START) % GRID_SIZE;
 					dDestRect->y = y + GRID_SIZE;
-					dDestRect->h = GRID_SIZE - dSrcRect->y;
+					dDestRect->h -= SPEED;
+					dSrcRect->h -= SPEED;
 					if (dDestRect->h <= SPEED)
 						d->setEmpty();
 				}
@@ -138,7 +140,8 @@ void Digger::update() {
 				if (dSrcRect->x < x % GRID_SIZE) {
 					dSrcRect->x = x % GRID_SIZE;
 					dDestRect->x = x + GRID_SIZE;
-					dDestRect->w = GRID_SIZE - dSrcRect->x;
+					dDestRect->w -= SPEED;
+					dSrcRect->w -= SPEED;
 					if (dDestRect->w <= SPEED)
 						d->setEmpty();
 				}
