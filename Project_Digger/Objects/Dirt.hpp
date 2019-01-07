@@ -23,6 +23,9 @@ public:
     virtual void draw() override;
 
     void setPassable(const Side& dir, bool b) { passable[dir] = b; }
+    bool isPassable(const Side& dir) const { return passable[dir]; }
+	bool isEmpty() const { return empty; }
+	void setEmpty() { empty = true; }
 	SDL_Rect& getSrcRect() { return srcRect; }
 	SDL_Rect& getDestRect() { return destRect; }
 

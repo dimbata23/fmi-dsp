@@ -22,10 +22,9 @@ void Digger::update() {
 
 	if (InputHandler::keyDown(SDL_SCANCODE_UP)) {
 		if (x % GRID_SIZE == 0) {
-			if ((y - GRID_START) % GRID_SIZE == 0) {
+			if ((y - GRID_START) % GRID_SIZE == 0 && y > GRID_START) {
 				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE)->setPassable(TOP_SIDE, true);
-				if (y > GRID_START)
-					GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE - 1, x / GRID_SIZE)->setPassable(BOTTOM_SIDE, true);
+				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE - 1, x / GRID_SIZE)->setPassable(BOTTOM_SIDE, true);
 			}
 			y -= SPEED;
 			dir = D_UP;
@@ -39,10 +38,9 @@ void Digger::update() {
 	}
 	else if (InputHandler::keyDown(SDL_SCANCODE_DOWN)) {
 		if (x % GRID_SIZE == 0) {
-			if ((y - GRID_START) % GRID_SIZE == 0) {
+			if ((y - GRID_START) % GRID_SIZE == 0 && y - GRID_START < (GRID_ROWS - 1) * GRID_SIZE) {
 				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE)->setPassable(BOTTOM_SIDE, true);
-				if (y - GRID_START < (GRID_ROWS-1) * GRID_SIZE)
-					GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE + 1, x / GRID_SIZE)->setPassable(TOP_SIDE, true);
+				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE + 1, x / GRID_SIZE)->setPassable(TOP_SIDE, true);
 			}
 			y += SPEED;
 			dir = D_DOWN;
@@ -56,10 +54,9 @@ void Digger::update() {
 	}
 	else if (InputHandler::keyDown(SDL_SCANCODE_LEFT)) {
 		if ((y - GRID_START) % GRID_SIZE == 0) {
-			if (x % GRID_SIZE == 0) {
+			if (x % GRID_SIZE == 0 && x > 0) {
 				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE)->setPassable(LEFT_SIDE, true);
-				if (x > 0)
-					GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE - 1)->setPassable(RIGHT_SIDE, true);
+				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE - 1)->setPassable(RIGHT_SIDE, true);
 			}
 			x -= SPEED;
 			dir = D_LEFT;
@@ -73,10 +70,9 @@ void Digger::update() {
 	}
 	else if (InputHandler::keyDown(SDL_SCANCODE_RIGHT)) {
 		if ((y - GRID_START) % GRID_SIZE == 0) {
-			if (x % GRID_SIZE == 0) {
+			if (x % GRID_SIZE == 0 && x < (GRID_COLS - 1) * GRID_SIZE) {
 				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE)->setPassable(RIGHT_SIDE, true);
-				if (x < (GRID_ROWS - 1) * GRID_SIZE)
-					GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE + 1)->setPassable(LEFT_SIDE, true);
+				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE + 1)->setPassable(LEFT_SIDE, true);
 			}
 			x += SPEED;
 			dir = D_RIGHT;
@@ -101,35 +97,51 @@ void Digger::update() {
 
 	if (moved == D_UP || moved == D_LEFT) {
 		Dirt* d = GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE);
-		SDL_Rect* dSrcRect = &d->getSrcRect();
-		SDL_Rect* dDestRect = &d->getDestRect();
-		if (moved == D_UP && dSrcRect->h > (y - GRID_START) % GRID_SIZE) {
-			dDestRect->h = dSrcRect->h = (y - GRID_START) % GRID_SIZE;
-		}
-		if (moved == D_LEFT && dSrcRect->w > x % GRID_SIZE) {
-			dDestRect->w = dSrcRect->w = x % GRID_SIZE;
-		}
-	}
-	else // Somerhing after this doesn't work correctly.... :(
-	if (moved == D_DOWN || moved == D_RIGHT) {
-		if ((y - GRID_START) / GRID_SIZE < GRID_ROWS) {
-			Dirt* d = GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE + 1, x / GRID_SIZE);
+		if (!d->isEmpty()) {
 			SDL_Rect* dSrcRect = &d->getSrcRect();
 			SDL_Rect* dDestRect = &d->getDestRect();
-			if (moved == D_DOWN && dSrcRect->y < y + GRID_SIZE) {
-				dSrcRect->y = y % GRID_SIZE;
-				dDestRect->y = y + GRID_SIZE;
-				dDestRect->h = GRID_SIZE - dSrcRect->y;
+			if (moved == D_UP && dSrcRect->h > (y - GRID_START) % GRID_SIZE) {
+				dDestRect->h = dSrcRect->h = (y - GRID_START) % GRID_SIZE;
+				if (dDestRect->h == 0)
+					d->setEmpty();
+			}
+			if (moved == D_LEFT && dSrcRect->w > x % GRID_SIZE) {
+				dDestRect->w = dSrcRect->w = x % GRID_SIZE;
+				if (dDestRect->w == 0)
+					d->setEmpty();
 			}
 		}
-		if (x / GRID_SIZE < GRID_COLS) {
+	}
+	else
+	if (moved == D_DOWN) {
+		if ((y - GRID_START) / GRID_SIZE < (GRID_ROWS - 1)) {
+			Dirt* d = GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE + 1, x / GRID_SIZE);
+			if (!d->isEmpty()) {
+				SDL_Rect* dSrcRect = &d->getSrcRect();
+				SDL_Rect* dDestRect = &d->getDestRect();
+				if (dSrcRect->y < (y - GRID_START) % GRID_SIZE) {
+					dSrcRect->y = (y - GRID_START) % GRID_SIZE;
+					dDestRect->y = y + GRID_SIZE;
+					dDestRect->h = GRID_SIZE - dSrcRect->y;
+					if (dDestRect->h <= SPEED)
+						d->setEmpty();
+				}
+			}
+		}
+	}
+	if (moved == D_RIGHT) {
+		if (x / GRID_SIZE < GRID_COLS - 1) {
 			Dirt* d = GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE + 1);
-			SDL_Rect* dSrcRect = &d->getSrcRect();
-			SDL_Rect* dDestRect = &d->getDestRect();
-			if (moved == D_RIGHT && dSrcRect->x < x + GRID_SIZE) {
-				dSrcRect->x = x % GRID_SIZE;
-				dDestRect->x = x + GRID_SIZE;
-				dDestRect->w = GRID_SIZE - dSrcRect->x;
+			if (!d->isEmpty()) {
+				SDL_Rect* dSrcRect = &d->getSrcRect();
+				SDL_Rect* dDestRect = &d->getDestRect();
+				if (dSrcRect->x < x % GRID_SIZE) {
+					dSrcRect->x = x % GRID_SIZE;
+					dDestRect->x = x + GRID_SIZE;
+					dDestRect->w = GRID_SIZE - dSrcRect->x;
+					if (dDestRect->w <= SPEED)
+						d->setEmpty();
+				}
 			}
 		}
 	}
