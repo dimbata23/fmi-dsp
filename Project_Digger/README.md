@@ -12,7 +12,7 @@
  - Search for **sdl2** and install **sdl2 by Sam Lantinga, SDL Contributors (Version 2.0.5)**
  - Search for **sdl2 image** and install **sdl2_image.nuget by Sam Lantinga and SDL2 contributors (Version 2.0.4)**
  - Search for **sdl2 ttf** and install **sdl2_ttf.nuget by Sam Lantinga and SDL2 contributors (Version 2.0.14.2)**
- - *(Folders "Levels/" and "Sprites/" must be placed where your project file is located [.vcxproj])*
+ - *(Folders "/Levels", "/Sprites", "/Fonts" and "/Sounds" must be placed where your project file is located [.vcxproj])*
 
 **[Windows] (other IDE)**
  - Download **SDL2**, **SDL2_image** and **SDL2_ttf** for windows
