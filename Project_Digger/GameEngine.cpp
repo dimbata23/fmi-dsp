@@ -15,6 +15,11 @@ const char* DIGGER_SPRITE = "Sprites/digger.png";
 const char* EMERALD_SPRITE = "Sprites/emerald.png";
 
 
+const SDL_Rect GUI_BG_SRC_RECT = { 0, 0, GRID_SIZE, GRID_SIZE};
+const SDL_Rect GUI_BG_DEST_RECT = { 0, GRID_START - GRID_SIZE, GRID_SIZE, GRID_SIZE};
+const SDL_Rect GUI_BORDER_SRC_RECT = {GRID_SIZE * 3, 0, GRID_SIZE, GRID_SIZE};
+
+
 GameEngine* GameEngine::instance = nullptr;
 
 
@@ -139,8 +144,17 @@ void GameEngine::draw() {
 
 void GameEngine::drawGUI() {
 
-    TextManager::i()->setFont("Fonts/Score.ttf", 40);
-	TextManager::i()->drawText(player->getScoreString().c_str(), 15, 0, renderer);
+    SDL_Rect dest = GUI_BG_DEST_RECT;
+    SDL_Texture* bgSpr = texManager.sprite(DIRT_SPRITE, renderer);
+    for (int i = 0; i < GRID_COLS * GRID_SIZE; i += GRID_SIZE) {
+        dest.x = i;
+        SDL_SetTextureAlphaMod(bgSpr, 60);
+        SDL_RenderCopy(renderer, bgSpr, &GUI_BG_SRC_RECT, &dest);
+        SDL_RenderCopy(renderer, texManager.sprite(DIRT_BORDER_SPRITE, renderer), &GUI_BORDER_SRC_RECT, &dest);
+    }
+
+    TextManager::i()->setFont("Fonts/Score.ttf", 45);
+	TextManager::i()->drawText(player->getScoreString().c_str(), 9, -4, renderer);
 
     SDL_RenderPresent(renderer);
 

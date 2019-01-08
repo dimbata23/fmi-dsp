@@ -41,6 +41,7 @@ void Digger::draw() {
 void Digger::increaseScore(size_t points) {
 	score += points;
 	scoreStr = std::to_string(score);
+	scoreStr.insert(scoreStr.begin(), 5 - scoreStr.length(), '0');
 }
 
 
