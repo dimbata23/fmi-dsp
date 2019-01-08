@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include "TextManager.hpp"
 
 
@@ -26,6 +27,8 @@ void TextManager::setFont(const std::string& text, int size) {
     auto it = fonts.find(key);
     if (it == fonts.end()) {
         this->font = TTF_OpenFont(text.c_str(), size);
+		if (!this->font)
+			std::cout << "Couldn't load font \"" << text << "\"!" << std::endl;
         fonts.insert(std::make_pair(key, this->font));
     } else {
         this->font = it->second;
