@@ -15,7 +15,7 @@ enum ObjectType {
     DIGGER,
     DIRT,
 	TUNNEL,
-    GEM,
+    EMERALD,
     BAG,
     ENEMY,
     SPAWNER
@@ -31,15 +31,21 @@ public:
     virtual void update();
     virtual void draw();
 
-    const ObjectType& getType() const { return type; }
+    ObjectType getType() const { return type; }
+    size_t getId() const { return id; }
+    int getX() const { return x; }
+    int getY() const { return y; }
+
+private:
+
+    size_t getNextId() const;
 
 protected:
 
+    size_t id;
     ObjectType type;
     int x;
     int y;
-    //float image_xscale;
-    //float image_yscale;
 
     SDL_Texture* sprite;
     SDL_Renderer* renderer;

@@ -6,9 +6,13 @@
 const int IMAGE_SIZE = 64;
 const int SPEED = 2;
 
+const int EMERALD_SCORE = 25;
+
 Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
 	Object(x, y, IMAGE_SIZE, IMAGE_SIZE, IMAGE_SIZE/2, IMAGE_SIZE/2, texture, renderer, DIGGER),
-	dir(D_RIGHT)
+	scoreStr("00000"),
+	dir(D_RIGHT),
+	score(0)
 {}
 
 
@@ -17,6 +21,30 @@ Digger::~Digger() {}
 
 void Digger::update() {
 	Object::update();
+
+	movement();
+
+	Emerald* em = GameEngine::i()->getEmeraldAt((y + (IMAGE_SIZE / 2) - GRID_START) / GRID_SIZE, (x + (IMAGE_SIZE / 2)) / GRID_SIZE);
+	if (em) {
+		GameEngine::i()->destroyEmerald(em);
+		increaseScore(25);
+	}
+
+}
+
+
+void Digger::draw() {
+	SDL_RenderCopyEx(renderer, sprite, &srcRect, &destRect, dir * 90.0, &origin, SDL_FLIP_NONE);
+}
+
+
+void Digger::increaseScore(size_t points) {
+	score += points;
+	scoreStr = std::to_string(score);
+}
+
+
+void Digger::movement() {
 
 	Direction moved = D_NONE;
 
@@ -149,9 +177,4 @@ void Digger::update() {
 		}
 	}
 
-}
-
-
-void Digger::draw() {
-	SDL_RenderCopyEx(renderer, sprite, &srcRect, &destRect, dir * 90.0, &origin, SDL_FLIP_NONE);
 }

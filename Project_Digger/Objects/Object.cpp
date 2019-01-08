@@ -1,7 +1,11 @@
 #include "Object.hpp"
 
 
+static size_t currId = 1;
+
+
 Object::Object(int x, int y, int width, int height, int xOrigin, int yOrigin, SDL_Texture* texture, SDL_Renderer* renderer, const ObjectType& type) :
+    id(getNextId()),
     type(type),
 	x(x),
     y(y),
@@ -23,7 +27,7 @@ Object::Object(int x, int y, int width, int height, int xOrigin, int yOrigin, SD
 
 Object::~Object() {
 
-    SDL_DestroyTexture(sprite);
+    //SDL_DestroyTexture(sprite);
 
 }
 
@@ -39,3 +43,6 @@ void Object::draw() {
     SDL_RenderCopy(renderer, sprite, &srcRect, &destRect);
 
 }
+
+
+size_t Object::getNextId() const { return currId++; }

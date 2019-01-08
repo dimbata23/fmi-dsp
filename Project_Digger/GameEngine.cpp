@@ -9,6 +9,10 @@ const int WIDTH = 960;
 const int HEIGHT = 680;
 
 const char* WINDOW_TITLE = "Project Digger";
+const char* DIRT_SPRITE = "Sprites/dirt2_64x64.png";
+const char* DIRT_BORDER_SPRITE = "Sprites/dirt_border.png";
+const char* DIGGER_SPRITE = "Sprites/digger.png";
+const char* EMERALD_SPRITE = "Sprites/emerald.png";
 
 
 GameEngine* GameEngine::instance = nullptr;
@@ -21,6 +25,7 @@ GameEngine* GameEngine::i() {
 
 GameEngine::GameEngine(const char* title, int x, int y, int width, int height, bool fullscreen) :
 	field({nullptr, }),
+	emeralds({nullptr, }),
     window(nullptr),
     renderer(nullptr),
 	player(nullptr),
@@ -54,6 +59,14 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 
     std::cout << "Game renderer sucessfully created." << std::endl;
+
+    if (TTF_Init() != 0) {
+        std::cout << "Couldn't initialize font system! Error: " << TTF_GetError() << std::endl;
+        clean();
+        return;
+    }
+
+    std::cout << "Font system sucessfully initialized." << std::endl;
 
     running = true;
 
@@ -91,8 +104,9 @@ void GameEngine::update() {
 	InputHandler::update();
 
 	player->update();
-    for (Object* obj : objects)
-        obj->update();
+
+   for (auto& objPair : objects)
+        objPair.second->update();
 
 	// DEBUG
 	//int mx;
@@ -106,15 +120,35 @@ void GameEngine::update() {
 void GameEngine::draw() {
 
     SDL_RenderClear(renderer);
-    for (Object* obj: objects)
-        obj->draw();
+    for (auto& objPair : objects) {
+        objPair.second->draw();
+    }
+
+    for (auto& arr : emeralds) {
+        for (auto& em : arr) {
+            if (em) {
+                em->draw();
+            }
+        }
+    }
+
 	player->draw();
+
+}
+
+
+void GameEngine::drawGUI() {
+
+    TextManager::i()->setFont("Fonts/Score.ttf", 40);
+	TextManager::i()->drawText(player->getScoreString().c_str(), 15, 0, renderer);
+
     SDL_RenderPresent(renderer);
 
 }
 
 
 void GameEngine::release() {
+    TextManager::release();
 	delete instance;
 	instance = nullptr;
 }
@@ -148,7 +182,8 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, int width
         result = player = new Digger(x, y, tex, renderer);
         break;
 
-    case GEM:
+    case EMERALD:
+        result = new Emerald(x, y, tex, renderer);
         break;
 
     case BAG:
@@ -162,8 +197,8 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, int width
 
     }
 
-	if (result != player)
-		objects.push_front(result);
+	if (type != DIGGER && type != EMERALD)
+		objects.insert(std::make_pair(result->getId(), result));
 
     return result;
 
@@ -174,17 +209,29 @@ void GameEngine::clean() {
 
     std::cout << std::endl << "Deleting objects..." << std::endl;
     size_t count = 0;
-    for (Object* obj : objects) {
-        delete obj;
-		obj = nullptr;
+    for (auto& objPair : objects) {
+        delete objPair.second;
+		objPair.second = nullptr;
         ++count;
     }
 	delete player;
 	player = nullptr;
-    std::cout << "Deleted " << count + 1 << " objects." << std::endl;
+    ++count;
+    for (auto& arr : emeralds) {
+        for (auto& em : arr) {
+            if (em) {
+                delete em;
+                em = nullptr;
+                ++count;
+            }
+        }
+    }
+    std::cout << "Deleted " << count << " objects." << std::endl;
 
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
+    
+    TTF_Quit();
     SDL_Quit();
 
 }
@@ -206,27 +253,26 @@ void GameEngine::generateNextLevel() {
         for ( int x = 0; ch != '\n'; x += GRID_SIZE ) {
             switch (ch) {
             case 'd':
-                field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
+                field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
                 break;
             case '0':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
 				break;
             case 'g':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
-                // gem
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
+                emeralds[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Emerald*>(createObject(EMERALD, x, y, GRID_SIZE, GRID_SIZE, EMERALD_SPRITE));
                 break;
             case 'b':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
                 // create bag
                 break;
             case 'e':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
                 // create enemy spawner
             	break;
             case 'p':
-            	createObject(DIGGER, x, y, GRID_SIZE, GRID_SIZE, "Sprites/digger.png");
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, "Sprites/dirt2_64x64.png", "Sprites/dirt_border.png"));
-                // create player obj
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
+            	createObject(DIGGER, x, y, GRID_SIZE, GRID_SIZE, DIGGER_SPRITE);
             	break;
             default:
                 break;
@@ -256,4 +302,10 @@ void GameEngine::setupTunnels() {
 		}
 	}
 
+}
+
+
+void GameEngine::destroyEmerald(Emerald* em) {
+    emeralds[(em->getY() - GRID_START) / GRID_SIZE][em->getX() / GRID_SIZE] = nullptr;
+    delete em;
 }

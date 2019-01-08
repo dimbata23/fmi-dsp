@@ -9,13 +9,15 @@
 #include <array>
 #include <list>
 #include <string>
+#include "TextureManager.hpp"
+#include "InputHandler.hpp"
+#include "TextManager.hpp"
 #include "Objects/Object.hpp"
 #include "Objects/Dirt.hpp"
 #include "Objects/Digger.hpp"
-#include "TextureManager.hpp"
-#include "InputHandler.hpp"
+#include "Objects/Emerald.hpp"
 
-using ObjectPoolType = std::list<Object*>;
+using ObjectPoolType = std::unordered_map<size_t, Object*>;
 
 const int GRID_COLS = 15;
 const int GRID_ROWS = 10;
@@ -33,12 +35,15 @@ public:
     void handleEvents();
     void update();
     void draw();
-	void release();
+    void drawGUI();
+	static void release();
 
     bool isRunning() const { return running; }
     Object* createObject(const ObjectType& type, int x, int y, int width, int height, const char* sprite, const char* sprite2 = nullptr);
 
 	Dirt* getDirtAt(int row, int col) const { return field[row][col]; }
+    Emerald* getEmeraldAt(int row, int col) { return emeralds[row][col]; }
+    void destroyEmerald(Emerald* em);
 
 private:
 
@@ -50,6 +55,7 @@ private:
 private:
 
     std::array<std::array<Dirt*, GRID_COLS>, GRID_ROWS> field;
+    std::array<std::array<Emerald*, GRID_COLS>, GRID_ROWS> emeralds;
     TextureManager texManager;
     ObjectPoolType objects;
     SDL_Window* window;

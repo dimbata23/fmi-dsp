@@ -16,6 +16,7 @@ int main() {
 		GameEngine::i()->handleEvents();
 		GameEngine::i()->update();
 		GameEngine::i()->draw();
+		GameEngine::i()->drawGUI();
 
         frameTime = SDL_GetTicks() - frameStart;
 
@@ -24,7 +25,7 @@ int main() {
 
     }
 
-	GameEngine::i()->release();
+	GameEngine::release();
 
     return 0;
 }
