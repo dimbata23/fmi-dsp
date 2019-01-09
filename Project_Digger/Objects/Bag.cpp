@@ -83,6 +83,8 @@ void Bag::update() {
     }
 
     if (!falling) {
+        if ((y - GRID_START) % GRID_SIZE != 0)
+            y -= (y - GRID_START) % GRID_SIZE;
         destRect.x = x;
         destRect.h = GRID_SIZE;
         destRect.w = GRID_SIZE;
