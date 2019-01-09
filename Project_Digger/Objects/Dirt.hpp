@@ -29,8 +29,10 @@ public:
 	SDL_Rect& getSrcRect() { return srcRect; }
 	SDL_Rect& getDestRect() { return destRect; }
 
+	int emptyPercent() const { return empty ? 100 : (100 - (100*(destRect.w * destRect.h))/(GRID_SIZE * GRID_SIZE)); }
+
 	// DEBUG
-	//void print() const { std::cout << "\nPassable:\nleft: " << passable[LEFT_SIDE] << "\ntop: " << passable[TOP_SIDE] << "\nright: " << passable[RIGHT_SIDE] << "\nbottom: " << passable[BOTTOM_SIDE] << std::endl; }
+	//void print() const { std::cout << "\nPercent empty: " << emptyPercent() << std::endl; }
 
 private:
 

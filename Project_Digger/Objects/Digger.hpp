@@ -3,14 +3,6 @@
 #include <string>
 #include "Object.hpp"
 
-enum Direction {
-	D_NONE = -1,
-	D_RIGHT,
-	D_DOWN,
-	D_LEFT,
-	D_UP
-};
-
 class Digger : public Object {
 
 public:
@@ -26,7 +18,7 @@ public:
 
 private:
 
-	void movement();
+	Direction movement();
 
 private:
 

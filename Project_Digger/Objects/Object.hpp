@@ -21,6 +21,14 @@ enum ObjectType {
     SPAWNER
 };
 
+enum Direction {
+	D_NONE = -1,
+	D_RIGHT,
+	D_DOWN,
+	D_LEFT,
+	D_UP
+};
+
 class Object {
 
 public:

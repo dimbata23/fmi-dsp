@@ -16,8 +16,9 @@
 #include "Objects/Dirt.hpp"
 #include "Objects/Digger.hpp"
 #include "Objects/Emerald.hpp"
+#include "Objects/Bag.hpp"
 
-using ObjectPoolType = std::unordered_map<size_t, Object*>;
+using ObjectPoolType = std::list<Object*>;
 
 const int GRID_COLS = 15;
 const int GRID_ROWS = 10;
@@ -44,6 +45,10 @@ public:
 	Dirt* getDirtAt(int row, int col) const { return field[row][col]; }
     Emerald* getEmeraldAt(int row, int col) { return emeralds[row][col]; }
     void destroyEmerald(Emerald* em);
+    void destroyObject(size_t id);
+
+    Object* getAtPosition(const ObjectType& type, int x, int y);
+    ObjectPoolType::iterator getObjectById(size_t id);
 
 private:
 

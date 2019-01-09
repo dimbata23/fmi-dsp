@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include "GameEngine.hpp"
 
 const int GRID_SIZE = 64;
@@ -110,14 +111,29 @@ void GameEngine::update() {
 
 	player->update();
 
-   for (auto& objPair : objects)
-        objPair.second->update();
+    for (auto& obj : objects)
+        obj->update();
+    
+    for (auto it = objects.begin(); it != objects.end();) {
+        if (!*it)
+            it = objects.erase(it);
+        else
+            ++it;
+    }
+
+    for (auto& arr : field) {
+        for (auto& dirt : arr) {
+            if (dirt) {
+                dirt->update();
+            }
+        }
+    }
 
 	// DEBUG
-	//int mx;
-	//int my;
-	//if (SDL_GetMouseState(&mx, &my) & SDL_BUTTON(SDL_BUTTON_LEFT))
-	//	field[(my - GRID_START) / GRID_SIZE][mx / GRID_SIZE]->print();
+	// int mx;
+	// int my;
+	// if (SDL_GetMouseState(&mx, &my) & SDL_BUTTON(SDL_BUTTON_LEFT))
+	// 	field[(my - GRID_START) / GRID_SIZE][mx / GRID_SIZE]->print();
 
 }
 
@@ -125,8 +141,13 @@ void GameEngine::update() {
 void GameEngine::draw() {
 
     SDL_RenderClear(renderer);
-    for (auto& objPair : objects) {
-        objPair.second->draw();
+
+    for (auto& arr : field) {
+        for (auto& dirt : arr) {
+            if (dirt) {
+                dirt->draw();
+            }
+        }
     }
 
     for (auto& arr : emeralds) {
@@ -135,6 +156,10 @@ void GameEngine::draw() {
                 em->draw();
             }
         }
+    }
+
+    for (auto& obj : objects) {
+        obj->draw();
     }
 
 	player->draw();
@@ -197,10 +222,11 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, int width
         break;
 
     case EMERALD:
-        result = new Emerald(x, y, tex, renderer);
+        emeralds[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Emerald*>(result = new Emerald(x, y, tex, renderer));
         break;
 
     case BAG:
+        result = new Bag(x, y, tex, renderer);
         break;
 
     case ENEMY:
@@ -211,8 +237,8 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, int width
 
     }
 
-	if (type != DIGGER && type != EMERALD)
-		objects.insert(std::make_pair(result->getId(), result));
+	if (type == BAG || type == ENEMY)
+		objects.push_back(result);
 
     return result;
 
@@ -223,9 +249,8 @@ void GameEngine::clean() {
 
     std::cout << std::endl << "Deleting objects..." << std::endl;
     size_t count = 0;
-    for (auto& objPair : objects) {
-        delete objPair.second;
-		objPair.second = nullptr;
+    for (auto& obj : objects) {
+        delete obj;
         ++count;
     }
 	delete player;
@@ -278,7 +303,7 @@ void GameEngine::generateNextLevel() {
                 break;
             case 'b':
             	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
-                // create bag
+                createObject(BAG, x, y, GRID_SIZE, GRID_SIZE, "Sprites/bag.png");
                 break;
             case 'e':
             	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
@@ -322,4 +347,48 @@ void GameEngine::setupTunnels() {
 void GameEngine::destroyEmerald(Emerald* em) {
     emeralds[(em->getY() - GRID_START) / GRID_SIZE][em->getX() / GRID_SIZE] = nullptr;
     delete em;
+}
+
+
+void GameEngine::destroyObject(size_t id) {
+
+    auto o = getObjectById(id);
+    if (o == objects.end())
+        return;
+
+    if ((*o)->getType() == BAG) {
+        delete dynamic_cast<Bag*>(*o);
+        *o = nullptr;
+    } else if ((*o)->getType() == ENEMY) {
+        //TODO..
+    }
+
+}
+
+
+Object* GameEngine::getAtPosition(const ObjectType& type, int x, int y) {
+
+    if (type == DIGGER && player->getX() == x && player->getY() == y)
+        return player;
+
+    if (type == ENEMY || type == BAG)
+        for (auto& i : objects)
+            if (i->getType() == type && i->getX() == x && i->getY() == y)
+                return i;
+
+    return nullptr;
+
+}
+
+
+ObjectPoolType::iterator GameEngine::getObjectById(size_t id) {
+
+    auto result = objects.begin();
+    while (result != objects.end()) {
+        if ((*result)->getId() == id)
+            break;
+        ++result;
+    }
+    return result;
+
 }

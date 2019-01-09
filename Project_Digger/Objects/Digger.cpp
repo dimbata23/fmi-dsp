@@ -1,5 +1,6 @@
 #include "Digger.hpp"
 #include "Dirt.hpp"
+#include "Bag.hpp"
 #include "../GameEngine.hpp"
 #include "../InputHandler.hpp"
 
@@ -20,9 +21,42 @@ Digger::~Digger() {}
 
 
 void Digger::update() {
+	
 	Object::update();
 
-	movement();
+	Bag* bagOnTop = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x, y - GRID_SIZE));
+
+	Direction moved = movement();
+
+	if (bagOnTop && !bagOnTop->isFalling()) {
+		if (moved == D_UP)
+			y += SPEED;
+		else
+			bagOnTop->triggerFall();
+	}
+
+	if (!bagOnTop) {
+		Bag* bag = nullptr;
+		switch (moved) {
+			case D_LEFT:
+				bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x - GRID_SIZE + SPEED, y));
+				if (bag && !bag->isFalling())
+					bag->move(D_LEFT);
+			break;
+			case D_RIGHT:
+				bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + GRID_SIZE - SPEED, y));
+				if (bag && !bag->isFalling())
+					bag->move(D_RIGHT);
+			break;
+			case D_DOWN:
+				bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x, y + GRID_SIZE - SPEED));
+				if (bag && !bag->isFalling())
+					y -= SPEED;
+			break;
+			default:
+			break;
+		}
+	}
 
 	Emerald* em = GameEngine::i()->getEmeraldAt((y + (IMAGE_SIZE / 2) - GRID_START) / GRID_SIZE, (x + (IMAGE_SIZE / 2)) / GRID_SIZE);
 	if (em) {
@@ -45,7 +79,7 @@ void Digger::increaseScore(size_t points) {
 }
 
 
-void Digger::movement() {
+Direction Digger::movement() {
 
 	Direction moved = D_NONE;
 
@@ -115,6 +149,8 @@ void Digger::movement() {
 		moved = dir;
 	}
 
+	
+
 	if (y < GRID_START)
 		y = GRID_START;
 	if (y > GRID_START + (GRID_ROWS * GRID_SIZE) - IMAGE_SIZE)
@@ -123,6 +159,8 @@ void Digger::movement() {
 		x = 0;
 	if (x > GRID_COLS * GRID_SIZE - IMAGE_SIZE)
 		x = GRID_COLS * GRID_SIZE - IMAGE_SIZE;
+
+	
 
 	if (moved == D_UP || moved == D_LEFT) {
 		Dirt* d = GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE);
@@ -177,5 +215,7 @@ void Digger::movement() {
 			}
 		}
 	}
+
+	return moved;
 
 }
