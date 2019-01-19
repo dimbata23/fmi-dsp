@@ -66,10 +66,17 @@ void Bag::update() {
 
     else if (moveDir != D_NONE) {
 
-        if (moveDir == D_LEFT)
+        if (moveDir == D_LEFT) {
+            Bag* b = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x - GRID_SIZE, y));
+            if (b)
+                b->move(moveDir);
             x -= MOVE_SPEED;
-        else if (moveDir == D_RIGHT)
+        } else if (moveDir == D_RIGHT) {
+            Bag* b = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + GRID_SIZE, y));
+            if (b)
+                b->move(moveDir);
             x += MOVE_SPEED;
+        }
         
         if (x % GRID_SIZE == 0) {
             moveDir = D_NONE;
@@ -104,7 +111,8 @@ void Bag::draw() {
 
 void Bag::releaseCoins() {
 
-    GameEngine::i()->createObject(EMERALD, x, y, GRID_SIZE, GRID_SIZE, COINS_SPRITE);
+    if (!GameEngine::i()->getEmeraldAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE))
+        GameEngine::i()->createObject(EMERALD, x, y, GRID_SIZE, GRID_SIZE, COINS_SPRITE);
     GameEngine::i()->destroyObject(this->id);
 
 }
