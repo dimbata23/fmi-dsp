@@ -16,6 +16,7 @@
 #include "Objects/Dirt.hpp"
 #include "Objects/Digger.hpp"
 #include "Objects/Emerald.hpp"
+#include "Objects/Enemy.hpp"
 #include "Objects/Bag.hpp"
 
 using ObjectPoolType = std::list<Object*>;
@@ -49,6 +50,8 @@ public:
 
     Object* getAtPosition(const ObjectType& type, int x, int y);
     ObjectPoolType::iterator getObjectById(size_t id);
+
+    Digger* getPlayer() const { return player; }
 
 private:
 

@@ -230,6 +230,7 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, int width
         break;
 
     case ENEMY:
+        result = new Enemy(x, y, tex, renderer);
         break;
 
     case SPAWNER:
@@ -308,6 +309,7 @@ void GameEngine::generateNextLevel() {
             case 'e':
             	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
                 // create enemy spawner
+                createObject(ENEMY, x, y, GRID_SIZE, GRID_SIZE, "Sprites/enemy.png");
             	break;
             case 'p':
             	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
