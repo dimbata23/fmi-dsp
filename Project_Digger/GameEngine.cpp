@@ -360,7 +360,7 @@ void GameEngine::destroyObject(size_t id) {
         delete dynamic_cast<Bag*>(*o);
         *o = nullptr;
     } else if ((*o)->getType() == ENEMY) {
-        //TODO..
+        // TODO..
     }
 
 }
@@ -373,7 +373,7 @@ Object* GameEngine::getAtPosition(const ObjectType& type, int x, int y) {
 
     if (type == ENEMY || type == BAG)
         for (auto& i : objects)
-            if (i->getType() == type && i->getX() == x && i->getY() == y)
+            if (i && i->getType() == type && i->getX() == x && i->getY() == y)
                 return i;
 
     return nullptr;
