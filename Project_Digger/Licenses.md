@@ -6,3 +6,4 @@
 
 *emerald.png* (edited) - by **sunburn** [https://opengameart.org/content/loot]
 
+*bag.png* - No Copyright
