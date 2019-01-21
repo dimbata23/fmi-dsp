@@ -57,7 +57,7 @@ void Dirt::draw() {
 	if (!empty)
 		Object::draw();
 
-	// Drawing inside border (passable)
+	// Drawing (passable) border
 	for (int i = 0; i < 4; ++i)
 		if (!passable[i])
 			SDL_RenderCopy(renderer, wallSprite, &defaultBorderSrcRect[i], &defaultDestRect);
