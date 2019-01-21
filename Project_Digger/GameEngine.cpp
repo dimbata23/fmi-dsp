@@ -25,7 +25,9 @@ GameEngine* GameEngine::instance = nullptr;
 
 
 GameEngine* GameEngine::i() {
-	return (instance ? instance : instance = new GameEngine(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT));
+	if (instance)
+		return instance;
+	return instance = new GameEngine(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT);
 }
 
 
@@ -169,6 +171,7 @@ void GameEngine::draw() {
 
 void GameEngine::drawGUI() {
 
+	// TODO: These variables should be const and global for this file
     SDL_Rect dest = GUI_BG_DEST_RECT;
     SDL_Texture* bgSpr = texManager.sprite(DIRT_SPRITE, renderer);
     for (int i = 0; i < GRID_COLS * GRID_SIZE; i += GRID_SIZE) {
@@ -178,6 +181,7 @@ void GameEngine::drawGUI() {
         SDL_RenderCopy(renderer, texManager.sprite(DIRT_BORDER_SPRITE, renderer), &GUI_BORDER_SRC_RECT, &dest);
     }
 
+	// TODO: setFont() can only be called once as it will not be changed throughout the game
     TextManager::i()->setFont("Fonts/Score.ttf", 45);
 	TextManager::i()->drawText(player->getScoreString().c_str(), 9, -4, renderer);
 
