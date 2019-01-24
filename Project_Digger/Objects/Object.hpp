@@ -37,6 +37,7 @@ public:
     Object(int x, int y, int xOrigin, int yOrigin, SDL_Texture* texture, SDL_Renderer* renderer, const ObjectType& type = ANY);
     Object(const Object&) = delete;
     Object& operator=(const Object&) = delete;
+    virtual ~Object();
 
     virtual void update();
     virtual void draw();
