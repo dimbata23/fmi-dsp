@@ -18,6 +18,7 @@
 #include "Objects/Emerald.hpp"
 #include "Objects/Enemy.hpp"
 #include "Objects/Bag.hpp"
+#include "Objects/Gold.hpp"
 
 using ObjectPoolType = std::list<Object*>;
 
@@ -45,7 +46,9 @@ public:
 
 	Dirt* getDirtAt(int row, int col) const { return field[row][col]; }
     Emerald* getEmeraldAt(int row, int col) { return emeralds[row][col]; }
-    void destroyEmerald(Emerald* em);
+    Gold* getGoldAt(int row, int col) { return gold[row][col]; }
+    void destroyObject(Emerald* em);
+    void destroyObject(Gold* el);
     void destroyObject(size_t id);
 
     Object* getAtPosition(const ObjectType& type, int x, int y);
@@ -64,6 +67,7 @@ private:
 
     std::array<std::array<Dirt*, GRID_COLS>, GRID_ROWS> field;
     std::array<std::array<Emerald*, GRID_COLS>, GRID_ROWS> emeralds;
+    std::array<std::array<Gold*, GRID_COLS>, GRID_ROWS> gold;
     ObjectPoolType objects;
     SDL_Window* window;
     SDL_Renderer* renderer;

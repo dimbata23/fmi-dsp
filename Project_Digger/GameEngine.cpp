@@ -165,6 +165,14 @@ void GameEngine::draw() {
         }
     }
 
+    for (auto& arr : gold) {
+        for (auto& el : arr) {
+            if (el) {
+                el->draw();
+            }
+        }
+    }
+
     for (auto& obj : objects) {
         obj->draw();
     }
@@ -231,6 +239,10 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, const cha
 
     case EMERALD:
         emeralds[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Emerald*>(result = new Emerald(x, y, tex, renderer));
+        break;
+
+    case GOLD:
+        gold[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Gold*>(result = new Gold(x, y, tex, renderer));
         break;
 
     case BAG:
@@ -354,9 +366,15 @@ void GameEngine::setupTunnels() {
 }
 
 
-void GameEngine::destroyEmerald(Emerald* em) {
+void GameEngine::destroyObject(Emerald* em) {
     emeralds[(em->getY() - GRID_START) / GRID_SIZE][em->getX() / GRID_SIZE] = nullptr;
     delete em;
+}
+
+
+void GameEngine::destroyObject(Gold* el) {
+    gold[(el->getY() - GRID_START) / GRID_SIZE][el->getX() / GRID_SIZE] = nullptr;
+    delete el;
 }
 
 
