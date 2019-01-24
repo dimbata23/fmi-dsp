@@ -25,9 +25,6 @@ Object::Object(int x, int y, int xOrigin, int yOrigin, SDL_Texture* texture, SDL
 }
 
 
-Object::~Object() {}
-
-
 void Object::update() {
     destRect.x = x;
     destRect.y = y;

@@ -17,6 +17,7 @@ enum ObjectType {
 	TUNNEL,
     EMERALD,
     BAG,
+    GOLD,
     ENEMY,
     SPAWNER
 };
@@ -34,7 +35,8 @@ class Object {
 public:
 
     Object(int x, int y, int xOrigin, int yOrigin, SDL_Texture* texture, SDL_Renderer* renderer, const ObjectType& type = ANY);
-    virtual ~Object();
+    Object(const Object&) = delete;
+    Object& operator=(const Object&) = delete;
 
     virtual void update();
     virtual void draw();
