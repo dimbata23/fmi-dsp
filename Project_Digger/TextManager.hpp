@@ -12,7 +12,7 @@ class TextManager {
 
 public:
 
-    // Get the FontManager instance
+    // Get the TextManager instance
 	static TextManager* i();
     TextManager(const TextManager& other) = delete;
     TextManager& operator=(const TextManager& other) = delete;
