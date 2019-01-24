@@ -286,6 +286,24 @@ void GameEngine::clean() {
             }
         }
     }
+    for (auto& arr : gold) {
+        for (auto& el : arr) {
+            if (el) {
+                delete el;
+                el = nullptr;
+                ++count;
+            }
+        }
+    }
+    for (auto& arr : field) {
+        for (auto& el : arr) {
+            if (el) {
+                delete el;
+                el = nullptr;
+                ++count;
+            }
+        }
+    }
     std::cout << "Deleted " << count << " objects." << std::endl;
 
     SDL_DestroyWindow(window);
