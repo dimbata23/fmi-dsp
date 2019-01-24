@@ -9,11 +9,14 @@ const int GRID_START = 40;
 const int WIDTH = 960;
 const int HEIGHT = 680;
 
-const char* WINDOW_TITLE = "Project Digger";
-const char* DIRT_SPRITE = "Sprites/dirt2_64x64.png";
-const char* DIRT_BORDER_SPRITE = "Sprites/dirt_border.png";
-const char* DIGGER_SPRITE = "Sprites/digger.png";
-const char* EMERALD_SPRITE = "Sprites/emerald.png";
+const char* WINDOW_TITLE        = "Project Digger";
+const char* DIRT_SPRITE         = "Sprites/dirt2_64x64.png";
+const char* DIRT_BORDER_SPRITE  = "Sprites/dirt_border.png";
+const char* DIGGER_SPRITE       = "Sprites/digger.png";
+const char* EMERALD_SPRITE      = "Sprites/emerald.png";
+
+const char* SCORE_FONT  = "Fonts/Score.ttf";
+const int   FONT_SIZE   = 45;
 
 SDL_Texture* BG_TEXTURE = nullptr;
 SDL_Texture* BG_BORDER_TEXTURE = nullptr;
@@ -27,9 +30,7 @@ GameEngine* GameEngine::instance = nullptr;
 
 
 GameEngine* GameEngine::i() {
-	if (instance)
-		return instance;
-	return instance = new GameEngine(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT);
+	return instance ? instance : instance = new GameEngine(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT);
 }
 
 
@@ -84,6 +85,8 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
     BG_BORDER_TEXTURE = TextureManager::i()->sprite(DIRT_BORDER_SPRITE, renderer);
 
     generateNextLevel();
+
+    TextManager::i()->setFont(SCORE_FONT, FONT_SIZE);
 
 }
 
@@ -183,8 +186,7 @@ void GameEngine::draw() {
 
 
 void GameEngine::drawGUI() {
-
-	// TODO: These variables should be const and global for this file
+    
     SDL_Rect dest = GUI_BG_DEST_RECT;
     for (int i = 0; i < GRID_COLS * GRID_SIZE; i += GRID_SIZE) {
         dest.x = i;
@@ -193,8 +195,6 @@ void GameEngine::drawGUI() {
         SDL_RenderCopy(renderer, BG_BORDER_TEXTURE, &GUI_BORDER_SRC_RECT, &dest);
     }
 
-	// TODO: setFont() can only be called once as it will not be changed throughout the game
-    TextManager::i()->setFont("Fonts/Score.ttf", 45);
 	TextManager::i()->drawText(player->getScoreString().c_str(), 9, -4, renderer);
 
     SDL_RenderPresent(renderer);
@@ -203,9 +203,12 @@ void GameEngine::drawGUI() {
 
 
 void GameEngine::release() {
+
     TextManager::release();
+    TextureManager::release();
 	delete instance;
 	instance = nullptr;
+
 }
 
 
@@ -318,7 +321,7 @@ void GameEngine::clean() {
 void GameEngine::generateNextLevel() {
 
 	std::string levelName = "Levels/level" + std::to_string(++level);
-	std::cout << "Loading level: " << levelName << std::endl;
+	std::cout << "Loading level \"" << levelName << '\"' << std::endl;
     std::ifstream in(levelName);
     if (!in) {
         std::cout << "No next level!" << std::endl;
