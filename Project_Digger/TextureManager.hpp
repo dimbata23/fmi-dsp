@@ -19,6 +19,7 @@ public:
     TextureManager& operator=(const TextureManager&) = delete;
     ~TextureManager();
 
+    static void release();
     SDL_Texture* sprite(const char* file, SDL_Renderer* ren);
 
 private:

@@ -13,6 +13,14 @@ TextureManager* TextureManager::i() {
 TextureManager::TextureManager() {}
 
 
+void TextureManager::release() {
+
+    delete instance;
+    instance = nullptr;
+
+}
+
+
 TextureManager::~TextureManager() {
 
     std::cout << std::endl << "Unloading textures..." << std::endl;
@@ -48,4 +56,5 @@ SDL_Texture* TextureManager::loadTexture(const char* fileName, SDL_Renderer* ren
     SDL_FreeSurface(temp);
 
     return tex;
+    
 }
