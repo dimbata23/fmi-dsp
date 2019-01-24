@@ -4,6 +4,6 @@
 
 *dirt2_64x64.png* (edited) & *dirt_border.png* (edited) - by **EZduzziteh** [https://opengameart.org/content/dirt-texture]
 
-*emerald.png* (edited) & *gold.png* - by **sunburn** [https://opengameart.org/content/loot]
+*emerald.png* (edited) & *gold.png* (edited) - by **sunburn** [https://opengameart.org/content/loot]
 
 *bag.png* - No Copyright
