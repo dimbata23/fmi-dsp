@@ -25,7 +25,7 @@ TextureManager::~TextureManager() {
 
     std::cout << std::endl << "Unloading textures..." << std::endl;
     for (const std::pair<const char*, SDL_Texture*>& p : textures) {
-        std::cout << "Unloading texture \"" << p.first << "\"." << std::endl;
+        std::cout << "Unloading texture \"" << p.first << '\"' << std::endl;
         SDL_DestroyTexture(p.second);
     }
 
