@@ -117,6 +117,3 @@ void Enemy::findPathBFS() {
     }
 
 }
-
-
-Enemy::~Enemy() {}

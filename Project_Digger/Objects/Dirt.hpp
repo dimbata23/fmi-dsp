@@ -17,7 +17,6 @@ class Dirt : public Object {
 public:
 
     Dirt(int x, int y, bool empty, SDL_Texture* sprite, SDL_Texture* wallSprite, SDL_Renderer* ren);
-    virtual ~Dirt();
 
     virtual void update() override;
     virtual void draw() override;

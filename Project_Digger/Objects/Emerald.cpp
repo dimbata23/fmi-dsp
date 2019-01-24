@@ -7,9 +7,6 @@ Emerald::Emerald(int x, int y, SDL_Texture* sprite, SDL_Renderer* ren) :
 {}
 
 
-Emerald::~Emerald() {}
-
-
 void Emerald::update() {}
 
 

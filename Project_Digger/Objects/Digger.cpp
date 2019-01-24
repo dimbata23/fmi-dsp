@@ -7,17 +7,16 @@
 const int SPEED = 2;
 
 const int EMERALD_SCORE = 25;
+const int GOLD_SCORE = 500;
 
 
 Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
 	Object(x, y, GRID_SIZE/2, GRID_SIZE/2, texture, renderer, DIGGER),
 	scoreStr("00000"),
 	dir(D_RIGHT),
-	score(0)
+	score(0),
+	canFire(true)
 {}
-
-
-Digger::~Digger() {}
 
 
 void Digger::update() {
@@ -60,8 +59,15 @@ void Digger::update() {
 
 	Emerald* em = GameEngine::i()->getEmeraldAt((y + (GRID_SIZE / 2) - GRID_START) / GRID_SIZE, (x + (GRID_SIZE / 2)) / GRID_SIZE);
 	if (em) {
-		GameEngine::i()->destroyEmerald(em);
-		increaseScore(25);
+		GameEngine::i()->destroyObject(em);
+		increaseScore(EMERALD_SCORE);
+	}
+
+	Gold* gold = GameEngine::i()->getGoldAt((y + (GRID_SIZE / 2) - GRID_START) / GRID_SIZE, (x + (GRID_SIZE / 2)) / GRID_SIZE);
+	if (gold) {
+		GameEngine::i()->destroyObject(gold);
+		increaseScore(GOLD_SCORE);
+		canFire = true;
 	}
 
 }
