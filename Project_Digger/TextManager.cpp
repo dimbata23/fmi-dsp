@@ -15,9 +15,14 @@ TextManager::TextManager() : font(nullptr) {}
 
 
 TextManager::~TextManager() {
-    for (auto& f : fonts)
+
+    std::cout << std::endl << "Unloading fonts..." << std::endl;
+    for (auto& f : fonts) {
         TTF_CloseFont(f.second);
+        std::cout << "Unloaded font \"" << f.first << '\"' << std::endl;
+    }
     this->font = nullptr;
+
 }
 
 
@@ -53,6 +58,8 @@ void TextManager::drawText(const char* text, int x, int y, SDL_Renderer* ren, SD
 
 
 void TextManager::release() {
+
     delete instance;
     instance = nullptr;
+    
 }
