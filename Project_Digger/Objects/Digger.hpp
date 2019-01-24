@@ -8,7 +8,7 @@ class Digger : public Object {
 public:
 
 	Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer);
-	virtual ~Digger() noexcept;
+	virtual ~Digger();
 
 	virtual void update() override;
 	virtual void draw() override;
