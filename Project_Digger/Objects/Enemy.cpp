@@ -9,7 +9,7 @@ const float SPEED = 2.133333f;
 
 
 Enemy::Enemy(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
-    Object(x, y, GRID_SIZE, GRID_SIZE, 0, 0, texture, renderer, ENEMY),
+    Object(x, y, 0, 0, texture, renderer, ENEMY),
     realX(x),
     realY(y),
     nextPosX(x),

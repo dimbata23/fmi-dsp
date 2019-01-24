@@ -13,7 +13,8 @@ class TextureManager {
 
 public:
 
-    TextureManager();
+    // Get the TextureManager instance
+	static TextureManager* i();
     TextureManager(const TextureManager&) = delete;
     TextureManager& operator=(const TextureManager&) = delete;
     ~TextureManager();
@@ -22,10 +23,12 @@ public:
 
 private:
 
+    TextureManager();
     static SDL_Texture* loadTexture(const char* fileName, SDL_Renderer* ren);
 
 private:
 
     TexturesPoolType textures;
+    static TextureManager* instance;
 
 };

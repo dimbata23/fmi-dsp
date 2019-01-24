@@ -9,7 +9,7 @@ const int FALL_STRETCH = 16;
 const char* COINS_SPRITE = "Sprites/emerald.png";
 
 Bag::Bag(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
-    Object(x, y, GRID_SIZE, GRID_SIZE, 0, 0, texture, renderer, BAG),
+    Object(x, y, 0, 0, texture, renderer, BAG),
     moveDir(D_NONE),
     time(DEFAULT_WOBBLE_FRAMES),
     startFallY(y),
@@ -112,7 +112,7 @@ void Bag::draw() {
 void Bag::releaseCoins() {
 
     if (!GameEngine::i()->getEmeraldAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE))
-        GameEngine::i()->createObject(EMERALD, x, y, GRID_SIZE, GRID_SIZE, COINS_SPRITE);
+        GameEngine::i()->createObject(EMERALD, x, y, COINS_SPRITE);
     GameEngine::i()->destroyObject(this->id);
 
 }

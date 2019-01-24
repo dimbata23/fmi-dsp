@@ -2,6 +2,14 @@
 #include "TextureManager.hpp"
 
 
+TextureManager* TextureManager::instance = nullptr;
+
+
+TextureManager* TextureManager::i() {
+    return (instance ? instance : instance = new TextureManager());
+}
+
+
 TextureManager::TextureManager() {}
 
 

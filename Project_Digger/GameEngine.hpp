@@ -41,7 +41,7 @@ public:
 	static void release();
 
     bool isRunning() const { return running; }
-    Object* createObject(const ObjectType& type, int x, int y, int width, int height, const char* sprite, const char* sprite2 = nullptr);
+    Object* createObject(const ObjectType& type, int x, int y, const char* sprite, const char* sprite2 = nullptr);
 
 	Dirt* getDirtAt(int row, int col) const { return field[row][col]; }
     Emerald* getEmeraldAt(int row, int col) { return emeralds[row][col]; }
@@ -64,7 +64,6 @@ private:
 
     std::array<std::array<Dirt*, GRID_COLS>, GRID_ROWS> field;
     std::array<std::array<Emerald*, GRID_COLS>, GRID_ROWS> emeralds;
-    TextureManager texManager;
     ObjectPoolType objects;
     SDL_Window* window;
     SDL_Renderer* renderer;

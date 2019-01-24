@@ -15,6 +15,8 @@ const char* DIRT_BORDER_SPRITE = "Sprites/dirt_border.png";
 const char* DIGGER_SPRITE = "Sprites/digger.png";
 const char* EMERALD_SPRITE = "Sprites/emerald.png";
 
+SDL_Texture* BG_TEXTURE = nullptr;
+SDL_Texture* BG_BORDER_TEXTURE = nullptr;
 
 const SDL_Rect GUI_BG_SRC_RECT = { 0, 0, GRID_SIZE, GRID_SIZE};
 const SDL_Rect GUI_BG_DEST_RECT = { 0, GRID_START - GRID_SIZE, GRID_SIZE, GRID_SIZE};
@@ -77,6 +79,9 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
     std::cout << "Font system sucessfully initialized." << std::endl;
 
     running = true;
+
+    BG_TEXTURE = TextureManager::i()->sprite(DIRT_SPRITE, renderer);
+    BG_BORDER_TEXTURE = TextureManager::i()->sprite(DIRT_BORDER_SPRITE, renderer);
 
     generateNextLevel();
 
@@ -173,12 +178,11 @@ void GameEngine::drawGUI() {
 
 	// TODO: These variables should be const and global for this file
     SDL_Rect dest = GUI_BG_DEST_RECT;
-    SDL_Texture* bgSpr = texManager.sprite(DIRT_SPRITE, renderer);
     for (int i = 0; i < GRID_COLS * GRID_SIZE; i += GRID_SIZE) {
         dest.x = i;
-        SDL_SetTextureAlphaMod(bgSpr, 60);
-        SDL_RenderCopy(renderer, bgSpr, &GUI_BG_SRC_RECT, &dest);
-        SDL_RenderCopy(renderer, texManager.sprite(DIRT_BORDER_SPRITE, renderer), &GUI_BORDER_SRC_RECT, &dest);
+        SDL_SetTextureAlphaMod(BG_TEXTURE, 60);
+        SDL_RenderCopy(renderer, BG_TEXTURE, &GUI_BG_SRC_RECT, &dest);
+        SDL_RenderCopy(renderer, BG_BORDER_TEXTURE, &GUI_BORDER_SRC_RECT, &dest);
     }
 
 	// TODO: setFont() can only be called once as it will not be changed throughout the game
@@ -197,20 +201,20 @@ void GameEngine::release() {
 }
 
 
-Object* GameEngine::createObject(const ObjectType& type, int x, int y, int width, int height, const char* sprite, const char* sprite2) {
+Object* GameEngine::createObject(const ObjectType& type, int x, int y, const char* sprite, const char* sprite2) {
 
     Object* result = nullptr;
     SDL_Texture* tex = nullptr;
     SDL_Texture* tex2 = nullptr;
     if (sprite)
-    	tex = texManager.sprite(sprite, renderer);
+    	tex = TextureManager::i()->sprite(sprite, renderer);
     if (sprite2)
-    	tex2 = texManager.sprite(sprite2, renderer);
+    	tex2 = TextureManager::i()->sprite(sprite2, renderer);
 
     switch(type) {
 
     case ANY:
-        result = new Object(x, y, width, height, 0, 0, tex, renderer);
+        result = new Object(x, y, 0, 0, tex, renderer);
         break;
 
     case DIRT:
@@ -297,27 +301,27 @@ void GameEngine::generateNextLevel() {
         for ( int x = 0; ch != '\n'; x += GRID_SIZE ) {
             switch (ch) {
             case 'd':
-                field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
+                field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
                 break;
             case '0':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
 				break;
             case 'g':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
-                emeralds[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Emerald*>(createObject(EMERALD, x, y, GRID_SIZE, GRID_SIZE, EMERALD_SPRITE));
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
+                emeralds[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Emerald*>(createObject(EMERALD, x, y, EMERALD_SPRITE));
                 break;
             case 'b':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
-                createObject(BAG, x, y, GRID_SIZE, GRID_SIZE, "Sprites/bag.png");
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
+                createObject(BAG, x, y, "Sprites/bag.png");
                 break;
             case 'e':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
                 // create enemy spawner
-                createObject(ENEMY, x, y, GRID_SIZE, GRID_SIZE, "Sprites/enemy.png");
+                createObject(ENEMY, x, y, "Sprites/enemy.png");
             	break;
             case 'p':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, GRID_SIZE, GRID_SIZE, DIRT_SPRITE, DIRT_BORDER_SPRITE));
-            	createObject(DIGGER, x, y, GRID_SIZE, GRID_SIZE, DIGGER_SPRITE);
+            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
+            	createObject(DIGGER, x, y, DIGGER_SPRITE);
             	break;
             default:
                 break;

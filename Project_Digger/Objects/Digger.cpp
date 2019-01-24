@@ -4,13 +4,13 @@
 #include "../GameEngine.hpp"
 #include "../InputHandler.hpp"
 
-const int IMAGE_SIZE = 64;
 const int SPEED = 2;
 
 const int EMERALD_SCORE = 25;
 
+
 Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
-	Object(x, y, IMAGE_SIZE, IMAGE_SIZE, IMAGE_SIZE/2, IMAGE_SIZE/2, texture, renderer, DIGGER),
+	Object(x, y, GRID_SIZE/2, GRID_SIZE/2, texture, renderer, DIGGER),
 	scoreStr("00000"),
 	dir(D_RIGHT),
 	score(0)
@@ -58,7 +58,7 @@ void Digger::update() {
 		}
 	}
 
-	Emerald* em = GameEngine::i()->getEmeraldAt((y + (IMAGE_SIZE / 2) - GRID_START) / GRID_SIZE, (x + (IMAGE_SIZE / 2)) / GRID_SIZE);
+	Emerald* em = GameEngine::i()->getEmeraldAt((y + (GRID_SIZE / 2) - GRID_START) / GRID_SIZE, (x + (GRID_SIZE / 2)) / GRID_SIZE);
 	if (em) {
 		GameEngine::i()->destroyEmerald(em);
 		increaseScore(25);
@@ -153,12 +153,12 @@ Direction Digger::movement() {
 
 	if (y < GRID_START)
 		y = GRID_START;
-	if (y > GRID_START + (GRID_ROWS * GRID_SIZE) - IMAGE_SIZE)
-		y = GRID_START + (GRID_ROWS * GRID_SIZE) - IMAGE_SIZE;
+	if (y > GRID_START + (GRID_ROWS * GRID_SIZE) - GRID_SIZE)
+		y = GRID_START + (GRID_ROWS * GRID_SIZE) - GRID_SIZE;
 	if (x < 0)
 		x = 0;
-	if (x > GRID_COLS * GRID_SIZE - IMAGE_SIZE)
-		x = GRID_COLS * GRID_SIZE - IMAGE_SIZE;
+	if (x > GRID_COLS * GRID_SIZE - GRID_SIZE)
+		x = GRID_COLS * GRID_SIZE - GRID_SIZE;
 
 	
 

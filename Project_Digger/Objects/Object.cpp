@@ -4,7 +4,7 @@
 static size_t currId = 1;
 
 
-Object::Object(int x, int y, int width, int height, int xOrigin, int yOrigin, SDL_Texture* texture, SDL_Renderer* renderer, const ObjectType& type) :
+Object::Object(int x, int y, int xOrigin, int yOrigin, SDL_Texture* texture, SDL_Renderer* renderer, const ObjectType& type) :
     id(getNextId()),
     type(type),
 	x(x),
@@ -12,24 +12,20 @@ Object::Object(int x, int y, int width, int height, int xOrigin, int yOrigin, SD
     sprite(texture),
     renderer(renderer)
 {
-    srcRect.w = width;
-    srcRect.h = height;
+    srcRect.w = GRID_SIZE;
+    srcRect.h = GRID_SIZE;
     srcRect.x = 0;
     srcRect.y = 0;
     destRect.x = x;
     destRect.y = y;
-    destRect.w = width;
-    destRect.h = height;
+    destRect.w = GRID_SIZE;
+    destRect.h = GRID_SIZE;
     origin.x = xOrigin;
     origin.y = yOrigin;
 }
 
 
-Object::~Object() {
-
-    //SDL_DestroyTexture(sprite);
-
-}
+Object::~Object() {}
 
 
 void Object::update() {

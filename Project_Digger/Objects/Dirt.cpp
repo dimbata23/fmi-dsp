@@ -1,9 +1,8 @@
 #include "Dirt.hpp"
 
-const int IMAGE_SIZE = 64;
 
 Dirt::Dirt(int x, int y, bool empty, SDL_Texture* sprite, SDL_Texture* wallSprite, SDL_Renderer* ren) :
-    Object(x, y, IMAGE_SIZE, IMAGE_SIZE, 0, 0, sprite, ren, empty ? TUNNEL : DIRT),
+    Object(x, y, 0, 0, sprite, ren, empty ? TUNNEL : DIRT),
 	defaultDestRect(destRect),
 	defaultSrcRect(srcRect),
 	wallSprite(wallSprite),
@@ -13,7 +12,7 @@ Dirt::Dirt(int x, int y, bool empty, SDL_Texture* sprite, SDL_Texture* wallSprit
 	for (int i = 0; i < 4; ++i) {
 		borderDestRect[i] = destRect;
 		borderSrcRect[i] = srcRect;
-		borderSrcRect[i].x += i * IMAGE_SIZE;
+		borderSrcRect[i].x += i * GRID_SIZE;
 		defaultBorderSrcRect[i] = borderSrcRect[i];
 	}
 }
