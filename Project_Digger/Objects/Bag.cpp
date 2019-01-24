@@ -6,7 +6,7 @@ const int WOBBLE_SIZE = 4;
 const int FALL_SPEED = 3;
 const int MOVE_SPEED = 2;
 const int FALL_STRETCH = 16;
-const char* COINS_SPRITE = "Sprites/emerald.png";
+const char* GOLD_SPRITE = "Sprites/gold.png";
 
 Bag::Bag(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
     Object(x, y, 0, 0, texture, renderer, BAG),
@@ -16,9 +16,6 @@ Bag::Bag(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
     excited(false),
     falling(false)
 {}
-
-
-Bag::~Bag() {}
 
 
 void Bag::update() {
@@ -112,7 +109,7 @@ void Bag::draw() {
 void Bag::releaseCoins() {
 
     if (!GameEngine::i()->getEmeraldAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE))
-        GameEngine::i()->createObject(EMERALD, x, y, COINS_SPRITE);
+        GameEngine::i()->createObject(GOLD, x, y, GOLD_SPRITE);
     GameEngine::i()->destroyObject(this->id);
 
 }

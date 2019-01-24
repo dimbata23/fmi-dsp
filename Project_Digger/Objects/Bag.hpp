@@ -7,7 +7,6 @@ class Bag : public Object {
 public:
 
     Bag(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer);
-    virtual ~Bag();
 
     virtual void update() override;
     virtual void draw() override;
