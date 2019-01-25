@@ -14,6 +14,7 @@ public:
 
 	void increaseScore(size_t points);
 	const std::string& getScoreString() const { return scoreStr; }
+	size_t getLives() const { return lives; }
 
 private:
 

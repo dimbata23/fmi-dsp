@@ -25,8 +25,6 @@ public:
     bool isPassable(const Side& dir) const { return passable[dir]; }
 	bool isEmpty() const { return empty; }
 	void setEmpty() { empty = true; }
-	SDL_Rect& getSrcRect() { return srcRect; }
-	SDL_Rect& getDestRect() { return destRect; }
 
 	int emptyPercent() const { return empty ? 100 : (100 - (100*(destRect.w * destRect.h))/(GRID_SIZE * GRID_SIZE)); }
 

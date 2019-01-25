@@ -9,9 +9,6 @@ const int SPEED = 2;
 const int EMERALD_SCORE	= 25;
 const int GOLD_SCORE	= 500;
 const int DEFAULT_LIVES = 3;
-const int LIVES_X_POS	= GRID_SIZE * 1.5;
-const int LIVES_Y_POS	= -3;
-const int LIVES_SIZE	= GRID_START;
 
 
 Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
@@ -80,12 +77,6 @@ void Digger::update() {
 
 void Digger::draw() {
 	SDL_RenderCopyEx(renderer, sprite, &srcRect, &destRect, dir * 90.0, &origin, SDL_FLIP_NONE);
-
-	SDL_Rect dest = { LIVES_X_POS, LIVES_Y_POS, LIVES_SIZE, LIVES_SIZE };
-	for (int i = 0; i < lives; ++i) {
-		dest.x = LIVES_X_POS + LIVES_SIZE * i;
-		SDL_RenderCopy(renderer, sprite, &srcRect, &dest);
-	}
 }
 
 

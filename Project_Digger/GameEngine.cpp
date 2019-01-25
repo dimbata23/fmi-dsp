@@ -25,6 +25,10 @@ const SDL_Rect GUI_BG_SRC_RECT = { 0, 0, GRID_SIZE, GRID_SIZE};
 const SDL_Rect GUI_BG_DEST_RECT = { 0, GRID_START - GRID_SIZE, GRID_SIZE, GRID_SIZE};
 const SDL_Rect GUI_BORDER_SRC_RECT = {GRID_SIZE * 3, 0, GRID_SIZE, GRID_SIZE};
 
+const int LIVES_X_POS = GRID_SIZE * 1.5;
+const int LIVES_Y_POS = -3;
+const int LIVES_SIZE = GRID_START;
+
 
 GameEngine* GameEngine::instance = nullptr;
 
@@ -197,6 +201,12 @@ void GameEngine::drawGUI() {
     }
 
 	TextManager::i()->drawText(player->getScoreString().c_str(), 9, -4, renderer);
+
+	SDL_Rect livesDest = { LIVES_X_POS, LIVES_Y_POS, LIVES_SIZE, LIVES_SIZE };
+	for (int i = 0; i < player->getLives(); ++i) {
+		livesDest.x = LIVES_X_POS + LIVES_SIZE * i;
+		SDL_RenderCopy(renderer, player->getSprite(), &player->getSrcRect(), &livesDest);
+	}
 
     SDL_RenderPresent(renderer);
 

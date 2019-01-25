@@ -42,6 +42,9 @@ public:
     virtual void update();
     virtual void draw();
 
+	SDL_Texture* getSprite() const { return sprite; }
+	SDL_Rect& getSrcRect() { return srcRect; }
+	SDL_Rect& getDestRect() { return destRect; }
     ObjectType getType() const { return type; }
     size_t getId() const { return id; }
     int getX() const { return x; }
