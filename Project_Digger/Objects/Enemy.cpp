@@ -3,6 +3,7 @@
 #include <stack>
 #include "Enemy.hpp"
 #include "../GameEngine.hpp"
+#include "../Utils.hpp"
 
 
 // Slightly faster than Digger
@@ -39,6 +40,9 @@ void Enemy::update() {
 	Gold* collidedGold = GameEngine::i()->getGoldAt((y - GRID_START + (GRID_SIZE / 2)) / GRID_SIZE, (x + (GRID_SIZE / 2)) / GRID_SIZE);
 	if (collidedGold)
 		GameEngine::i()->destroyObject(collidedGold);
+
+	if (distance(GameEngine::i()->getPlayer()->getX(), GameEngine::i()->getPlayer()->getY(), x, y) < GRID_SIZE / 2)
+		GameEngine::i()->getPlayer()->kill();
 
 }
 

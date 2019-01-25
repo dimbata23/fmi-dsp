@@ -410,6 +410,23 @@ void GameEngine::destroyObject(Gold* el) {
 }
 
 
+void GameEngine::destroyObject(Object* obj) {
+
+	switch (obj->getType()) {
+		case EMERALD:
+			destroyObject(dynamic_cast<Emerald*>(obj));
+			break;
+		case GOLD:
+			destroyObject(dynamic_cast<Gold*>(obj));
+			break;
+		default:
+			destroyObject(obj->getId());
+			break;
+	}
+
+}
+
+
 void GameEngine::destroyObject(size_t id) {
 
     auto o = getObjectById(id);
@@ -420,7 +437,8 @@ void GameEngine::destroyObject(size_t id) {
         delete dynamic_cast<Bag*>(*o);
         *o = nullptr;
     } else if ((*o)->getType() == ENEMY) {
-        // TODO..
+		delete dynamic_cast<Enemy*>(*o);
+		*o = nullptr;
     }
 
 }
@@ -450,5 +468,14 @@ ObjectPoolType::iterator GameEngine::getObjectById(size_t id) {
         ++result;
     }
     return result;
+
+}
+
+
+void GameEngine::destroyEnemies() {
+
+	for (auto obj : objects)
+		if (obj->getType() == ENEMY)
+			destroyObject(obj);
 
 }

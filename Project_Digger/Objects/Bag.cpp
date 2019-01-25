@@ -110,6 +110,6 @@ void Bag::releaseCoins() {
 
     if (!GameEngine::i()->getGoldAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE))
         GameEngine::i()->createObject(GOLD, x, y, GOLD_SPRITE);
-    GameEngine::i()->destroyObject(this->id);
+    GameEngine::i()->destroyObject(this);
 
 }

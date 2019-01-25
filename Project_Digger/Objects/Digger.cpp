@@ -17,6 +17,8 @@ Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
 	dir(D_RIGHT),
 	score(0),
 	lives(DEFAULT_LIVES),
+	startingX(x),
+	startingY(y),
 	canFire(true)
 {}
 
@@ -84,6 +86,20 @@ void Digger::increaseScore(size_t points) {
 	score += points;
 	scoreStr = std::to_string(score);
 	scoreStr.insert(scoreStr.begin(), 5 - scoreStr.length(), '0');
+}
+
+
+void Digger::kill() {
+	SDL_Delay(1000);
+
+	if (lives == 0) {
+		GameEngine::i()->end();
+	} else {
+		--lives;
+		GameEngine::i()->destroyEnemies();
+		x = startingX;
+		y = startingY;
+	}
 }
 
 

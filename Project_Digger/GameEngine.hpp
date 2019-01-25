@@ -40,6 +40,7 @@ public:
     void draw();
     void drawGUI();
 	static void release();
+	void end() { running = false; }
 
     bool isRunning() const { return running; }
     Object* createObject(const ObjectType& type, int x, int y, const char* sprite, const char* sprite2 = nullptr);
@@ -49,12 +50,15 @@ public:
     Gold* getGoldAt(int row, int col) { return gold[row][col]; }
     void destroyObject(Emerald* em);
     void destroyObject(Gold* el);
+	void destroyObject(Object* obj);
     void destroyObject(size_t id);
 
     Object* getAtPosition(const ObjectType& type, int x, int y);
     ObjectPoolType::iterator getObjectById(size_t id);
 
     Digger* getPlayer() const { return player; }
+
+	void destroyEnemies();
 
 private:
 
