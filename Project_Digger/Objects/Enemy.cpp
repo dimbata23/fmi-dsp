@@ -5,7 +5,8 @@
 #include "../GameEngine.hpp"
 
 
-const float SPEED = 2.133333f;
+// Slightly faster than Digger
+const float SPEED = GRID_SIZE / ((GRID_SIZE / 2) - 1.0f);
 
 
 Enemy::Enemy(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
@@ -34,6 +35,10 @@ void Enemy::update() {
 
     x = round(realX);
     y = round(realY);
+
+	Gold* collidedGold = GameEngine::i()->getGoldAt((y - GRID_START + (GRID_SIZE / 2)) / GRID_SIZE, (x + (GRID_SIZE / 2)) / GRID_SIZE);
+	if (collidedGold)
+		GameEngine::i()->destroyObject(collidedGold);
 
 }
 
