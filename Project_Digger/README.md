@@ -27,3 +27,27 @@
  - Download **SDL2**, **SDL2_image** and **SDL2_ttf** for windows
  - Install **SDL2** as stated in [their site](https://wiki.libsdl.org/Installation)
  - Link **SDL2**, **SDL2_image** and **SDL2_ttf** for your preferred IDE
+
+
+## Features
+ - Levels loading from files
+ - Textures system
+ - Dirt & tunnels with varying size
+ - Digger movement
+ - Emeralds & scoring
+ - Bags & gold
+ - Enemy tracking
+ - ***[TODO]** Lives*
+ - ***[TODO]** Enemy spawner with fixed amount of enemies*
+ - ***[TODO]** Enemies eating gold*
+ - ***[TODO]** Enemies transform & push bags*
+ - ***[TODO]** Enemies kill Digger*
+ - ***[TODO]** Out of lives restarts game*
+ - ***[TODO]** Highscore system*
+ - ***[TODO]** Bags kill everything they fall on*
+ - ***[TODO]** Digger can fire*
+ - ***[TODO]** Main menu*
+ - ***[TODO]** Pause menu* 
+ - ***[TODO]** Sound system*
+ - ***[TODO]** Bonus mode*
+ - ***[TODO]** Pushing bags slows down Digger*
