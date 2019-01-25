@@ -4,6 +4,7 @@
 const int DEFAULT_WOBBLE_FRAMES = 60;
 const int WOBBLE_SIZE = 4;
 const int FALL_SPEED = 3;
+//const int MOVE_SPEED = GRID_SIZE / ((GRID_SIZE / 2) + 2.0f);
 const int MOVE_SPEED = 2;
 const int FALL_STRETCH = 16;
 const char* GOLD_SPRITE = "Sprites/gold.png";
