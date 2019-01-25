@@ -37,7 +37,7 @@
  - Emeralds & scoring
  - Bags & gold
  - Enemy tracking
- - ***[TODO]** Lives*
+ - Lives
  - ***[TODO]** Enemy spawner with fixed amount of enemies*
  - Enemies eat gold
  - ***[TODO]** Enemies transform & push bags*
