@@ -39,7 +39,7 @@
  - Enemy tracking
  - ***[TODO]** Lives*
  - ***[TODO]** Enemy spawner with fixed amount of enemies*
- - ***[TODO]** Enemies eating gold*
+ - Enemies eat gold
  - ***[TODO]** Enemies transform & push bags*
  - ***[TODO]** Enemies kill Digger*
  - ***[TODO]** Out of lives restarts game*
