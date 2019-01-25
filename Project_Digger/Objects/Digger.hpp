@@ -24,6 +24,7 @@ private:
 	std::string scoreStr;
 	Direction dir;
 	size_t score;
+	size_t lives;
 	bool canFire;
 
 };
