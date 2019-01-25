@@ -29,7 +29,7 @@
  - Link **SDL2**, **SDL2_image** and **SDL2_ttf** for your preferred IDE
 
 
-## Features:
+## Features
  - Levels loading from files
  - Textures system
  - Dirt & tunnels with varying size
