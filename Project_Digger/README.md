@@ -49,3 +49,5 @@
  - ***[TODO]** Main menu*
  - ***[TODO]** Pause menu* 
  - ***[TODO]** Sound system*
+ - ***[TODO]** Bonus mode*
+ - ***[TODO]** Pushing bags slows down Digger*
