@@ -31,6 +31,7 @@
 
 ## Features:
  - Levels loading from files
+ - Textures system
  - Dirt & tunnels with varying size
  - Digger movement
  - Emeralds & scoring
@@ -47,3 +48,4 @@
  - ***[TODO]** Digger can fire*
  - ***[TODO]** Main menu*
  - ***[TODO]** Pause menu* 
+ - ***[TODO]** Sound system*
