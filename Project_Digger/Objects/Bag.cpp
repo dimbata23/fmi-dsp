@@ -75,7 +75,7 @@ void Bag::update() {
     else if (moveDir != D_NONE) {
 
         if (moveDir == D_LEFT) {
-            Bag* b = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x - GRID_SIZE, y));
+            Bag* b = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x - 1, y));
             if (b)
                 b->move(moveDir);
             realX -= MOVE_SPEED;
@@ -142,9 +142,17 @@ bool Bag::canMove(const Direction dir) const {
 	if (falling || excited)
 		return false;
 
-	Bag* adj = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + (dir == D_LEFT) ? -1 : GRID_SIZE, y));
+	Bag* adj = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, (x + ((dir == D_LEFT) ? -1 : GRID_SIZE)), y));
 	if (adj)
 		return adj->canMove(dir);
+    
+    Object* o = GameEngine::i()->getAtPosition(DIGGER, x + ((dir == D_LEFT) ? -1 : GRID_SIZE), y);
+    if (o)
+        return false;
+
+    Enemy* e = dynamic_cast<Enemy*>(GameEngine::i()->getAtPosition(ENEMY, x + ((dir == D_LEFT) ? -1 : GRID_SIZE), y));
+	if (e)
+		return false;
 
 	if (dir == D_LEFT && x > 0)
 		return true;
