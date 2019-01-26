@@ -27,14 +27,30 @@ void Enemy::update() {
     if (x % GRID_SIZE == 0 && (y - GRID_START) % GRID_SIZE == 0)
         findPathBFS();
 
-    if (nextPosX < x)
+    if (nextPosX < x) {
         realX -= SPEED;
-    else if (nextPosX > x)
+        Bag* o = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, round(realX), y));
+        if (o && !o->isFalling()) {
+            if (o->canMove(D_LEFT))
+                o->move(D_LEFT);
+            realX += SPEED;
+        }
+    } else if (nextPosX > x) {
         realX += SPEED;
-    else if (nextPosY < y)
+        Bag* o = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, round(realX) + GRID_SIZE - 1, y));
+        if (o && !o->isFalling()) {
+            if (o->canMove(D_RIGHT))
+                o->move(D_RIGHT);
+            realX -= SPEED;
+        }
+    } else if (nextPosY < y) {
         realY -= SPEED;
-    else if (nextPosY > y)
+    } else if (nextPosY > y) {
         realY += SPEED;
+        Bag* o = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, round(realX), y + GRID_SIZE - 1));
+        if (o)
+            realY -= SPEED;
+    }
 
     x = round(realX);
     y = round(realY);
