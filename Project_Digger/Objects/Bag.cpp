@@ -35,11 +35,11 @@ void Bag::update() {
 
     else if (falling) {
 
-		Digger* o = dynamic_cast<Digger*>(GameEngine::i()->getAtPosition(DIGGER, x, y + GRID_SIZE));
+		Digger* o = dynamic_cast<Digger*>(GameEngine::i()->getAtPosition(DIGGER, x + GRID_SIZE/2, y + GRID_SIZE));
 		if (o)
 			o->kill();
 
-		Enemy* e = dynamic_cast<Enemy*>(GameEngine::i()->getAtPosition(ENEMY, x, y + GRID_SIZE));
+		Enemy* e = dynamic_cast<Enemy*>(GameEngine::i()->getAtPosition(ENEMY, x + GRID_SIZE/2, y + GRID_SIZE));
 		if (e)
 			e->kill();
 
