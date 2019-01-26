@@ -146,12 +146,6 @@ void GameEngine::update() {
         }
     }
 
-	// DEBUG
-	// int mx;
-	// int my;
-	// if (SDL_GetMouseState(&mx, &my) & SDL_BUTTON(SDL_BUTTON_LEFT))
-	// 	field[(my - GRID_START) / GRID_SIZE][mx / GRID_SIZE]->print();
-
 }
 
 

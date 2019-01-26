@@ -28,9 +28,6 @@ public:
 
 	int emptyPercent() const { return empty ? 100 : (100 - (100*(destRect.w * destRect.h))/(GRID_SIZE * GRID_SIZE)); }
 
-	// DEBUG
-	//void print() const { std::cout << "\nPercent empty: " << emptyPercent() << std::endl; }
-
 private:
 
 	SDL_Rect borderSrcRect[4];
