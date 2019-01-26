@@ -41,7 +41,7 @@
  - Enemy spawner with fixed amount of enemies
  - Enemies eat gold
  - ***[TODO]** Enemies transform & dig*
- - ***[TODO]** Enemies push bags*
+ - [TODO] Enemies push bags
  - Enemies kill Digger
  - ***[TODO]** Out of lives restarts game*
  - ***[TODO]** Highscore system*
