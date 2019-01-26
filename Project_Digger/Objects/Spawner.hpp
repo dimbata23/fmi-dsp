@@ -13,6 +13,6 @@ public:
 
 private:
 
-	size_t lastSpawnTime;
+	int lastSpawnTime;
 
 };

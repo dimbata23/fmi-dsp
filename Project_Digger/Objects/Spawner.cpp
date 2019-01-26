@@ -6,7 +6,7 @@ const int SPAWN_RATE = 3000; // in ms
 
 Spawner::Spawner(int x, int y, SDL_Texture* sprite, SDL_Renderer* ren) :
 	Object(x, y, 0, 0, sprite, ren, SPAWNER),
-	lastSpawnTime(0)
+	lastSpawnTime(-SPAWN_RATE)
 {}
 
 
