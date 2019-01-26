@@ -22,7 +22,6 @@ Enemy::Enemy(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
 
 
 void Enemy::update() {
-    Object::update();
 
     if (x % GRID_SIZE == 0 && (y - GRID_START) % GRID_SIZE == 0)
         findPathBFS();
@@ -61,6 +60,8 @@ void Enemy::update() {
 
 	if (distance(GameEngine::i()->getPlayer()->getX(), GameEngine::i()->getPlayer()->getY(), x, y) < GRID_SIZE / 2)
 		GameEngine::i()->getPlayer()->kill();
+
+    Object::update();
 
 }
 

@@ -27,8 +27,6 @@ Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
 
 
 void Digger::update() {
-	
-	Object::update();
 
 	Bag* bagOnTop = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + (GRID_SIZE / 2), y - 1));
 
@@ -101,6 +99,8 @@ void Digger::update() {
 		increaseScore(GOLD_SCORE);
 		canFire = true;
 	}
+
+	Object::update();
 
 }
 

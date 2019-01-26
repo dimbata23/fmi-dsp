@@ -21,8 +21,6 @@ Bag::Bag(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
 
 void Bag::update() {
 
-    Object::update();
-
     if (excited) {
         --time;
         if (time == 0) {
@@ -115,6 +113,8 @@ void Bag::update() {
         destRect.h = GRID_SIZE;
         destRect.w = GRID_SIZE;
     }
+
+    Object::update();
 
 }
 
