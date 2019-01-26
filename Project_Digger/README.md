@@ -38,7 +38,7 @@
  - Bags & gold
  - Enemy tracking
  - Lives
- - ***[TODO]** Enemy spawner with fixed amount of enemies*
+ - Enemy spawner with fixed amount of enemies
  - Enemies eat gold
  - ***[TODO]** Enemies transform & push bags*
  - Enemies kill Digger
