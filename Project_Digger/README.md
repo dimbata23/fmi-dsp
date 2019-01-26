@@ -46,7 +46,7 @@
  - ***[TODO]** Out of lives restarts game*
  - ***[TODO]** Highscore system*
  - Bags kill everything they fall on
- - ***[TODO]** Digger can fire*
+ - Digger can fire
  - ***[TODO]** Main menu*
  - ***[TODO]** Pause menu* 
  - ***[TODO]** Sound system*
