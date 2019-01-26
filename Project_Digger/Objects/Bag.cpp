@@ -4,8 +4,7 @@
 const int DEFAULT_WOBBLE_FRAMES = 60;
 const int WOBBLE_SIZE = 4;
 const int FALL_SPEED = 3;
-//const int MOVE_SPEED = GRID_SIZE / ((GRID_SIZE / 2) + 2.0f);
-const int MOVE_SPEED = 2;
+const float MOVE_SPEED = 1.5f;
 const int FALL_STRETCH = 16;
 const char* GOLD_SPRITE = "Sprites/gold.png";
 
@@ -14,7 +13,8 @@ Bag::Bag(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
     moveDir(D_NONE),
     time(DEFAULT_WOBBLE_FRAMES),
     startFallY(y),
-    excited(false),
+	realX(x),
+	excited(false),
     falling(false)
 {}
 
@@ -42,6 +42,7 @@ void Bag::update() {
 
         if (y >= GRID_SIZE * GRID_ROWS + GRID_START - GRID_SIZE) {
             falling = false;
+			y = GRID_SIZE * GRID_ROWS + GRID_START - GRID_SIZE;
         } else {
             Dirt* d = GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE + 1, x / GRID_SIZE);
             if (!d->isEmpty()) {
@@ -68,14 +69,25 @@ void Bag::update() {
             Bag* b = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x - GRID_SIZE, y));
             if (b)
                 b->move(moveDir);
-            x -= MOVE_SPEED;
+            realX -= MOVE_SPEED;
         } else if (moveDir == D_RIGHT) {
             Bag* b = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + GRID_SIZE, y));
             if (b)
                 b->move(moveDir);
-            x += MOVE_SPEED;
+            realX += MOVE_SPEED;
         }
+
+		x = round(realX);
+
+		// Fix for uneven movement
+		if (x % 2 != 0)
+			x += (moveDir == D_LEFT) ? 1 : -1;
         
+		if (x < 0)
+			x = 0;
+		if (x > GRID_COLS * GRID_SIZE - GRID_SIZE)
+			x = GRID_COLS * GRID_SIZE - GRID_SIZE;
+
         if (x % GRID_SIZE == 0) {
             moveDir = D_NONE;
             Dirt* d = GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE + 1, x / GRID_SIZE);
@@ -113,4 +125,22 @@ void Bag::releaseCoins() {
         GameEngine::i()->createObject(GOLD, x, y, GOLD_SPRITE);
     GameEngine::i()->destroyObject(this);
 
+}
+
+
+bool Bag::canMove(const Direction dir) const {
+
+	if (falling || excited)
+		return false;
+
+	Bag* adj = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + (dir == D_LEFT) ? -1 : GRID_SIZE, y));
+	if (adj)
+		return adj->canMove(dir);
+
+	if (dir == D_LEFT && x > 0)
+		return true;
+	if (dir == D_RIGHT && x < GRID_COLS * GRID_SIZE - GRID_SIZE)
+		return true;
+
+	return false;
 }

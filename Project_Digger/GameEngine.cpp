@@ -446,13 +446,15 @@ void GameEngine::destroyObject(size_t id) {
 
 Object* GameEngine::getAtPosition(const ObjectType& type, int x, int y) {
 
-    if (type == DIGGER && player->getX() == x && player->getY() == y)
-        return player;
+	if (type == DIGGER && x >= player->getX() && x < player->getX() + GRID_SIZE
+		&& y >= player->getY() && y < player->getY() + GRID_SIZE)
+			return player;
 
     if (type == ENEMY || type == BAG)
         for (auto& i : objects)
-            if (i && i->getType() == type && i->getX() == x && i->getY() == y)
-                return i;
+            if (i && i->getType() == type && x >= i->getX() && x < i->getX() + GRID_SIZE
+				&& y >= i->getY() && y < i->getY() + GRID_SIZE)
+					return i;
 
     return nullptr;
 

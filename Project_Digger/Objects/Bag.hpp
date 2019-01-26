@@ -18,11 +18,14 @@ public:
     void move(const Direction& dir) { moveDir = dir; }
     void releaseCoins();
 
+	bool canMove(const Direction dir) const;
+
 private:
 
     Direction moveDir;
     int time;
     int startFallY;
+	float realX;
     bool excited;
     bool falling;
 

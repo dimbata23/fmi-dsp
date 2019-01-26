@@ -29,6 +29,7 @@ private:
 	size_t lives;
 	int startingX;
 	int startingY;
+	float realX;
 	bool canFire;
 
 };

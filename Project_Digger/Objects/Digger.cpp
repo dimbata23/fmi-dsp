@@ -4,11 +4,12 @@
 #include "../GameEngine.hpp"
 #include "../InputHandler.hpp"
 
-const int SPEED = 2;
+const int	SPEED		= 2;
+const float PUSH_SPEED	= 1.5;
 
 const int EMERALD_SCORE	= 25;
 const int GOLD_SCORE	= 500;
-const int DEFAULT_LIVES = 3;
+const int DEFAULT_LIVES = 2;
 
 
 Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
@@ -19,6 +20,7 @@ Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
 	lives(DEFAULT_LIVES),
 	startingX(x),
 	startingY(y),
+	realX(x),
 	canFire(true)
 {}
 
@@ -27,7 +29,7 @@ void Digger::update() {
 	
 	Object::update();
 
-	Bag* bagOnTop = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x, y - GRID_SIZE));
+	Bag* bagOnTop = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + (GRID_SIZE / 2), y - 1));
 
 	Direction moved = movement();
 
@@ -38,21 +40,41 @@ void Digger::update() {
 			bagOnTop->triggerFall();
 	}
 
+	// Fix for moving with uneven speed
+	if (moved != D_LEFT && moved != D_RIGHT) {
+		realX = round(realX);
+		x = realX;
+		if (x % 2 != 0)
+			++realX;
+	}
+
 	if (!bagOnTop) {
 		Bag* bag = nullptr;
 		switch (moved) {
 			case D_LEFT:
-				bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x - GRID_SIZE + SPEED, y));
-				if (bag && !bag->isFalling())
-					bag->move(D_LEFT);
+				bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x, y));
+				if (bag) {
+					if (bag->canMove(D_LEFT)) {
+						bag->move(D_LEFT);
+						realX += SPEED - PUSH_SPEED;
+					} else {
+						realX += SPEED;
+					}
+				}
 			break;
 			case D_RIGHT:
-				bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + GRID_SIZE - SPEED, y));
-				if (bag && !bag->isFalling())
-					bag->move(D_RIGHT);
+				bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + GRID_SIZE - 1, y));
+				if (bag) {
+					if (bag->canMove(D_RIGHT)) {
+						bag->move(D_RIGHT);
+						realX -= SPEED - PUSH_SPEED;
+					} else {
+						realX -= SPEED;
+					}
+				}
 			break;
 			case D_DOWN:
-				bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x, y + GRID_SIZE - SPEED));
+				bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x, y + GRID_SIZE - 1));
 				if (bag && !bag->isFalling())
 					y -= SPEED;
 			break;
@@ -60,6 +82,11 @@ void Digger::update() {
 			break;
 		}
 	}
+
+	x = round(realX);
+
+	if (x % 2 != 0)
+		++x;
 
 	Emerald* em = GameEngine::i()->getEmeraldAt((y + (GRID_SIZE / 2) - GRID_START) / GRID_SIZE, (x + (GRID_SIZE / 2)) / GRID_SIZE);
 	if (em) {
@@ -97,6 +124,7 @@ void Digger::kill() {
 	} else {
 		--lives;
 		GameEngine::i()->destroyEnemies();
+		realX = startingX;
 		x = startingX;
 		y = startingY;
 	}
@@ -117,9 +145,9 @@ Direction Digger::movement() {
 			dir = D_UP;
 		} else {
 			if (dir == D_LEFT)
-				x -= SPEED;
+				realX -= SPEED;
 			else if (dir == D_RIGHT)
-				x += SPEED;
+				realX += SPEED;
 		}
 		moved = dir;
 	}
@@ -133,9 +161,9 @@ Direction Digger::movement() {
 			dir = D_DOWN;
 		} else {
 			if (dir == D_LEFT)
-				x -= SPEED;
+				realX -= SPEED;
 			else if (dir == D_RIGHT)
-				x += SPEED;
+				realX += SPEED;
 		}
 		moved = dir;
 	}
@@ -145,7 +173,7 @@ Direction Digger::movement() {
 				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE)->setPassable(LEFT_SIDE, true);
 				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE - 1)->setPassable(RIGHT_SIDE, true);
 			}
-			x -= SPEED;
+			realX -= SPEED;
 			dir = D_LEFT;
 		} else {
 			if (dir == D_UP)
@@ -161,7 +189,7 @@ Direction Digger::movement() {
 				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE)->setPassable(RIGHT_SIDE, true);
 				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE + 1)->setPassable(LEFT_SIDE, true);
 			}
-			x += SPEED;
+			realX += SPEED;
 			dir = D_RIGHT;
 		}
 		else {
@@ -179,12 +207,15 @@ Direction Digger::movement() {
 		y = GRID_START;
 	if (y > GRID_START + (GRID_ROWS * GRID_SIZE) - GRID_SIZE)
 		y = GRID_START + (GRID_ROWS * GRID_SIZE) - GRID_SIZE;
-	if (x < 0)
-		x = 0;
-	if (x > GRID_COLS * GRID_SIZE - GRID_SIZE)
-		x = GRID_COLS * GRID_SIZE - GRID_SIZE;
+	if (realX < 0)
+		realX = 0;
+	if (realX > GRID_COLS * GRID_SIZE - GRID_SIZE)
+		realX = GRID_COLS * GRID_SIZE - GRID_SIZE;
 
-	
+	x = round(realX);
+	if (x % 2 != 0)
+		++x;
+
 
 	if (moved == D_UP || moved == D_LEFT) {
 		Dirt* d = GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE);
