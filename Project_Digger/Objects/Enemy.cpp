@@ -9,6 +9,8 @@
 // Slightly faster than Digger
 const float SPEED = GRID_SIZE / ((GRID_SIZE / 2) - 1.0f);
 
+const int ON_KILL_SCORE = 250;
+
 
 Enemy::Enemy(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
     Object(x, y, 0, 0, texture, renderer, ENEMY),
@@ -124,5 +126,13 @@ void Enemy::findPathBFS() {
         nextPosX = it->first->getX();
         nextPosY = it->first->getY();
     }
+
+}
+
+
+void Enemy::kill() {
+
+	GameEngine::i()->getPlayer()->increaseScore(ON_KILL_SCORE);
+	GameEngine::i()->destroyObject(this);
 
 }

@@ -34,6 +34,15 @@ void Bag::update() {
     }
 
     else if (falling) {
+
+		Digger* o = dynamic_cast<Digger*>(GameEngine::i()->getAtPosition(DIGGER, x, y + GRID_SIZE));
+		if (o)
+			o->kill();
+
+		Enemy* e = dynamic_cast<Enemy*>(GameEngine::i()->getAtPosition(ENEMY, x, y + GRID_SIZE));
+		if (e)
+			e->kill();
+
         destRect.h = GRID_SIZE + FALL_STRETCH;
         destRect.x = x + FALL_STRETCH / 2;
         destRect.w = GRID_SIZE - FALL_STRETCH;
