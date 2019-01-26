@@ -10,6 +10,7 @@ const float PUSH_SPEED	= 1.5;
 const int EMERALD_SCORE	= 25;
 const int GOLD_SCORE	= 500;
 const int DEFAULT_LIVES = 2;
+const int BONUS_LIFE_ON = 20'000;
 
 
 Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
@@ -110,9 +111,13 @@ void Digger::draw() {
 
 
 void Digger::increaseScore(size_t points) {
+	size_t oldScore = score;
 	score += points;
 	scoreStr = std::to_string(score);
 	scoreStr.insert(scoreStr.begin(), 5 - scoreStr.length(), '0');
+
+	if (oldScore % BONUS_LIFE_ON > score % BONUS_LIFE_ON)
+		++lives;
 }
 
 
