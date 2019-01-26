@@ -126,8 +126,10 @@ void GameEngine::update() {
 
 	player->update();
 
-    for (auto& obj : objects)
-        obj->update();
+	for (auto& obj : objects) {
+		if (obj)
+			obj->update();
+	}
     
     for (auto it = objects.begin(); it != objects.end();) {
         if (!*it)
