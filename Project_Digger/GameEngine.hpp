@@ -19,6 +19,7 @@
 #include "Objects/Enemy.hpp"
 #include "Objects/Bag.hpp"
 #include "Objects/Gold.hpp"
+#include "Objects/Spawner.hpp"
 
 using ObjectPoolType = std::list<Object*>;
 
@@ -59,6 +60,7 @@ public:
     Digger* getPlayer() const { return player; }
 
 	void destroyEnemies();
+	bool spawnEnemy(int x, int y);
 
 private:
 
@@ -77,7 +79,9 @@ private:
     SDL_Renderer* renderer;
 	Digger* player;
 	static GameEngine* instance;
-    unsigned short level;
+	size_t enemiesToSpawn;
+	size_t currNumOfEnemies;
+	size_t level;
     bool running;
 
 };

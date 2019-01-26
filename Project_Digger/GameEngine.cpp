@@ -13,7 +13,9 @@ const char* WINDOW_TITLE        = "Project Digger";
 const char* DIRT_SPRITE         = "Sprites/dirt2_64x64.png";
 const char* DIRT_BORDER_SPRITE  = "Sprites/dirt_border.png";
 const char* DIGGER_SPRITE       = "Sprites/digger.png";
-const char* EMERALD_SPRITE      = "Sprites/emerald.png";
+const char* EMERALD_SPRITE		= "Sprites/emerald.png";
+const char* BAG_SPRITE			= "Sprites/bag.png";
+const char* ENEMY_SPRITE		= "Sprites/enemy.png";
 
 const char* SCORE_FONT  = "Fonts/Score.ttf";
 const int   FONT_SIZE   = 45;
@@ -28,6 +30,8 @@ const SDL_Rect GUI_BORDER_SRC_RECT = {GRID_SIZE * 3, 0, GRID_SIZE, GRID_SIZE};
 const int LIVES_X_POS = GRID_SIZE * 1.5;
 const int LIVES_Y_POS = -3;
 const int LIVES_SIZE = GRID_START;
+
+const int MAX_ENEMIES_ONSCREEN = 4;
 
 
 GameEngine* GameEngine::instance = nullptr;
@@ -45,6 +49,8 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
     window(nullptr),
     renderer(nullptr),
 	player(nullptr),
+	enemiesToSpawn(0),
+	currNumOfEnemies(0),
     level(0),
     running(false)
 {
@@ -264,11 +270,12 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, const cha
         break;
 
     case SPAWNER:
+		result = new Spawner(x, y, tex, renderer);
         break;
 
     }
 
-	if (type == BAG || type == ENEMY)
+	if (type == BAG || type == ENEMY || type == SPAWNER)
 		objects.push_back(result);
 
     return result;
@@ -327,6 +334,8 @@ void GameEngine::clean() {
 
 void GameEngine::generateNextLevel() {
 
+	enemiesToSpawn = 6 + level;
+
 	std::string levelName = "Levels/level" + std::to_string(++level);
 	std::cout << "Loading level \"" << levelName << '\"' << std::endl;
     std::ifstream in(levelName);
@@ -352,12 +361,11 @@ void GameEngine::generateNextLevel() {
                 break;
             case 'b':
             	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
-                createObject(BAG, x, y, "Sprites/bag.png");
+                createObject(BAG, x, y, BAG_SPRITE);
                 break;
             case 'e':
             	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
-                // create enemy spawner
-                createObject(ENEMY, x, y, "Sprites/enemy.png");
+                createObject(SPAWNER, x, y, nullptr);
             	break;
             case 'p':
             	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
@@ -435,7 +443,11 @@ void GameEngine::destroyObject(size_t id) {
     } else if ((*o)->getType() == ENEMY) {
 		delete dynamic_cast<Enemy*>(*o);
 		*o = nullptr;
-    }
+		--currNumOfEnemies;
+    } else if ((*o)->getType() == SPAWNER) {
+		delete dynamic_cast<Spawner*>(*o);
+		*o = nullptr;
+	}
 
 }
 
@@ -446,7 +458,7 @@ Object* GameEngine::getAtPosition(const ObjectType& type, int x, int y) {
 		&& y >= player->getY() && y < player->getY() + GRID_SIZE)
 			return player;
 
-    if (type == ENEMY || type == BAG)
+    if (type == ENEMY || type == BAG || type == SPAWNER)
         for (auto& i : objects)
             if (i && i->getType() == type && x >= i->getX() && x < i->getX() + GRID_SIZE
 				&& y >= i->getY() && y < i->getY() + GRID_SIZE)
@@ -461,7 +473,7 @@ ObjectPoolType::iterator GameEngine::getObjectById(size_t id) {
 
     auto result = objects.begin();
     while (result != objects.end()) {
-        if ((*result)->getId() == id)
+        if (*result && (*result)->getId() == id)
             break;
         ++result;
     }
@@ -473,7 +485,29 @@ ObjectPoolType::iterator GameEngine::getObjectById(size_t id) {
 void GameEngine::destroyEnemies() {
 
 	for (auto obj : objects)
-		if (obj->getType() == ENEMY)
+		if (obj && obj->getType() == ENEMY)
 			destroyObject(obj);
+
+	currNumOfEnemies = 0;
+	enemiesToSpawn = 6 + level;
+
+}
+
+
+bool GameEngine::spawnEnemy(int x, int y) {
+
+	if (enemiesToSpawn == 0) {
+		// TODO: Create cherry
+		destroyObject(GameEngine::getAtPosition(SPAWNER, x, y)->getId());
+	}
+
+	if (currNumOfEnemies < MAX_ENEMIES_ONSCREEN) {
+		createObject(ENEMY, x, y, ENEMY_SPRITE);
+		--enemiesToSpawn;
+		++currNumOfEnemies;
+		return true;
+	}
+
+	return false;
 
 }
