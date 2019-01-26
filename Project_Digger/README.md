@@ -44,10 +44,10 @@
  - Enemies kill Digger
  - ***[TODO]** Out of lives restarts game*
  - ***[TODO]** Highscore system*
- - ***[TODO]** Bags kill everything they fall on*
+ - Bags kill everything they fall on
  - ***[TODO]** Digger can fire*
  - ***[TODO]** Main menu*
  - ***[TODO]** Pause menu* 
  - ***[TODO]** Sound system*
  - ***[TODO]** Bonus mode*
- - ***[TODO]** Pushing bags slows down Digger*
+ - Pushing bags slows down Digger
