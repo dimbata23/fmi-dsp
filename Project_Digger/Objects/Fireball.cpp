@@ -39,6 +39,9 @@ void Fireball::update() {
 
     Object::update();
 
+    if (x < 0 || x > GRID_COLS * GRID_SIZE || y < 0 || y > GRID_ROWS * GRID_SIZE)
+        GameEngine::i()->destroyObject(this);
+
 }
 
 
