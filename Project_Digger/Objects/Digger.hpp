@@ -16,6 +16,7 @@ public:
 	const std::string& getScoreString() const { return scoreStr; }
 	size_t getLives() const { return lives; }
 	void kill();
+	Direction getDirection() const { return dir; }
 
 private:
 
@@ -23,12 +24,14 @@ private:
 
 private:
 
+	SDL_Texture* canFireTexture;
 	std::string scoreStr;
 	Direction dir;
 	size_t score;
 	size_t lives;
 	int startingX;
 	int startingY;
+	int lastFire;
 	float realX;
 	bool canFire;
 

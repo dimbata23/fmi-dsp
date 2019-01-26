@@ -273,9 +273,13 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, const cha
 		result = new Spawner(x, y, tex, renderer);
         break;
 
+    case FIREBALL:
+        result = new Fireball(x, y, tex, renderer, player->getDirection());
+        break;
+
     }
 
-	if (type == BAG || type == ENEMY || type == SPAWNER)
+	if (type == BAG || type == ENEMY || type == SPAWNER || type == FIREBALL)
 		objects.push_back(result);
 
     return result;
@@ -447,7 +451,10 @@ void GameEngine::destroyObject(size_t id) {
     } else if ((*o)->getType() == SPAWNER) {
 		delete dynamic_cast<Spawner*>(*o);
 		*o = nullptr;
-	}
+	} else if ((*o)->getType() == FIREBALL) {
+		delete dynamic_cast<Fireball*>(*o);
+		*o = nullptr;
+    }
 
 }
 

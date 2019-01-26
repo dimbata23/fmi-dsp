@@ -20,6 +20,7 @@
 #include "Objects/Bag.hpp"
 #include "Objects/Gold.hpp"
 #include "Objects/Spawner.hpp"
+#include "Objects/Fireball.hpp"
 
 using ObjectPoolType = std::list<Object*>;
 

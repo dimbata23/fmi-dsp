@@ -12,21 +12,29 @@ const int GOLD_SCORE	= 500;
 const int DEFAULT_LIVES = 2;
 const int BONUS_LIFE_ON = 20'000;
 
+const int DEFAULT_FIRE_WAIT_TIME = 6000; // in ms
+const char* FIREBALL_SPRITE = "Sprites/fireball.png";
+
 
 Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
 	Object(x, y, GRID_SIZE / 2, GRID_SIZE / 2, texture, renderer, DIGGER),
+	canFireTexture(TextureManager::i()->sprite("Sprites/canFire.png", renderer)),
 	scoreStr("00000"),
 	dir(D_RIGHT),
 	score(0),
 	lives(DEFAULT_LIVES),
 	startingX(x),
 	startingY(y),
+	lastFire(-DEFAULT_FIRE_WAIT_TIME),
 	realX(x),
 	canFire(true)
 {}
 
 
 void Digger::update() {
+
+	if (SDL_GetTicks() - lastFire >= DEFAULT_FIRE_WAIT_TIME)
+		canFire = true;
 
 	Bag* bagOnTop = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + (GRID_SIZE / 2), y - 1));
 
@@ -100,6 +108,12 @@ void Digger::update() {
 		canFire = true;
 	}
 
+	if (InputHandler::keyDown(SDL_SCANCODE_SPACE) && canFire) {
+		GameEngine::i()->createObject(FIREBALL, x, y, FIREBALL_SPRITE);
+		canFire = false;
+		lastFire = SDL_GetTicks();
+	}
+
 	Object::update();
 
 }
@@ -107,6 +121,8 @@ void Digger::update() {
 
 void Digger::draw() {
 	SDL_RenderCopyEx(renderer, sprite, &srcRect, &destRect, dir * 90.0, &origin, SDL_FLIP_NONE);
+	if (canFire)
+		SDL_RenderCopyEx(renderer, canFireTexture, &srcRect, &destRect, dir * 90.0, &origin, SDL_FLIP_NONE);
 }
 
 
@@ -132,6 +148,7 @@ void Digger::kill() {
 		realX = startingX;
 		x = startingX;
 		y = startingY;
+		canFire = true;
 	}
 }
 

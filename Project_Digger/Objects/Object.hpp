@@ -19,7 +19,8 @@ enum ObjectType {
     BAG,
     GOLD,
     ENEMY,
-    SPAWNER
+    SPAWNER,
+    FIREBALL
 };
 
 enum Direction {
