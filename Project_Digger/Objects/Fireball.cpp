@@ -28,7 +28,8 @@ void Fireball::update() {
     }
 
     Dirt* d = dynamic_cast<Dirt*>(GameEngine::i()->getDirtAt((y + origin.y - GRID_START) / GRID_SIZE, (x + origin.x) / GRID_SIZE));
-    if (d && !d->isEmpty())
+    Object* b = GameEngine::i()->getAtPosition(BAG, x + origin.x, y + origin.y);
+    if (b || d && !d->isEmpty())
         GameEngine::i()->destroyObject(this);
 
     Enemy* e = dynamic_cast<Enemy*>(GameEngine::i()->getAtPosition(ENEMY, x + origin.x, y + origin.y));
