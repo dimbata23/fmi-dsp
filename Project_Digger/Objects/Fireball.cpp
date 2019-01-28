@@ -2,12 +2,15 @@
 #include "../GameEngine.hpp"
 
 const int SPEED = 3;
+const char* FIREBALL_SOUND = "Sounds/fireball.wav";
 
 
 Fireball::Fireball(int x, int y, SDL_Texture* sprite, SDL_Renderer* ren, const Direction& dir) :
     Object(x, y, GRID_SIZE/2, GRID_SIZE/2, sprite, ren, FIREBALL),
     dir(dir)
-{}
+{
+	AudioManager::i()->playSoundEffect(AudioManager::i()->soundEffect(FIREBALL_SOUND));
+}
 
 
 void Fireball::update() {
