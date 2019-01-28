@@ -13,20 +13,23 @@
     sudo apt-get install libsdl2-image-dev
     sudo apt-get install libsdl2-ttf-2.0
     sudo apt-get install libsdl2-ttf-dev
+    sudo apt-get install libsdl2-mixer-2.0
+    sudo apt-get install libsdl2-mixer-dev
     ```
- - Link **SDL2**, **SDL2_image** and **SDL2_ttf** for your preferred IDE
+ - Link **SDL2**, **SDL2_image**, **SDL2_ttf** and **SDL2_mixer** for your preferred IDE
  
 **[Windows] (Visual Studio)**
  - Right click on your project's **References** -> **Manage NuGet Packages**
  - Search for **sdl2** and install **sdl2 by Sam Lantinga, SDL Contributors (Version 2.0.5)**
  - Search for **sdl2 image** and install **sdl2_image.nuget by Sam Lantinga and SDL2 contributors (Version 2.0.4)**
- - Search for **sdl2 ttf** and install **sdl2_ttf.nuget by Sam Lantinga and SDL2 contributors (Version 2.0.14.2)**  
+ - Search for **sdl2 ttf** and install **sdl2_ttf.nuget by Sam Lantinga and SDL2 contributors (Version 2.0.14.2)**
+ - Search for **sdl2 mixer** and install **sdl2_mixer.nuget by Sam Lantinga and SDL2 contributors (Version 2.0.4)**
  *(Folders **"/Levels"**, **"/Sprites"**, **"/Fonts"** and **"/Sounds"** must be placed where your **project file** is located [.vcxproj])*
 
 **[Windows] (other IDE)**
- - Download **SDL2**, **SDL2_image** and **SDL2_ttf** for windows
+ - Download **SDL2**, **SDL2_image**, **SDL2_ttf** and **SDL2_mixer** for windows
  - Install **SDL2** as stated in [their site](https://wiki.libsdl.org/Installation)
- - Link **SDL2**, **SDL2_image** and **SDL2_ttf** for your preferred IDE
+ - Link **SDL2**, **SDL2_image**, **SDL2_ttf** and **SDL2_mixer** for your preferred IDE
 
 
 ## Features
@@ -52,3 +55,4 @@
  - ***[TODO]** Sound system*
  - ***[TODO]** Bonus mode*
  - Pushing bags slows down Digger
+ - ***[TODO]** Addition for the DSP course*
