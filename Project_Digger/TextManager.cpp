@@ -29,7 +29,7 @@ TextManager::~TextManager() {
 void TextManager::setFont(const std::string& text, int size) {
 
     std::string key = text + std::to_string(size);
-    auto it = fonts.find(key);
+	FontsPoolType::iterator it = fonts.find(key);
     if (it == fonts.end()) {
         this->font = TTF_OpenFont(text.c_str(), size);
 		if (!this->font)
