@@ -28,8 +28,18 @@ void Fireball::update() {
     }
 
     Dirt* d = dynamic_cast<Dirt*>(GameEngine::i()->getDirtAt((y + origin.y - GRID_START) / GRID_SIZE, (x + origin.x) / GRID_SIZE));
+	if (d) {
+		if ((!d->isEmpty()) ||
+			(dir == D_RIGHT && !d->isPassable(LEFT_SIDE) && x < d->getX()) ||
+			(dir == D_LEFT && !d->isPassable(RIGHT_SIDE) && x > d->getX()) ||
+			(dir == D_DOWN && !d->isPassable(TOP_SIDE) && y < d->getY()) ||
+			(dir == D_UP && !d->isPassable(BOTTOM_SIDE) && y > d->getY())) 
+		{
+			GameEngine::i()->destroyObject(this);
+		}
+	}
     Object* b = GameEngine::i()->getAtPosition(BAG, x + origin.x, y + origin.y);
-    if (b || d && !d->isEmpty())
+    if (b)
         GameEngine::i()->destroyObject(this);
 
     Enemy* e = dynamic_cast<Enemy*>(GameEngine::i()->getAtPosition(ENEMY, x + origin.x, y + origin.y));

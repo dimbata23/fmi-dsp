@@ -12,6 +12,7 @@
 #include "TextureManager.hpp"
 #include "InputHandler.hpp"
 #include "TextManager.hpp"
+#include "AudioManager.hpp"
 #include "Objects/Object.hpp"
 #include "Objects/Dirt.hpp"
 #include "Objects/Digger.hpp"

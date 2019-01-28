@@ -14,6 +14,7 @@ const int BONUS_LIFE_ON = 20'000;
 
 const int DEFAULT_FIRE_WAIT_TIME = 6000; // in ms
 const char* FIREBALL_SPRITE = "Sprites/fireball.png";
+const char* FIREBALL_SOUND = "Sounds/fireball.wav";
 
 
 Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
@@ -109,6 +110,7 @@ void Digger::update() {
 	}
 
 	if (InputHandler::keyDown(SDL_SCANCODE_SPACE) && canFire) {
+		AudioManager::i()->playSoundEffect(AudioManager::i()->soundEffect(FIREBALL_SOUND));
 		GameEngine::i()->createObject(FIREBALL, x, y, FIREBALL_SPRITE);
 		canFire = false;
 		lastFire = SDL_GetTicks();
