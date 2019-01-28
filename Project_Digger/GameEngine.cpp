@@ -90,7 +90,7 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
 
     std::cout << "Font system sucessfully initialized." << std::endl;
 
-	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 4096) != 0) {
+	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 512) != 0) {
 		std::cout << "Couldn't initialize audio system! Error: " << Mix_GetError() << std::endl;
 		clean();
 		return;
