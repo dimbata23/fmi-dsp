@@ -33,7 +33,7 @@ void TextManager::setFont(const std::string& text, int size) {
     if (it == fonts.end()) {
         this->font = TTF_OpenFont(text.c_str(), size);
 		if (!this->font)
-			std::cout << "Couldn't load font \"" << text << "\"!" << std::endl;
+			std::cerr << "[ERROR] Unable to load \"" << text << "\"! Error: " << TTF_GetError() << std::endl;
         fonts.insert(std::make_pair(key, this->font));
     } else {
         this->font = it->second;

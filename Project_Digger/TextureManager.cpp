@@ -52,7 +52,7 @@ SDL_Texture* TextureManager::loadTexture(const char* fileName, SDL_Renderer* ren
     SDL_Surface* temp = IMG_Load(fileName);
     SDL_Texture* tex = SDL_CreateTextureFromSurface(ren, temp);
     if (!tex)
-        std::cerr << "[ERROR] Unable to load " << fileName << '!' << std::endl;
+        std::cerr << "[ERROR] Unable to load \"" << fileName << "\"! Error: " << SDL_GetError() << std::endl;
     SDL_FreeSurface(temp);
 
     return tex;
