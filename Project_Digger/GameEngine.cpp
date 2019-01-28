@@ -20,6 +20,8 @@ const char* ENEMY_SPRITE		= "Sprites/enemy.png";
 const char* SCORE_FONT  = "Fonts/Score.ttf";
 const int   FONT_SIZE   = 45;
 
+const char* BACKGROUND_MUSIC = "Sounds/background.wav";
+
 SDL_Texture* BG_TEXTURE = nullptr;
 SDL_Texture* BG_BORDER_TEXTURE = nullptr;
 
@@ -95,6 +97,8 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
 		clean();
 		return;
 	}
+
+	AudioManager::i()->playMusic(AudioManager::i()->musicAudio(BACKGROUND_MUSIC));
 
 	std::cout << "Audio system sucessfully initialized." << std::endl;
 

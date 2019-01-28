@@ -15,6 +15,8 @@ const int BONUS_LIFE_ON = 20'000;
 const int DEFAULT_FIRE_WAIT_TIME = 6000; // in ms
 const char* FIREBALL_SPRITE = "Sprites/fireball.png";
 
+const char* DEATH_SOUND = "Sounds/death.wav";
+
 
 Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
 	Object(x, y, GRID_SIZE / 2, GRID_SIZE / 2, texture, renderer, DIGGER),
@@ -138,7 +140,10 @@ void Digger::increaseScore(size_t points) {
 
 
 void Digger::kill() {
-	SDL_Delay(1000);
+	AudioManager::i()->pauseMusic();
+	AudioManager::i()->playSoundEffect(AudioManager::i()->soundEffect(DEATH_SOUND));
+	SDL_Delay(8000);
+	AudioManager::i()->resumeMusic();
 
 	if (lives == 0) {
 		GameEngine::i()->end();
