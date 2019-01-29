@@ -52,7 +52,7 @@
  - Digger can fire
  - ***[TODO]** Main menu*
  - ***[TODO]** Pause menu* 
- - ***[TODO]** Sound system*
+ - Audio system
  - ***[TODO]** Bonus mode*
  - Pushing bags slows down Digger
  - ***[TODO]** Addition for the DSP course*
