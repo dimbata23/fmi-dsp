@@ -4,7 +4,8 @@
 #include "../GameEngine.hpp"
 #include "../InputHandler.hpp"
 
-const int	SPEED		= 2;
+const int	SPEED = 2;
+const int	LABIRINTH_SPEED = 4;
 const float PUSH_SPEED	= 1.5;
 
 const int EMERALD_SCORE	= 25;
@@ -329,54 +330,54 @@ void Digger::labirinthMovement() {
 	if (InputHandler::keyDown(KEY_UP)) {
 		if (x % GRID_SIZE == 0) {
 			if (GameEngine::i()->labirinthCanMove(x + GRID_SIZE - 1, y + GRID_SIZE - 1, D_UP)) {
-				y -= SPEED;
+				y -= LABIRINTH_SPEED;
 				dir = D_UP;
 			}
 		} else {
 			if (dir == D_LEFT)
-				x -= SPEED;
+				x -= LABIRINTH_SPEED;
 			else if (dir == D_RIGHT)
-				x += SPEED;
+				x += LABIRINTH_SPEED;
 		}
 	}
 	else if (InputHandler::keyDown(KEY_DOWN)) {
 		if (x % GRID_SIZE == 0) {
 			if (GameEngine::i()->labirinthCanMove(x, y, D_DOWN)) {
-				y += SPEED;
+				y += LABIRINTH_SPEED;
 				dir = D_DOWN;
 			}
 		} else {
 			if (dir == D_LEFT)
-				x -= SPEED;
+				x -= LABIRINTH_SPEED;
 			else if (dir == D_RIGHT)
-				x += SPEED;
+				x += LABIRINTH_SPEED;
 		}
 	}
 	else if (InputHandler::keyDown(KEY_LEFT)) {
 		if ((y - GRID_START) % GRID_SIZE == 0) {
 			if (GameEngine::i()->labirinthCanMove(x + GRID_SIZE - 1, y + GRID_SIZE - 1, D_LEFT)) {
-				x -= SPEED;
+				x -= LABIRINTH_SPEED;
 				dir = D_LEFT;
 			}
 		} else {
 			if (dir == D_UP)
-				y -= SPEED;
+				y -= LABIRINTH_SPEED;
 			else if (dir == D_DOWN)
-				y += SPEED;
+				y += LABIRINTH_SPEED;
 		}
 	}
 	else if (InputHandler::keyDown(KEY_RIGHT)) {
 		if ((y - GRID_START) % GRID_SIZE == 0) {
 			if (GameEngine::i()->labirinthCanMove(x, y, D_RIGHT)) {
-				x += SPEED;
+				x += LABIRINTH_SPEED;
 				dir = D_RIGHT;
 			}
 		}
 		else {
 			if (dir == D_UP)
-				y -= SPEED;
+				y -= LABIRINTH_SPEED;
 			else if (dir == D_DOWN)
-				y += SPEED;
+				y += LABIRINTH_SPEED;
 		}
 	}
 
