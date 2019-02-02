@@ -9,6 +9,7 @@
 const char* WALL_SPRITE = "Sprites/dirt2_64x64.png";
 const char* WALL_BORDER_SPRITE = "Sprites/dirt_border.png";
 const char* PLAYER_SPRITE = "Sprites/digger.png";
+const char* FINISH_SPRITE = "Sprites/emerald.png";
 const int LABIRINTH_START_X = 0;
 const int LABIRINTH_START_Y = GRID_START;
 
@@ -21,7 +22,8 @@ LabirinthManager::LabirinthManager() :
     graph{0, },
     finishX(-GRID_SIZE),
     finishY(-GRID_SIZE),
-    startTime(SDL_GetTicks())
+    startTime(SDL_GetTicks()),
+	playerCanMove(false)
 {}
 
 
@@ -67,9 +69,22 @@ void LabirinthManager::draw() {
         for (int j = 0; j < LABIRINTH_WIDTH; ++j)
             labirinth[i][j]->draw();
 
-    GameEngine::i()->drawTexture(finishX, finishY, "Sprites/emerald.png");
+    GameEngine::i()->drawTexture(finishX, finishY, FINISH_SPRITE);
 
     player->draw();
+
+}
+
+
+void LabirinthManager::drawGUI() {
+
+	if (playerCanMove) {
+		size_t timeLeft = (SONG_LENGTH - (SDL_GetTicks() - startTime));
+		if (timeLeft > 5000)
+			TextManager::i()->drawText(std::to_string(timeLeft / 1000).c_str(), GRID_SIZE*GRID_COLS / 2, -4, GameEngine::i()->getRenderer());
+		else
+			TextManager::i()->drawText(std::to_string(timeLeft / 1000.0).c_str(), GRID_SIZE*GRID_COLS / 2 - GRID_SIZE, -4, GameEngine::i()->getRenderer(), {200, 100, 100});
+	}
 
 }
 
@@ -87,6 +102,9 @@ void LabirinthManager::createLabirinth() {
     player = dynamic_cast<Digger*>(GameEngine::i()->createObject(DIGGER, LABIRINTH_START_X, LABIRINTH_START_Y, PLAYER_SPRITE));
 
     randomizedKruskal();
+	createFinish();
+
+	playerCanMove = true;
 
 }
 
@@ -162,8 +180,6 @@ void LabirinthManager::randomizedKruskal() {
 
         edges.erase(it);
     }
-
-    createFinish();
 
 }
 

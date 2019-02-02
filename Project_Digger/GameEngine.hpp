@@ -70,6 +70,8 @@ public:
 
     void drawTexture(int x, int y, const char* texture);
 
+	SDL_Renderer* getRenderer() const { return renderer; }
+
 private:
 
 	GameEngine(const char* title, int x, int y, int width, int height, bool fullscreen = false);

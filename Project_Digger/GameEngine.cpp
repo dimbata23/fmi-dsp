@@ -273,6 +273,9 @@ void GameEngine::drawGUI() {
 		SDL_RenderCopy(renderer, player->getSprite(), &player->getSrcRect(), &livesDest);
 	}
 
+	if (lab)
+		lab->drawGUI();
+
     SDL_RenderPresent(renderer);
 
 }
