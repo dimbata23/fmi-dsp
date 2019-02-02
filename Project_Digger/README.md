@@ -55,4 +55,4 @@
  - Audio system
  - ***[TODO]** Bonus mode*
  - Pushing bags slows down Digger
- - ***[TODO]** Addition for the DSP course*
+ - Addition for the DSP course

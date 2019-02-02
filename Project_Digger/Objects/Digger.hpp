@@ -18,6 +18,7 @@ public:
 	size_t getLives() const { return lives; }
 	void kill();
 	Direction getDirection() const { return dir; }
+	void setPosition(int x, int y) { realX = x; this->y = y; }
 
 private:
 

@@ -76,6 +76,7 @@ private:
 
 	GameEngine(const char* title, int x, int y, int width, int height, bool fullscreen = false);
     void clean();
+	void clearLevel();
     void generateNextLevel();
     void setupTunnels();
 
@@ -95,6 +96,7 @@ private:
     LabirinthManager* lab;
     int labirinthMode;
     size_t currLabEnemyId;
+	size_t numberOfEmeralds;
     bool running;
 
 };

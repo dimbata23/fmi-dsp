@@ -21,6 +21,7 @@ const char* SCORE_FONT  = "Fonts/Score.ttf";
 const int   FONT_SIZE   = 45;
 
 const char* BACKGROUND_MUSIC = "Sounds/background.wav";
+const char* VICTORY_SOUND = "Sounds/victory.wav";
 
 SDL_Texture* BG_TEXTURE = nullptr;
 SDL_Texture* BG_BORDER_TEXTURE = nullptr;
@@ -57,6 +58,7 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
     labirinthMode(LAB_OFF),
     lab(nullptr),
     currLabEnemyId(0),
+	numberOfEmeralds(0),
     running(false)
 {
 
@@ -202,6 +204,17 @@ void GameEngine::update() {
             }
         }
 
+		if (numberOfEmeralds == 0) {
+			draw();
+			drawGUI();
+			AudioManager::i()->pauseMusic();
+			AudioManager::i()->playSoundEffect(AudioManager::i()->soundEffect(VICTORY_SOUND));
+			SDL_Delay(2000);
+			clearLevel();
+			generateNextLevel();
+			AudioManager::i()->playMusic(AudioManager::i()->musicAudio(BACKGROUND_MUSIC));
+		}
+
     }
 
 }
@@ -323,6 +336,7 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, const cha
         break;
 
     case EMERALD:
+		++numberOfEmeralds;
         emeralds[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Emerald*>(result = new Emerald(x, y, tex, renderer));
         break;
 
@@ -362,42 +376,10 @@ void GameEngine::clean() {
     lab = nullptr;
 
     std::cout << std::endl << "Deleting objects..." << std::endl;
-    size_t count = 0;
-    for (auto& obj : objects) {
-        delete obj;
-        ++count;
-    }
+    
+	clearLevel();
 	delete player;
 	player = nullptr;
-    ++count;
-    for (auto& arr : emeralds) {
-        for (auto& em : arr) {
-            if (em) {
-                delete em;
-                em = nullptr;
-                ++count;
-            }
-        }
-    }
-    for (auto& arr : gold) {
-        for (auto& el : arr) {
-            if (el) {
-                delete el;
-                el = nullptr;
-                ++count;
-            }
-        }
-    }
-    for (auto& arr : field) {
-        for (auto& el : arr) {
-            if (el) {
-                delete el;
-                el = nullptr;
-                ++count;
-            }
-        }
-    }
-    std::cout << "Deleted " << count << " objects." << std::endl;
 
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
@@ -406,6 +388,39 @@ void GameEngine::clean() {
     TTF_Quit();
     SDL_Quit();
 
+}
+
+
+void GameEngine::clearLevel()
+{
+	for (auto& obj : objects) {
+		delete obj;
+		obj = nullptr;
+	}
+	for (auto& arr : emeralds) {
+		for (auto& em : arr) {
+			if (em) {
+				delete em;
+				em = nullptr;
+			}
+		}
+	}
+	for (auto& arr : gold) {
+		for (auto& el : arr) {
+			if (el) {
+				delete el;
+				el = nullptr;
+			}
+		}
+	}
+	for (auto& arr : field) {
+		for (auto& el : arr) {
+			if (el) {
+				delete el;
+				el = nullptr;
+			}
+		}
+	}
 }
 
 
@@ -418,6 +433,7 @@ void GameEngine::generateNextLevel() {
     std::ifstream in(levelName);
     if (!in) {
         std::cout << "No next level!" << std::endl;
+		running = false;
         return;
     }
 
@@ -446,7 +462,11 @@ void GameEngine::generateNextLevel() {
             	break;
             case 'p':
             	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
-            	createObject(DIGGER, x, y, DIGGER_SPRITE);
+				if (!player) {
+            		createObject(DIGGER, x, y, DIGGER_SPRITE);
+				} else {
+					player->setPosition(x, y);
+				}
             	break;
             default:
                 break;
@@ -480,6 +500,7 @@ void GameEngine::setupTunnels() {
 
 
 void GameEngine::destroyObject(Emerald* em) {
+	--numberOfEmeralds;
     emeralds[(em->getY() - GRID_START) / GRID_SIZE][em->getX() / GRID_SIZE] = nullptr;
     delete em;
 }
