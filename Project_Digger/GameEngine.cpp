@@ -333,6 +333,8 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, const cha
         result = new Digger(x, y, tex, renderer);
         if (!player)
             player = dynamic_cast<Digger*>(result);
+		else
+			objects.push_back(result);
         break;
 
     case EMERALD:
