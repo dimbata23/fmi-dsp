@@ -17,6 +17,12 @@ const char* FIREBALL_SPRITE = "Sprites/fireball.png";
 
 const char* DEATH_SOUND = "Sounds/death.wav";
 
+const SDL_Scancode KEY_UP = SDL_SCANCODE_UP;
+const SDL_Scancode KEY_DOWN = SDL_SCANCODE_DOWN;
+const SDL_Scancode KEY_LEFT = SDL_SCANCODE_LEFT;
+const SDL_Scancode KEY_RIGHT = SDL_SCANCODE_RIGHT;
+const SDL_Scancode KEY_SHOOT = SDL_SCANCODE_SPACE;
+
 
 Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
 	Object(x, y, GRID_SIZE / 2, GRID_SIZE / 2, texture, renderer, DIGGER),
@@ -33,90 +39,105 @@ Digger::Digger(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
 {}
 
 
-void Digger::update() {
+void Digger::update(bool labirinthMode) {
 
-	if (SDL_GetTicks() - lastFire >= DEFAULT_FIRE_WAIT_TIME)
-		canFire = true;
+	if (!labirinthMode) {
+			
+		if (SDL_GetTicks() - lastFire >= DEFAULT_FIRE_WAIT_TIME)
+			canFire = true;
 
-	Bag* bagOnTop = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + (GRID_SIZE / 2), y - 1));
+		Bag* bagOnTop = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + (GRID_SIZE / 2), y - 1));
 
-	Direction moved = movement();
+		Direction moved = movement();
 
-	if (bagOnTop && !bagOnTop->isFalling()) {
-		if (moved == D_UP)
-			y += SPEED;
-		else
-			bagOnTop->triggerFall();
-	}
-
-	// Fix for moving with uneven speed
-	if (moved != D_LEFT && moved != D_RIGHT) {
-		realX = round(realX);
-		x = realX;
-		if (x % 2 != 0)
-			++realX;
-	}
-
-	if (!bagOnTop) {
-		Bag* bag = nullptr;
-		switch (moved) {
-			case D_LEFT:
-				bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x, y));
-				if (bag) {
-					if (bag->canMove(D_LEFT)) {
-						bag->move(D_LEFT);
-						realX += SPEED - PUSH_SPEED;
-					} else {
-						realX += SPEED;
-					}
-				}
-			break;
-			case D_RIGHT:
-				bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + GRID_SIZE - 1, y));
-				if (bag) {
-					if (bag->canMove(D_RIGHT)) {
-						bag->move(D_RIGHT);
-						realX -= SPEED - PUSH_SPEED;
-					} else {
-						realX -= SPEED;
-					}
-				}
-			break;
-			case D_DOWN:
-				bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x, y + GRID_SIZE - 1));
-				if (bag && !bag->isFalling())
-					y -= SPEED;
-			break;
-			default:
-			break;
+		if (bagOnTop && !bagOnTop->isFalling()) {
+			if (moved == D_UP)
+				y += SPEED;
+			else
+				bagOnTop->triggerFall();
 		}
-	}
 
-	x = round(realX);
+		// Fix for moving with uneven speed
+		if (moved != D_LEFT && moved != D_RIGHT) {
+			realX = round(realX);
+			x = realX;
+			if (x % 2 != 0)
+				++realX;
+		}
 
-	if (x % 2 != 0)
-		++x;
+		if (!bagOnTop) {
+			Bag* bag = nullptr;
+			switch (moved) {
+				case D_LEFT:
+					bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x, y));
+					if (bag) {
+						if (bag->canMove(D_LEFT)) {
+							bag->move(D_LEFT);
+							realX += SPEED - PUSH_SPEED;
+						} else {
+							realX += SPEED;
+						}
+					}
+				break;
+				case D_RIGHT:
+					bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x + GRID_SIZE - 1, y));
+					if (bag) {
+						if (bag->canMove(D_RIGHT)) {
+							bag->move(D_RIGHT);
+							realX -= SPEED - PUSH_SPEED;
+						} else {
+							realX -= SPEED;
+						}
+					}
+				break;
+				case D_DOWN:
+					bag = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, x, y + GRID_SIZE - 1));
+					if (bag && !bag->isFalling())
+						y -= SPEED;
+				break;
+				default:
+				break;
+			}
+		}
 
-	Emerald* em = GameEngine::i()->getEmeraldAt((y + (GRID_SIZE / 2) - GRID_START) / GRID_SIZE, (x + (GRID_SIZE / 2)) / GRID_SIZE);
-	if (em) {
-		GameEngine::i()->destroyObject(em);
-		increaseScore(EMERALD_SCORE);
-	}
+		x = round(realX);
 
-	Gold* gold = GameEngine::i()->getGoldAt((y + (GRID_SIZE / 2) - GRID_START) / GRID_SIZE, (x + (GRID_SIZE / 2)) / GRID_SIZE);
-	if (gold) {
-		GameEngine::i()->destroyObject(gold);
-		increaseScore(GOLD_SCORE);
-		canFire = true;
-	}
+		if (x % 2 != 0)
+			++x;
 
-	if (InputHandler::keyDown(SDL_SCANCODE_SPACE) && canFire) {
-		GameEngine::i()->createObject(FIREBALL, x, y, FIREBALL_SPRITE);
-		canFire = false;
-		lastFire = SDL_GetTicks();
+		Emerald* em = GameEngine::i()->getEmeraldAt((y + (GRID_SIZE / 2) - GRID_START) / GRID_SIZE, (x + (GRID_SIZE / 2)) / GRID_SIZE);
+		if (em) {
+			GameEngine::i()->destroyObject(em);
+			increaseScore(EMERALD_SCORE);
+		}
+
+		Gold* gold = GameEngine::i()->getGoldAt((y + (GRID_SIZE / 2) - GRID_START) / GRID_SIZE, (x + (GRID_SIZE / 2)) / GRID_SIZE);
+		if (gold) {
+			GameEngine::i()->destroyObject(gold);
+			increaseScore(GOLD_SCORE);
+			canFire = true;
+		}
+
+		if (InputHandler::keyDown(KEY_SHOOT) && canFire) {
+			GameEngine::i()->createObject(FIREBALL, x, y, FIREBALL_SPRITE);
+			canFire = false;
+			lastFire = SDL_GetTicks();
+		}
+
+	} else {
+
+		labirinthMovement();
+
 	}
 
 	Object::update();
+
+}
+
+
+void Digger::update() {
+
+	update(false);
 
 }
 
@@ -162,7 +183,7 @@ Direction Digger::movement() {
 
 	Direction moved = D_NONE;
 
-	if (InputHandler::keyDown(SDL_SCANCODE_UP)) {
+	if (InputHandler::keyDown(KEY_UP)) {
 		if (x % GRID_SIZE == 0) {
 			if ((y - GRID_START) % GRID_SIZE == 0 && y > GRID_START) {
 				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE)->setPassable(TOP_SIDE, true);
@@ -178,7 +199,7 @@ Direction Digger::movement() {
 		}
 		moved = dir;
 	}
-	else if (InputHandler::keyDown(SDL_SCANCODE_DOWN)) {
+	else if (InputHandler::keyDown(KEY_DOWN)) {
 		if (x % GRID_SIZE == 0) {
 			if ((y - GRID_START) % GRID_SIZE == 0 && y - GRID_START < (GRID_ROWS - 1) * GRID_SIZE) {
 				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE)->setPassable(BOTTOM_SIDE, true);
@@ -194,7 +215,7 @@ Direction Digger::movement() {
 		}
 		moved = dir;
 	}
-	else if (InputHandler::keyDown(SDL_SCANCODE_LEFT)) {
+	else if (InputHandler::keyDown(KEY_LEFT)) {
 		if ((y - GRID_START) % GRID_SIZE == 0) {
 			if (x % GRID_SIZE == 0 && x > 0) {
 				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE)->setPassable(LEFT_SIDE, true);
@@ -210,7 +231,7 @@ Direction Digger::movement() {
 		}
 		moved = dir;
 	}
-	else if (InputHandler::keyDown(SDL_SCANCODE_RIGHT)) {
+	else if (InputHandler::keyDown(KEY_RIGHT)) {
 		if ((y - GRID_START) % GRID_SIZE == 0) {
 			if (x % GRID_SIZE == 0 && x < (GRID_COLS - 1) * GRID_SIZE) {
 				GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE, x / GRID_SIZE)->setPassable(RIGHT_SIDE, true);
@@ -299,5 +320,64 @@ Direction Digger::movement() {
 	}
 
 	return moved;
+
+}
+
+
+void Digger::labirinthMovement() {
+
+	if (InputHandler::keyDown(KEY_UP)) {
+		if (x % GRID_SIZE == 0) {
+			if (GameEngine::i()->labirinthCanMove(x + GRID_SIZE - 1, y + GRID_SIZE - 1, D_UP)) {
+				y -= SPEED;
+				dir = D_UP;
+			}
+		} else {
+			if (dir == D_LEFT)
+				x -= SPEED;
+			else if (dir == D_RIGHT)
+				x += SPEED;
+		}
+	}
+	else if (InputHandler::keyDown(KEY_DOWN)) {
+		if (x % GRID_SIZE == 0) {
+			if (GameEngine::i()->labirinthCanMove(x, y, D_DOWN)) {
+				y += SPEED;
+				dir = D_DOWN;
+			}
+		} else {
+			if (dir == D_LEFT)
+				x -= SPEED;
+			else if (dir == D_RIGHT)
+				x += SPEED;
+		}
+	}
+	else if (InputHandler::keyDown(KEY_LEFT)) {
+		if ((y - GRID_START) % GRID_SIZE == 0) {
+			if (GameEngine::i()->labirinthCanMove(x + GRID_SIZE - 1, y + GRID_SIZE - 1, D_LEFT)) {
+				x -= SPEED;
+				dir = D_LEFT;
+			}
+		} else {
+			if (dir == D_UP)
+				y -= SPEED;
+			else if (dir == D_DOWN)
+				y += SPEED;
+		}
+	}
+	else if (InputHandler::keyDown(KEY_RIGHT)) {
+		if ((y - GRID_START) % GRID_SIZE == 0) {
+			if (GameEngine::i()->labirinthCanMove(x, y, D_RIGHT)) {
+				x += SPEED;
+				dir = D_RIGHT;
+			}
+		}
+		else {
+			if (dir == D_UP)
+				y -= SPEED;
+			else if (dir == D_DOWN)
+				y += SPEED;
+		}
+	}
 
 }

@@ -54,6 +54,9 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
 	enemiesToSpawn(0),
 	currNumOfEnemies(0),
     level(0),
+    labirinthMode(LAB_OFF),
+    lab(nullptr),
+    currLabEnemyId(0),
     running(false)
 {
 
@@ -140,28 +143,65 @@ void GameEngine::handleEvents() {
 
 void GameEngine::update() {
 
-	InputHandler::update();
+    if (labirinthMode == LAB_START) {
 
-	player->update();
+        lab = new LabirinthManager();
+        lab->createLabirinth();
+        labirinthMode = LAB_RUNNING;
 
-	for (auto& obj : objects) {
-		if (obj)
-			obj->update();
-	}
-    
-    for (auto it = objects.begin(); it != objects.end();) {
-        if (!*it)
-            it = objects.erase(it);
-        else
-            ++it;
     }
 
-    for (auto& arr : field) {
-        for (auto& dirt : arr) {
-            if (dirt) {
-                dirt->update();
+    InputHandler::update();
+
+    if (lab) {
+
+        LabirinthMode mode;
+        mode = lab->update();
+        if (mode != LAB_RUNNING) {
+            delete lab;
+            lab = nullptr;
+            AudioManager::i()->playMusic(AudioManager::i()->musicAudio(BACKGROUND_MUSIC));
+            draw();
+            drawGUI();
+        }
+        switch (mode) {
+            case LAB_WON:
+                destroyObject(currLabEnemyId);
+                draw();
+                drawGUI();
+                SDL_Delay(1000);
+                break;
+            case LAB_LOST:
+                player->kill();
+                break;
+            default:
+                break;
+        }
+
+    } else {
+
+        player->update();
+
+        for (auto& obj : objects) {
+            if (obj)
+                obj->update();
+        }
+        
+        for (auto it = objects.begin(); it != objects.end();) {
+            if (!*it)
+                it = objects.erase(it);
+            else
+                ++it;
+        }
+
+        for (auto& arr : field) {
+            for (auto& dirt : arr) {
+                if (dirt) {
+                    dirt->update();
+                }
             }
         }
+
     }
 
 }
@@ -169,37 +209,48 @@ void GameEngine::update() {
 
 void GameEngine::draw() {
 
+
     SDL_RenderClear(renderer);
 
-    for (auto& arr : field) {
-        for (auto& dirt : arr) {
-            if (dirt) {
-                dirt->draw();
+    if (!lab) {
+
+        for (auto& arr : field) {
+            for (auto& dirt : arr) {
+                if (dirt) {
+                    dirt->draw();
+                }
             }
         }
-    }
 
-    for (auto& arr : emeralds) {
-        for (auto& em : arr) {
-            if (em) {
-                em->draw();
+        for (auto& arr : emeralds) {
+            for (auto& em : arr) {
+                if (em) {
+                    em->draw();
+                }
             }
         }
-    }
 
-    for (auto& arr : gold) {
-        for (auto& el : arr) {
-            if (el) {
-                el->draw();
+        for (auto& arr : gold) {
+            for (auto& el : arr) {
+                if (el) {
+                    el->draw();
+                }
             }
         }
-    }
 
-    for (auto& obj : objects) {
-        obj->draw();
-    }
+        for (auto& obj : objects) {
+            if (obj)
+                obj->draw();
+        }
 
-	player->draw();
+        player->draw();
+
+    } else {
+
+        SDL_RenderClear(renderer);
+        lab->draw();
+
+    }
 
 }
 
@@ -263,7 +314,9 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, const cha
     	break;
 
     case DIGGER:
-        result = player = new Digger(x, y, tex, renderer);
+        result = new Digger(x, y, tex, renderer);
+        if (!player)
+            player = dynamic_cast<Digger*>(result);
         break;
 
     case EMERALD:
@@ -301,6 +354,9 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, const cha
 
 
 void GameEngine::clean() {
+
+    delete lab;
+    lab = nullptr;
 
     std::cout << std::endl << "Deleting objects..." << std::endl;
     size_t count = 0;
@@ -468,6 +524,9 @@ void GameEngine::destroyObject(size_t id) {
 	} else if ((*o)->getType() == FIREBALL) {
 		delete dynamic_cast<Fireball*>(*o);
 		*o = nullptr;
+    } else if ((*o)->getType() == DIGGER) {
+		delete dynamic_cast<Digger*>(*o);
+		*o = nullptr;
     }
 
 }
@@ -530,5 +589,20 @@ bool GameEngine::spawnEnemy(int x, int y) {
 	}
 
 	return false;
+
+}
+
+
+void GameEngine::startLabirinth(size_t id) { 
+    currLabEnemyId = id; 
+    labirinthMode = LAB_START;
+}
+
+
+void GameEngine::drawTexture(int x, int y, const char* texture) {
+
+    SDL_Rect def = {0, 0, GRID_SIZE, GRID_SIZE};
+    SDL_Rect defD = {x, y, GRID_SIZE, GRID_SIZE};
+    SDL_RenderCopy(renderer, TextureManager::i()->sprite(texture, renderer), &def, &defD);
 
 }

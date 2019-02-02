@@ -13,6 +13,7 @@
 #include "InputHandler.hpp"
 #include "TextManager.hpp"
 #include "AudioManager.hpp"
+#include "LabirinthManager.hpp"
 #include "Objects/Object.hpp"
 #include "Objects/Dirt.hpp"
 #include "Objects/Digger.hpp"
@@ -64,6 +65,11 @@ public:
 	void destroyEnemies();
 	bool spawnEnemy(int x, int y);
 
+    void startLabirinth(size_t id);
+    bool labirinthCanMove(int x, int y, const Direction& dir) { return lab->canMove(x, y, dir); }
+
+    void drawTexture(int x, int y, const char* texture);
+
 private:
 
 	GameEngine(const char* title, int x, int y, int width, int height, bool fullscreen = false);
@@ -84,6 +90,9 @@ private:
 	size_t enemiesToSpawn;
 	size_t currNumOfEnemies;
 	size_t level;
+    LabirinthManager* lab;
+    int labirinthMode;
+    size_t currLabEnemyId;
     bool running;
 
 };

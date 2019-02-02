@@ -11,6 +11,7 @@ public:
 
 	virtual void update() override;
 	virtual void draw() override;
+	void update(bool labirinthMode);
 
 	void increaseScore(size_t points);
 	const std::string& getScoreString() const { return scoreStr; }
@@ -21,6 +22,7 @@ public:
 private:
 
 	Direction movement();
+	void labirinthMovement();
 
 private:
 

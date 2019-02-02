@@ -58,8 +58,9 @@ void Enemy::update() {
 	if (collidedGold)
 		GameEngine::i()->destroyObject(collidedGold);
 
-	if (distance(GameEngine::i()->getPlayer()->getX(), GameEngine::i()->getPlayer()->getY(), x, y) < GRID_SIZE / 2)
-		GameEngine::i()->getPlayer()->kill();
+	if (distance(GameEngine::i()->getPlayer()->getX(), GameEngine::i()->getPlayer()->getY(), x, y) < GRID_SIZE / 2) {
+		GameEngine::i()->startLabirinth(this->id);
+    }
 
     Object::update();
 
