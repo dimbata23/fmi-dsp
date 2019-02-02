@@ -383,12 +383,18 @@ void GameEngine::clean() {
 	delete player;
 	player = nullptr;
 
+	std::cout << "Destroying window..." << std::endl;
     SDL_DestroyWindow(window);
+	std::cout << "Destroying game renderer..." << std::endl;
     SDL_DestroyRenderer(renderer);
     
+	std::cout << "Closing audio system..." << std::endl;
 	Mix_CloseAudio();
+	std::cout << "Closing font system..." << std::endl;
     TTF_Quit();
+	std::cout << "Closing game engine..." << std::endl;
     SDL_Quit();
+	std::cout << "Done!" << std::endl;
 
 }
 
