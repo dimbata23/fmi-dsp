@@ -23,7 +23,7 @@
  - Search for **sdl2** and install **sdl2 by Sam Lantinga, SDL Contributors (Version 2.0.5)**
  - Search for **sdl2 image** and install **sdl2_image.nuget by Sam Lantinga and SDL2 contributors (Version 2.0.4)**
  - Search for **sdl2 ttf** and install **sdl2_ttf.nuget by Sam Lantinga and SDL2 contributors (Version 2.0.14.2)**
- - Search for **sdl2 mixer** and install **sdl2_mixer.nuget by Sam Lantinga and SDL2 contributors (Version 2.0.4)**
+ - Search for **sdl2 mixer** and install **sdl2_mixer.nuget by Sam Lantinga and SDL2 contributors (Version 2.0.4)**  
  *(Folders **"/Levels"**, **"/Sprites"**, **"/Fonts"** and **"/Sounds"** must be placed where your **project file** is located [.vcxproj])*
 
 **[Windows] (other IDE)**
