@@ -55,4 +55,4 @@
  - Audio system
  - ***[TODO]** Bonus mode*
  - Pushing bags slows down Digger
- - Addition for the DSP course
+ - Addition for the DSP course (Labirinth, when chased down by an enemy)
