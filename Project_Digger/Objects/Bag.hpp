@@ -11,7 +11,6 @@ public:
     virtual void update() override;
     virtual void draw() override;
 
-    // TODO: If the block the bag is in is empty => fall immediately
     void triggerFall() { excited = true; }
     bool isFalling() const { return falling; }
 
