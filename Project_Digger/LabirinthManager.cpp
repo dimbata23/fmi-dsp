@@ -80,11 +80,14 @@ void LabirinthManager::drawGUI() {
 
 	if (playerCanMove) {
 		size_t timeLeft = (SONG_LENGTH - (SDL_GetTicks() - startTime));
-		if (timeLeft > 6000)
+		if (timeLeft > 6000) {
 			TextManager::i()->drawText(std::to_string(timeLeft / 1000).c_str(), GRID_SIZE*GRID_COLS / 2, -4, GameEngine::i()->getRenderer());
-		else
-			TextManager::i()->drawText(std::to_string(timeLeft / 1000.0).c_str(), GRID_SIZE*GRID_COLS / 2 - GRID_SIZE, -4, GameEngine::i()->getRenderer(), {200, 100, 100, 255});
-	}
+        } else {
+            std::string leftStr = std::to_string(timeLeft / 1000.0);
+            leftStr.resize(4);
+			TextManager::i()->drawText(leftStr.c_str(), GRID_SIZE*GRID_COLS / 2 - 8, -4, GameEngine::i()->getRenderer(), {200, 100, 100, 255});
+        }
+    }
 
 }
 
