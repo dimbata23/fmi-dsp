@@ -55,8 +55,8 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
 	enemiesToSpawn(0),
 	currNumOfEnemies(0),
     level(0),
-    labirinthMode(LAB_OFF),
     lab(nullptr),
+    labirinthMode(LAB_OFF),
     currLabEnemyId(0),
 	numberOfEmeralds(0),
     running(false)
@@ -281,7 +281,7 @@ void GameEngine::drawGUI() {
 	TextManager::i()->drawText(player->getScoreString().c_str(), 9, -4, renderer);
 
 	SDL_Rect livesDest = { LIVES_X_POS, LIVES_Y_POS, LIVES_SIZE, LIVES_SIZE };
-	for (int i = 0; i < player->getLives(); ++i) {
+	for (size_t i = 0; i < player->getLives(); ++i) {
 		livesDest.x = LIVES_X_POS + LIVES_SIZE * i;
 		SDL_RenderCopy(renderer, player->getSprite(), &player->getSrcRect(), &livesDest);
 	}
