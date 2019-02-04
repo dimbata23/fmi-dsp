@@ -83,11 +83,14 @@ void LabirinthManager::drawGUI() {
 
 	if (playerCanMove) {
 		size_t timeLeft = (SONG_LENGTH - (SDL_GetTicks() - startTime));
-		if (timeLeft > 6000)
+		if (timeLeft > 6000) {
 			TextManager::i()->drawText(std::to_string(timeLeft / 1000).c_str(), GRID_SIZE*GRID_COLS / 2, -4, GameEngine::i()->getRenderer());
-		else
-			TextManager::i()->drawText(std::to_string(timeLeft / 1000.0).c_str(), GRID_SIZE*GRID_COLS / 2 - GRID_SIZE, -4, GameEngine::i()->getRenderer(), {200, 100, 100});
-	}
+        } else {
+            std::string leftStr = std::to_string(timeLeft / 1000.0);
+            leftStr.resize(4);
+			TextManager::i()->drawText(leftStr.c_str(), GRID_SIZE*GRID_COLS / 2 - 8, -4, GameEngine::i()->getRenderer(), {200, 100, 100, 255});
+        }
+    }
 
 }
 
@@ -127,7 +130,6 @@ void LabirinthManager::randomizedKruskal() {
     }
 
     AudioManager::i()->playMusic(AudioManager::i()->musicAudio("Sounds/maze.wav"));
-    size_t startTime = SDL_GetTicks();
     size_t startDelay;
     size_t endDelay;
 
@@ -255,6 +257,8 @@ bool LabirinthManager::canMove(int x, int y, const Direction& d) const {
             return labirinth[(y - LABIRINTH_START_Y) / GRID_SIZE][(x - LABIRINTH_START_X) / GRID_SIZE]->isPassable(TOP_SIDE);
         case D_DOWN:
             return labirinth[(y - LABIRINTH_START_Y) / GRID_SIZE][(x - LABIRINTH_START_X) / GRID_SIZE]->isPassable(BOTTOM_SIDE);
+        default:
+            break;
    }
 
    return false;

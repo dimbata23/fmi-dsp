@@ -28,6 +28,8 @@ void Fireball::update() {
         case D_DOWN:
             y += SPEED;
             break;
+        default:
+            break;
     }
 
     Dirt* d = dynamic_cast<Dirt*>(GameEngine::i()->getDirtAt((y + origin.y - GRID_START) / GRID_SIZE, (x + origin.x) / GRID_SIZE));
