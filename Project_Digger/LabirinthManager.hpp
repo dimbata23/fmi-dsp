@@ -32,10 +32,9 @@ public:
     void createFinish();
     bool canMove(int x, int y, const Direction& dir) const;
 
-    void clear();
-
 private:
 
+	void clear();
     void randomizedKruskal();
 
 private:

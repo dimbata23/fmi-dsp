@@ -129,7 +129,7 @@ void LabirinthManager::randomizedKruskal() {
         }
     }
 
-    AudioManager::i()->playMusic(AudioManager::i()->musicAudio("Sounds/maze.wav"));
+    AudioManager::i()->playMusic("Sounds/maze.wav");
     size_t startDelay;
     size_t endDelay;
 

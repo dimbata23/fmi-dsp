@@ -163,7 +163,7 @@ void Digger::increaseScore(size_t points) {
 
 void Digger::kill() {
 	AudioManager::i()->pauseMusic();
-	AudioManager::i()->playSoundEffect(AudioManager::i()->soundEffect(DEATH_SOUND));
+	AudioManager::i()->playSoundEffect(DEATH_SOUND);
 	GameEngine::i()->wait(8000);
 	AudioManager::i()->resumeMusic();
 

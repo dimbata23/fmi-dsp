@@ -104,7 +104,7 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
 		return;
 	}
 
-	AudioManager::i()->playMusic(AudioManager::i()->musicAudio(BACKGROUND_MUSIC));
+	AudioManager::i()->playMusic(BACKGROUND_MUSIC);
 
 	std::cout << "Audio system sucessfully initialized." << std::endl;
 
@@ -166,7 +166,7 @@ void GameEngine::update() {
         if (mode != LAB_RUNNING) {
             delete lab;
             lab = nullptr;
-            AudioManager::i()->playMusic(AudioManager::i()->musicAudio(BACKGROUND_MUSIC));
+            AudioManager::i()->playMusic(BACKGROUND_MUSIC);
             draw();
             drawGUI();
         }
@@ -214,11 +214,11 @@ void GameEngine::update() {
 			draw();
 			drawGUI();
 			AudioManager::i()->pauseMusic();
-			AudioManager::i()->playSoundEffect(AudioManager::i()->soundEffect(VICTORY_SOUND));
+			AudioManager::i()->playSoundEffect(VICTORY_SOUND);
 			GameEngine::i()->wait(2000);
 			clearLevel();
 			generateNextLevel();
-			AudioManager::i()->playMusic(AudioManager::i()->musicAudio(BACKGROUND_MUSIC));
+			AudioManager::i()->playMusic(BACKGROUND_MUSIC);
 		}
 
     }

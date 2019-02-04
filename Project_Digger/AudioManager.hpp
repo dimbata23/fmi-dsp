@@ -20,19 +20,26 @@ public:
 	AudioManager& operator=(const AudioManager&) = delete;
 	~AudioManager();
 
+	// Clears out the manager's memory
 	static void release();
-	Mix_Music* musicAudio(const char* file);
-	Mix_Chunk* soundEffect(const char* file);
 
-	void playMusic(Mix_Music* music, int loops = -1);
+	// Plays a larger audio file
+	void playMusic(const char* file, int loops = -1);
+
+	// Pauses the playing music
 	void pauseMusic();
+
+	// Resumes playing the music
 	void resumeMusic();
 
-	void playSoundEffect(Mix_Chunk* soundEffect, int loops = 0, int channel = 0);
+	// Plays a short audio file
+	void playSoundEffect(const char* file, int loops = 0, int channel = 0);
 
 private:
 
 	AudioManager();
+	Mix_Music* musicAudio(const char* file);
+	Mix_Chunk* soundEffect(const char* file);
 
 private:
 

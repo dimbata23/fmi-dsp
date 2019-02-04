@@ -21,8 +21,13 @@ public:
 	InputHandler& operator=(const InputHandler&) = delete;
 	~InputHandler() = delete;
 
+	// Returns wheter or not a key is being pressed
 	static bool keyDown(const SDL_Scancode& sc);
+
+	// Returns wheter or not a mouse button is being pressed
 	static bool mouseButton(const MouseButtons& mb);
+
+	// Updates the current keyboard state
 	static void update();
 
 private:

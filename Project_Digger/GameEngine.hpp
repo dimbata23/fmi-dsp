@@ -5,7 +5,6 @@
 #else
 #include <SDL2/SDL.h>
 #endif
-#include <vector>
 #include <array>
 #include <list>
 #include <string>
@@ -39,37 +38,80 @@ public:
     GameEngine& operator=(const GameEngine& other) = delete;
     ~GameEngine();
 
-    void handleEvents();
+	// Used for closing the window
+	void handleEvents();
+
+	// Updates all the objects in the game
     void update();
+
+	// Draws all the objects in the game
     void draw();
+
+	// Draw the GUI of the game
     void drawGUI();
+
+	// Clears out all the memory
 	static void release();
+
+	// Ends the game
 	void end() { running = false; }
+
+	// Delays the next tick of the engine
 	void wait(size_t miliseconds);
 
+	// Returns true if the engine is running
     bool isRunning() const { return running; }
+
+	// Creates an object of specific type with a specified texture and position
     Object* createObject(const ObjectType& type, int x, int y, const char* sprite, const char* sprite2 = nullptr);
 
+	// Returns a pointer to the Dirt object at a specified row and col
 	Dirt* getDirtAt(int row, int col) const { return field[row][col]; }
+
+	// Returns a pointer to the Emerald object at a specified row and col
     Emerald* getEmeraldAt(int row, int col) { return emeralds[row][col]; }
+
+	// Returns a pointer to the Gold object at a specified row and col
     Gold* getGoldAt(int row, int col) { return gold[row][col]; }
+
+	// Destroys an Emerald object
     void destroyObject(Emerald* em);
+
+	// Destroys a Gold object
     void destroyObject(Gold* el);
+
+	// Destroys an object
 	void destroyObject(Object* obj);
+
+	// Destroys an object by its id
     void destroyObject(size_t id);
 
+	// Returns the object at a specific position or nullptr if none are found
     Object* getAtPosition(const ObjectType& type, int x, int y);
+
+	// Returns an iterator to the object with a specific id 
+	// or an iterator to end() if no object with the specifed id exists
     ObjectPoolType::iterator getObjectById(size_t id);
+
+	// Returns a pointer to the Digger object
     Digger* getPlayer() const { return player; }
 
+	// Destroys all the enemies on the screen
 	void destroyEnemies();
+
+	// Spawns an enemy at a specified position
 	bool spawnEnemy(int x, int y);
 
+	// Starts the labirint mode with an id of the object that caused it
     void startLabirinth(size_t id);
+
+	// Returns wheter or not the player can move a specific direction the labirinth
     bool labirinthCanMove(int x, int y, const Direction& dir) { return lab->canMove(x, y, dir); }
 
+	// Draws a texture at a specified position
     void drawTexture(int x, int y, const char* texture);
 
+	// Returns a pointer to the game renderer
 	SDL_Renderer* getRenderer() const { return renderer; }
 
 private:

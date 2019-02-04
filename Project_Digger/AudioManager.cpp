@@ -49,8 +49,7 @@ Mix_Chunk* AudioManager::soundEffect(const char* file) {
 	if (it == effects.end()) {
 		result = Mix_LoadWAV(file);
 		effects.insert(std::make_pair(file, result));
-	}
-	else {
+	} else {
 		result = it->second;
 	}
 
@@ -62,8 +61,8 @@ Mix_Chunk* AudioManager::soundEffect(const char* file) {
 }
 
 
-void AudioManager::playMusic(Mix_Music* music, int loops) {
-	Mix_PlayMusic(music, loops);
+void AudioManager::playMusic(const char* file, int loops) {
+	Mix_PlayMusic(musicAudio(file), loops);
 }
 
 
@@ -79,7 +78,7 @@ void AudioManager::resumeMusic() {
 }
 
 
-void AudioManager::playSoundEffect(Mix_Chunk* soundEffect, int loops, int channel) {
-	Mix_PlayChannel(channel, soundEffect, loops);
+void AudioManager::playSoundEffect(const char* file, int loops, int channel) {
+	Mix_PlayChannel(channel, soundEffect(file), loops);
 }
 
