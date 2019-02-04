@@ -52,7 +52,7 @@ void LabirinthManager::clear() {
 
 LabirinthMode LabirinthManager::update() {
 
-	if (GameEngine::i()->isRunning())
+	if (!GameEngine::i()->isRunning())
 		return LAB_OFF;
 
     player->update(true);
