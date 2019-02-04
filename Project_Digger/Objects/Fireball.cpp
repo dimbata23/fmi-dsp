@@ -34,7 +34,7 @@ void Fireball::update() {
 
     Dirt* d = dynamic_cast<Dirt*>(GameEngine::i()->getDirtAt((y + origin.y - GRID_START) / GRID_SIZE, (x + origin.x) / GRID_SIZE));
 	if (d) {
-		if ((!d->isEmpty()) ||
+		if ((d->emptyPercent() < 45) ||
 			(dir == D_RIGHT && !d->isPassable(LEFT_SIDE) && x < d->getX()) ||
 			(dir == D_LEFT && !d->isPassable(RIGHT_SIDE) && x > d->getX()) ||
 			(dir == D_DOWN && !d->isPassable(TOP_SIDE) && y < d->getY()) ||
