@@ -11,8 +11,12 @@ public:
 	virtual void update() override;
 	virtual void draw() override;
 
+	void setActive() { active = true; }
+	void setInactive() { active = false; }
+
 private:
 
 	int lastSpawnTime;
+	bool active;
 
 };

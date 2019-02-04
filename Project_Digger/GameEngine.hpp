@@ -22,6 +22,7 @@
 #include "Objects/Gold.hpp"
 #include "Objects/Spawner.hpp"
 #include "Objects/Fireball.hpp"
+#include "Objects/Spawner.hpp"
 
 using ObjectPoolType = std::list<Object*>;
 
@@ -131,6 +132,7 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
 	Digger* player;
+	Spawner* spawner;
 	static GameEngine* instance;
 	size_t enemiesToSpawn;
 	size_t currNumOfEnemies;

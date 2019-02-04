@@ -52,6 +52,7 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
     window(nullptr),
     renderer(nullptr),
 	player(nullptr),
+	spawner(nullptr),
 	enemiesToSpawn(0),
 	currNumOfEnemies(0),
     level(0),
@@ -485,7 +486,7 @@ void GameEngine::generateNextLevel() {
                 break;
             case 'e':
             	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
-                createObject(SPAWNER, x, y, nullptr);
+                spawner = dynamic_cast<Spawner*>(createObject(SPAWNER, x, y, nullptr));
             	break;
             case 'p':
             	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
@@ -621,6 +622,7 @@ void GameEngine::destroyEnemies() {
 
 	currNumOfEnemies = 0;
 	enemiesToSpawn = 6 + level;
+	spawner->setActive();
 
 }
 
@@ -629,7 +631,8 @@ bool GameEngine::spawnEnemy(int x, int y) {
 
 	if (enemiesToSpawn == 0) {
 		// TODO: Create cherry
-		destroyObject(GameEngine::getAtPosition(SPAWNER, x, y)->getId());
+		spawner->setInactive();
+		return false;
 	}
 
 	if (currNumOfEnemies < MAX_ENEMIES_ONSCREEN) {
