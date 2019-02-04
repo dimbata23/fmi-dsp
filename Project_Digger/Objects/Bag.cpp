@@ -114,14 +114,14 @@ void Bag::update() {
         destRect.w = GRID_SIZE;
     }
 
-    Object::update();
+	destRect.y = y;
 
 }
 
 
 void Bag::draw() {
 
-    if (excited && SDL_GetTicks() % 2 == 0)
+    if (excited && SDL_GetTicks() % 3 == 0)
         destRect.x = x + (rand() % (WOBBLE_SIZE*2)) - WOBBLE_SIZE;
     Object::draw();
 
