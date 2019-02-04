@@ -59,6 +59,7 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
     lab(nullptr),
     currLabEnemyId(0),
 	numberOfEmeralds(0),
+	waitTime(0),
     running(false)
 {
 
@@ -145,6 +146,11 @@ void GameEngine::handleEvents() {
 
 void GameEngine::update() {
 
+	InputHandler::update();
+
+	if (SDL_GetTicks() < waitTime)
+		return;
+
     if (labirinthMode == LAB_START) {
 
         lab = new LabirinthManager();
@@ -152,8 +158,6 @@ void GameEngine::update() {
         labirinthMode = LAB_RUNNING;
 
     }
-
-    InputHandler::update();
 
     if (lab) {
 
@@ -171,11 +175,13 @@ void GameEngine::update() {
                 destroyObject(currLabEnemyId);
                 draw();
                 drawGUI();
-                SDL_Delay(1000);
+                GameEngine::i()->wait(1000);
                 break;
             case LAB_LOST:
                 player->kill();
                 break;
+			case LAB_OFF:
+				return;
             default:
                 break;
         }
@@ -209,7 +215,7 @@ void GameEngine::update() {
 			drawGUI();
 			AudioManager::i()->pauseMusic();
 			AudioManager::i()->playSoundEffect(AudioManager::i()->soundEffect(VICTORY_SOUND));
-			SDL_Delay(2000);
+			GameEngine::i()->wait(2000);
 			clearLevel();
 			generateNextLevel();
 			AudioManager::i()->playMusic(AudioManager::i()->musicAudio(BACKGROUND_MUSIC));
@@ -302,6 +308,19 @@ void GameEngine::release() {
 	delete instance;
 	instance = nullptr;
 
+}
+
+
+void GameEngine::wait(size_t miliseconds)
+{
+	draw();
+	drawGUI();
+	size_t time = SDL_GetTicks();
+	size_t endTime = time + miliseconds;
+	while (time < endTime) {
+		time = SDL_GetTicks();
+		handleEvents();
+	}
 }
 
 

@@ -45,6 +45,7 @@ public:
     void drawGUI();
 	static void release();
 	void end() { running = false; }
+	void wait(size_t miliseconds);
 
     bool isRunning() const { return running; }
     Object* createObject(const ObjectType& type, int x, int y, const char* sprite, const char* sprite2 = nullptr);
@@ -59,7 +60,6 @@ public:
 
     Object* getAtPosition(const ObjectType& type, int x, int y);
     ObjectPoolType::iterator getObjectById(size_t id);
-
     Digger* getPlayer() const { return player; }
 
 	void destroyEnemies();
@@ -97,6 +97,7 @@ private:
     int labirinthMode;
     size_t currLabEnemyId;
 	size_t numberOfEmeralds;
+	size_t waitTime;
     bool running;
 
 };

@@ -164,7 +164,7 @@ void Digger::increaseScore(size_t points) {
 void Digger::kill() {
 	AudioManager::i()->pauseMusic();
 	AudioManager::i()->playSoundEffect(AudioManager::i()->soundEffect(DEATH_SOUND));
-	SDL_Delay(8000);
+	GameEngine::i()->wait(8000);
 	AudioManager::i()->resumeMusic();
 
 	if (lives == 0) {

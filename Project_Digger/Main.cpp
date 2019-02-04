@@ -21,7 +21,7 @@ int main() {
         frameTime = SDL_GetTicks() - frameStart;
 
         if (frameTime < FRAME_DELAY)
-            SDL_Delay(FRAME_DELAY - frameTime);
+			GameEngine::i()->wait(FRAME_DELAY - frameTime);
 
     }
 

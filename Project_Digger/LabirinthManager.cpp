@@ -52,6 +52,9 @@ void LabirinthManager::clear() {
 
 LabirinthMode LabirinthManager::update() {
 
+	if (GameEngine::i()->isRunning())
+		return LAB_OFF;
+
     player->update(true);
     if (distance(player->getX(), player->getY(), finishX, finishY) <= GRID_SIZE / 2)
         return LAB_WON;
@@ -128,7 +131,7 @@ void LabirinthManager::randomizedKruskal() {
     size_t startDelay;
     size_t endDelay;
 
-    while (!edges.empty()) {
+    while (!edges.empty() && GameEngine::i()->isRunning()) {
         startDelay = SDL_GetTicks();
         auto it = edges.begin() + (std::rand() % edges.size());
         
@@ -149,7 +152,7 @@ void LabirinthManager::randomizedKruskal() {
                 GameEngine::i()->draw();
                 GameEngine::i()->drawGUI();
                 endDelay = SDL_GetTicks();
-                SDL_Delay(CREATION_DELAY - (endDelay - startDelay));
+				GameEngine::i()->wait(CREATION_DELAY - (endDelay - startDelay));
                 startDelay = SDL_GetTicks();
             }
 
@@ -158,7 +161,7 @@ void LabirinthManager::randomizedKruskal() {
                 GameEngine::i()->draw();
                 GameEngine::i()->drawGUI();
                 endDelay = SDL_GetTicks();
-                SDL_Delay(CREATION_DELAY - (endDelay - startDelay));
+				GameEngine::i()->wait(CREATION_DELAY - (endDelay - startDelay));
                 startDelay = SDL_GetTicks();
             }
 
@@ -167,7 +170,7 @@ void LabirinthManager::randomizedKruskal() {
                 GameEngine::i()->draw();
                 GameEngine::i()->drawGUI();
                 endDelay = SDL_GetTicks();
-                SDL_Delay(CREATION_DELAY - (endDelay - startDelay));
+				GameEngine::i()->wait(CREATION_DELAY - (endDelay - startDelay));
                 startDelay = SDL_GetTicks();
             }
 
