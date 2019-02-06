@@ -220,6 +220,7 @@ void GameEngine::update() {
 			clearLevel();
 			generateNextLevel();
 			AudioManager::i()->playMusic(BACKGROUND_MUSIC);
+            AudioManager::i()->resumeMusic();
 		}
 
     }
