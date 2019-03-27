@@ -456,6 +456,7 @@ void GameEngine::clearLevel()
 void GameEngine::generateNextLevel() {
 
 	enemiesToSpawn = 6 + level;
+    currNumOfEnemies = 0;
 
 	std::string levelName = "Levels/level" + std::to_string(++level);
 	std::cout << "Loading level \"" << levelName << '\"' << std::endl;
