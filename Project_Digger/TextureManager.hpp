@@ -14,7 +14,7 @@ class TextureManager {
 public:
 
     // Get the TextureManager instance
-	static TextureManager* i();
+    static TextureManager* i();
     TextureManager(const TextureManager&) = delete;
     TextureManager& operator=(const TextureManager&) = delete;
     ~TextureManager();

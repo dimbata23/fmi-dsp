@@ -13,7 +13,7 @@ class TextManager {
 public:
 
     // Get the TextManager instance
-	static TextManager* i();
+    static TextManager* i();
     TextManager(const TextManager& other) = delete;
     TextManager& operator=(const TextManager& other) = delete;
     ~TextManager();

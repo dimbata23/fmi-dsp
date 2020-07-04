@@ -54,12 +54,12 @@ void Enemy::update() {
     x = round(realX);
     y = round(realY);
 
-	Gold* collidedGold = GameEngine::i()->getGoldAt((y - GRID_START + (GRID_SIZE / 2)) / GRID_SIZE, (x + (GRID_SIZE / 2)) / GRID_SIZE);
-	if (collidedGold)
-		GameEngine::i()->destroyObject(collidedGold);
+    Gold* collidedGold = GameEngine::i()->getGoldAt((y - GRID_START + (GRID_SIZE / 2)) / GRID_SIZE, (x + (GRID_SIZE / 2)) / GRID_SIZE);
+    if (collidedGold)
+        GameEngine::i()->destroyObject(collidedGold);
 
-	if (distance(GameEngine::i()->getPlayer()->getX(), GameEngine::i()->getPlayer()->getY(), x, y) < GRID_SIZE / 2) {
-		GameEngine::i()->startLabirinth(this->id);
+    if (distance(GameEngine::i()->getPlayer()->getX(), GameEngine::i()->getPlayer()->getY(), x, y) < GRID_SIZE / 2) {
+        GameEngine::i()->startLabirinth(this->id);
     }
 
     Object::update();
@@ -150,7 +150,7 @@ void Enemy::findPathBFS() {
 
 void Enemy::kill() {
 
-	GameEngine::i()->getPlayer()->increaseScore(ON_KILL_SCORE);
-	GameEngine::i()->destroyObject(this);
+    GameEngine::i()->getPlayer()->increaseScore(ON_KILL_SCORE);
+    GameEngine::i()->destroyObject(this);
 
 }

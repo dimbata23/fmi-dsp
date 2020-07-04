@@ -7,7 +7,7 @@ static size_t currId = 1;
 Object::Object(int x, int y, int xOrigin, int yOrigin, SDL_Texture* texture, SDL_Renderer* renderer, const ObjectType& type) :
     id(getNextId()),
     type(type),
-	x(x),
+    x(x),
     y(y),
     sprite(texture),
     renderer(renderer)

@@ -13,7 +13,7 @@ public:
     virtual void draw();
 
     void findPathBFS();
-	void kill();
+    void kill();
 
 private:
 

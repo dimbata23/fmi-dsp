@@ -27,14 +27,14 @@ public:
 
     LabirinthMode update();
     void draw();
-	void drawGUI();
+    void drawGUI();
     void createLabirinth();
     void createFinish();
     bool canMove(int x, int y, const Direction& dir) const;
 
 private:
 
-	void clear();
+    void clear();
     void randomizedKruskal();
 
 private:
@@ -45,7 +45,7 @@ private:
     int finishX;
     int finishY;
     size_t startTime;
-	bool playerCanMove;
+    bool playerCanMove;
 
 };
 

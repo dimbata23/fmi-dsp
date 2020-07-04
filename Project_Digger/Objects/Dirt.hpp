@@ -5,10 +5,10 @@
 //#include <iostream>
 
 enum Side {
-	LEFT_SIDE,
-	TOP_SIDE,
-	RIGHT_SIDE,
-	BOTTOM_SIDE
+    LEFT_SIDE,
+    TOP_SIDE,
+    RIGHT_SIDE,
+    BOTTOM_SIDE
 };
 
 
@@ -23,18 +23,18 @@ public:
 
     void setPassable(const Side& dir, bool b) { passable[dir] = b; }
     bool isPassable(const Side& dir) const { return passable[dir]; }
-	bool isEmpty() const { return empty; }
-	void setEmpty() { empty = true; }
+    bool isEmpty() const { return empty; }
+    void setEmpty() { empty = true; }
 
-	int emptyPercent() const { return empty ? 100 : (100 - (100*(destRect.w * destRect.h))/(GRID_SIZE * GRID_SIZE)); }
+    int emptyPercent() const { return empty ? 100 : (100 - (100*(destRect.w * destRect.h))/(GRID_SIZE * GRID_SIZE)); }
 
 private:
 
-	SDL_Rect borderSrcRect[4];
-	SDL_Rect borderDestRect[4];
-	SDL_Rect defaultBorderSrcRect[4];
-	SDL_Rect defaultDestRect;
-	SDL_Rect defaultSrcRect;
+    SDL_Rect borderSrcRect[4];
+    SDL_Rect borderDestRect[4];
+    SDL_Rect defaultBorderSrcRect[4];
+    SDL_Rect defaultDestRect;
+    SDL_Rect defaultSrcRect;
     SDL_Texture* wallSprite;
     // Which side the enemies can pass through
     bool passable[4];

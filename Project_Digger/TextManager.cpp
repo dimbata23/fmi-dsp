@@ -29,11 +29,11 @@ TextManager::~TextManager() {
 void TextManager::setFont(const std::string& text, int size) {
 
     std::string key = text + std::to_string(size);
-	FontsPoolType::iterator it = fonts.find(key);
+    FontsPoolType::iterator it = fonts.find(key);
     if (it == fonts.end()) {
         this->font = TTF_OpenFont(text.c_str(), size);
-		if (!this->font)
-			std::cerr << "[ERROR] Unable to load \"" << text << "\"! Error: " << TTF_GetError() << std::endl;
+        if (!this->font)
+            std::cerr << "[ERROR] Unable to load \"" << text << "\"! Error: " << TTF_GetError() << std::endl;
         fonts.insert(std::make_pair(key, this->font));
     } else {
         this->font = it->second;

@@ -13,19 +13,19 @@ int main() {
 
         frameStart = SDL_GetTicks();
 
-		GameEngine::i()->handleEvents();
-		GameEngine::i()->update();
-		GameEngine::i()->draw();
-		GameEngine::i()->drawGUI();
+        GameEngine::i()->handleEvents();
+        GameEngine::i()->update();
+        GameEngine::i()->draw();
+        GameEngine::i()->drawGUI();
 
         frameTime = SDL_GetTicks() - frameStart;
 
         if (frameTime < FRAME_DELAY)
-			GameEngine::i()->wait(FRAME_DELAY - frameTime);
+            GameEngine::i()->wait(FRAME_DELAY - frameTime);
 
     }
 
-	GameEngine::release();
+    GameEngine::release();
 
     return 0;
 }

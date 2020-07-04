@@ -13,9 +13,9 @@ const char* WINDOW_TITLE        = "Project Digger";
 const char* DIRT_SPRITE         = "Sprites/dirt2_64x64.png";
 const char* DIRT_BORDER_SPRITE  = "Sprites/dirt_border.png";
 const char* DIGGER_SPRITE       = "Sprites/digger.png";
-const char* EMERALD_SPRITE		= "Sprites/emerald.png";
-const char* BAG_SPRITE			= "Sprites/bag.png";
-const char* ENEMY_SPRITE		= "Sprites/enemy.png";
+const char* EMERALD_SPRITE        = "Sprites/emerald.png";
+const char* BAG_SPRITE            = "Sprites/bag.png";
+const char* ENEMY_SPRITE        = "Sprites/enemy.png";
 
 const char* SCORE_FONT  = "Fonts/Score.ttf";
 const int   FONT_SIZE   = 45;
@@ -41,26 +41,26 @@ GameEngine* GameEngine::instance = nullptr;
 
 
 GameEngine* GameEngine::i() {
-	return instance ? instance : instance = new GameEngine(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT);
+    return instance ? instance : instance = new GameEngine(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WIDTH, HEIGHT);
 }
 
 
 GameEngine::GameEngine(const char* title, int x, int y, int width, int height, bool fullscreen) :
-	field({nullptr, }),
-	emeralds({nullptr, }),
-	gold({nullptr, }),
+    field({nullptr, }),
+    emeralds({nullptr, }),
+    gold({nullptr, }),
     window(nullptr),
     renderer(nullptr),
-	player(nullptr),
-	spawner(nullptr),
-	enemiesToSpawn(0),
-	currNumOfEnemies(0),
+    player(nullptr),
+    spawner(nullptr),
+    enemiesToSpawn(0),
+    currNumOfEnemies(0),
     level(0),
     lab(nullptr),
     labirinthMode(LAB_OFF),
     currLabEnemyId(0),
-	numberOfEmeralds(0),
-	waitTime(0),
+    numberOfEmeralds(0),
+    waitTime(0),
     running(false)
 {
 
@@ -99,15 +99,15 @@ GameEngine::GameEngine(const char* title, int x, int y, int width, int height, b
 
     std::cout << "Font system sucessfully initialized." << std::endl;
 
-	if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 512) != 0) {
-		std::cout << "Couldn't initialize audio system! Error: " << Mix_GetError() << std::endl;
-		clean();
-		return;
-	}
+    if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 512) != 0) {
+        std::cout << "Couldn't initialize audio system! Error: " << Mix_GetError() << std::endl;
+        clean();
+        return;
+    }
 
-	AudioManager::i()->playMusic(BACKGROUND_MUSIC);
+    AudioManager::i()->playMusic(BACKGROUND_MUSIC);
 
-	std::cout << "Audio system sucessfully initialized." << std::endl;
+    std::cout << "Audio system sucessfully initialized." << std::endl;
 
     running = true;
 
@@ -128,29 +128,29 @@ GameEngine::~GameEngine() {
 
 void GameEngine::handleEvents() {
 
-	SDL_Event event;
-	SDL_PollEvent(&event);
+    SDL_Event event;
+    SDL_PollEvent(&event);
 
-	switch (event.type) {
+    switch (event.type) {
 
-	case SDL_QUIT:
-		running = false;
-		break;
+    case SDL_QUIT:
+        running = false;
+        break;
 
-	default:
-		break;
+    default:
+        break;
 
-	}
+    }
 
 }
 
 
 void GameEngine::update() {
 
-	InputHandler::update();
+    InputHandler::update();
 
-	if (SDL_GetTicks() < waitTime)
-		return;
+    if (SDL_GetTicks() < waitTime)
+        return;
 
     if (labirinthMode == LAB_START) {
 
@@ -181,8 +181,8 @@ void GameEngine::update() {
             case LAB_LOST:
                 player->kill();
                 break;
-			case LAB_OFF:
-				return;
+            case LAB_OFF:
+                return;
             default:
                 break;
         }
@@ -211,17 +211,17 @@ void GameEngine::update() {
             }
         }
 
-		if (numberOfEmeralds == 0) {
-			draw();
-			drawGUI();
-			AudioManager::i()->pauseMusic();
-			AudioManager::i()->playSoundEffect(VICTORY_SOUND);
-			GameEngine::i()->wait(2000);
-			clearLevel();
-			generateNextLevel();
-			AudioManager::i()->playMusic(BACKGROUND_MUSIC);
+        if (numberOfEmeralds == 0) {
+            draw();
+            drawGUI();
+            AudioManager::i()->pauseMusic();
+            AudioManager::i()->playSoundEffect(VICTORY_SOUND);
+            GameEngine::i()->wait(2000);
+            clearLevel();
+            generateNextLevel();
+            AudioManager::i()->playMusic(BACKGROUND_MUSIC);
             AudioManager::i()->resumeMusic();
-		}
+        }
 
     }
 
@@ -286,16 +286,16 @@ void GameEngine::drawGUI() {
         SDL_RenderCopy(renderer, BG_BORDER_TEXTURE, &GUI_BORDER_SRC_RECT, &dest);
     }
 
-	TextManager::i()->drawText(player->getScoreString().c_str(), 9, -4, renderer);
+    TextManager::i()->drawText(player->getScoreString().c_str(), 9, -4, renderer);
 
-	SDL_Rect livesDest = { LIVES_X_POS, LIVES_Y_POS, LIVES_SIZE, LIVES_SIZE };
-	for (size_t i = 0; i < player->getLives(); ++i) {
-		livesDest.x = LIVES_X_POS + LIVES_SIZE * i;
-		SDL_RenderCopy(renderer, player->getSprite(), &player->getSrcRect(), &livesDest);
-	}
+    SDL_Rect livesDest = { LIVES_X_POS, LIVES_Y_POS, LIVES_SIZE, LIVES_SIZE };
+    for (size_t i = 0; i < player->getLives(); ++i) {
+        livesDest.x = LIVES_X_POS + LIVES_SIZE * i;
+        SDL_RenderCopy(renderer, player->getSprite(), &player->getSrcRect(), &livesDest);
+    }
 
-	if (lab)
-		lab->drawGUI();
+    if (lab)
+        lab->drawGUI();
 
     SDL_RenderPresent(renderer);
 
@@ -306,23 +306,23 @@ void GameEngine::release() {
 
     TextManager::release();
     TextureManager::release();
-	AudioManager::release();
-	delete instance;
-	instance = nullptr;
+    AudioManager::release();
+    delete instance;
+    instance = nullptr;
 
 }
 
 
 void GameEngine::wait(size_t miliseconds)
 {
-	draw();
-	drawGUI();
-	size_t time = SDL_GetTicks();
-	size_t endTime = time + miliseconds;
-	while (time < endTime) {
-		time = SDL_GetTicks();
-		handleEvents();
-	}
+    draw();
+    drawGUI();
+    size_t time = SDL_GetTicks();
+    size_t endTime = time + miliseconds;
+    while (time < endTime) {
+        time = SDL_GetTicks();
+        handleEvents();
+    }
 }
 
 
@@ -332,9 +332,9 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, const cha
     SDL_Texture* tex = nullptr;
     SDL_Texture* tex2 = nullptr;
     if (sprite)
-    	tex = TextureManager::i()->sprite(sprite, renderer);
+        tex = TextureManager::i()->sprite(sprite, renderer);
     if (sprite2)
-    	tex2 = TextureManager::i()->sprite(sprite2, renderer);
+        tex2 = TextureManager::i()->sprite(sprite2, renderer);
 
     switch(type) {
 
@@ -347,19 +347,19 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, const cha
         break;
 
     case TUNNEL:
-    	result = new Dirt(x, y, true, tex, tex2, renderer);
-    	break;
+        result = new Dirt(x, y, true, tex, tex2, renderer);
+        break;
 
     case DIGGER:
         result = new Digger(x, y, tex, renderer);
         if (!player)
             player = dynamic_cast<Digger*>(result);
-		else
-			objects.push_back(result);
+        else
+            objects.push_back(result);
         break;
 
     case EMERALD:
-		++numberOfEmeralds;
+        ++numberOfEmeralds;
         emeralds[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Emerald*>(result = new Emerald(x, y, tex, renderer));
         break;
 
@@ -376,7 +376,7 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, const cha
         break;
 
     case SPAWNER:
-		result = new Spawner(x, y, tex, renderer);
+        result = new Spawner(x, y, tex, renderer);
         break;
 
     case FIREBALL:
@@ -385,8 +385,8 @@ Object* GameEngine::createObject(const ObjectType& type, int x, int y, const cha
 
     }
 
-	if (type == BAG || type == ENEMY || type == SPAWNER || type == FIREBALL)
-		objects.push_back(result);
+    if (type == BAG || type == ENEMY || type == SPAWNER || type == FIREBALL)
+        objects.push_back(result);
 
     return result;
 
@@ -400,70 +400,70 @@ void GameEngine::clean() {
 
     std::cout << std::endl << "Deleting objects..." << std::endl;
     
-	clearLevel();
-	delete player;
-	player = nullptr;
+    clearLevel();
+    delete player;
+    player = nullptr;
 
-	std::cout << "Destroying window..." << std::endl;
+    std::cout << "Destroying window..." << std::endl;
     SDL_DestroyWindow(window);
-	std::cout << "Destroying game renderer..." << std::endl;
+    std::cout << "Destroying game renderer..." << std::endl;
     SDL_DestroyRenderer(renderer);
     
-	std::cout << "Closing audio system..." << std::endl;
-	Mix_CloseAudio();
-	std::cout << "Closing font system..." << std::endl;
+    std::cout << "Closing audio system..." << std::endl;
+    Mix_CloseAudio();
+    std::cout << "Closing font system..." << std::endl;
     TTF_Quit();
-	std::cout << "Closing game engine..." << std::endl;
+    std::cout << "Closing game engine..." << std::endl;
     SDL_Quit();
-	std::cout << "Done!" << std::endl;
+    std::cout << "Done!" << std::endl;
 
 }
 
 
 void GameEngine::clearLevel()
 {
-	for (auto& obj : objects) {
-		delete obj;
-		obj = nullptr;
-	}
-	for (auto& arr : emeralds) {
-		for (auto& em : arr) {
-			if (em) {
-				delete em;
-				em = nullptr;
-			}
-		}
-	}
-	for (auto& arr : gold) {
-		for (auto& el : arr) {
-			if (el) {
-				delete el;
-				el = nullptr;
-			}
-		}
-	}
-	for (auto& arr : field) {
-		for (auto& el : arr) {
-			if (el) {
-				delete el;
-				el = nullptr;
-			}
-		}
-	}
+    for (auto& obj : objects) {
+        delete obj;
+        obj = nullptr;
+    }
+    for (auto& arr : emeralds) {
+        for (auto& em : arr) {
+            if (em) {
+                delete em;
+                em = nullptr;
+            }
+        }
+    }
+    for (auto& arr : gold) {
+        for (auto& el : arr) {
+            if (el) {
+                delete el;
+                el = nullptr;
+            }
+        }
+    }
+    for (auto& arr : field) {
+        for (auto& el : arr) {
+            if (el) {
+                delete el;
+                el = nullptr;
+            }
+        }
+    }
 }
 
 
 void GameEngine::generateNextLevel() {
 
-	enemiesToSpawn = 6 + level;
+    enemiesToSpawn = 6 + level;
     currNumOfEnemies = 0;
 
-	std::string levelName = "Levels/level" + std::to_string(++level);
-	std::cout << "Loading level \"" << levelName << '\"' << std::endl;
+    std::string levelName = "Levels/level" + std::to_string(++level);
+    std::cout << "Loading level \"" << levelName << '\"' << std::endl;
     std::ifstream in(levelName);
     if (!in) {
         std::cout << "No next level!" << std::endl;
-		running = false;
+        running = false;
         return;
     }
 
@@ -476,28 +476,28 @@ void GameEngine::generateNextLevel() {
                 field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
                 break;
             case '0':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
-				break;
+                field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
+                break;
             case 'g':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
+                field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
                 emeralds[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Emerald*>(createObject(EMERALD, x, y, EMERALD_SPRITE));
                 break;
             case 'b':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
+                field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(DIRT, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
                 createObject(BAG, x, y, BAG_SPRITE);
                 break;
             case 'e':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
+                field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
                 spawner = dynamic_cast<Spawner*>(createObject(SPAWNER, x, y, nullptr));
-            	break;
+                break;
             case 'p':
-            	field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
-				if (!player) {
-            		createObject(DIGGER, x, y, DIGGER_SPRITE);
-				} else {
-					player->setPosition(x, y);
-				}
-            	break;
+                field[y / GRID_SIZE][x / GRID_SIZE] = dynamic_cast<Dirt*>(createObject(TUNNEL, x, y, DIRT_SPRITE, DIRT_BORDER_SPRITE));
+                if (!player) {
+                    createObject(DIGGER, x, y, DIGGER_SPRITE);
+                } else {
+                    player->setPosition(x, y);
+                }
+                break;
             default:
                 break;
             }
@@ -513,24 +513,24 @@ void GameEngine::generateNextLevel() {
 
 void GameEngine::setupTunnels() {
 
-	for (int i = 0; i < GRID_ROWS; ++i) {
-		for (int j = 0; j < GRID_COLS; ++j) {
-			if (field[i][j] && i > 0 && field[i - 1][j] && field[i - 1][j]->getType() == TUNNEL && field[i][j]->getType() == TUNNEL)
-				field[i][j]->setPassable(TOP_SIDE, true);
-			if (field[i][j] && j > 0 && field[i][j - 1] && field[i][j - 1]->getType() == TUNNEL && field[i][j]->getType() == TUNNEL)
-				field[i][j]->setPassable(LEFT_SIDE, true);
-			if (field[i][j] && i < GRID_ROWS - 1 && field[i + 1][j] && field[i + 1][j]->getType() == TUNNEL && field[i][j]->getType() == TUNNEL)
-				field[i][j]->setPassable(BOTTOM_SIDE, true);
-			if (field[i][j] && j < GRID_COLS - 1 && field[i][j + 1] && field[i][j + 1]->getType() == TUNNEL && field[i][j]->getType() == TUNNEL)
-				field[i][j]->setPassable(RIGHT_SIDE, true);
-		}
-	}
+    for (int i = 0; i < GRID_ROWS; ++i) {
+        for (int j = 0; j < GRID_COLS; ++j) {
+            if (field[i][j] && i > 0 && field[i - 1][j] && field[i - 1][j]->getType() == TUNNEL && field[i][j]->getType() == TUNNEL)
+                field[i][j]->setPassable(TOP_SIDE, true);
+            if (field[i][j] && j > 0 && field[i][j - 1] && field[i][j - 1]->getType() == TUNNEL && field[i][j]->getType() == TUNNEL)
+                field[i][j]->setPassable(LEFT_SIDE, true);
+            if (field[i][j] && i < GRID_ROWS - 1 && field[i + 1][j] && field[i + 1][j]->getType() == TUNNEL && field[i][j]->getType() == TUNNEL)
+                field[i][j]->setPassable(BOTTOM_SIDE, true);
+            if (field[i][j] && j < GRID_COLS - 1 && field[i][j + 1] && field[i][j + 1]->getType() == TUNNEL && field[i][j]->getType() == TUNNEL)
+                field[i][j]->setPassable(RIGHT_SIDE, true);
+        }
+    }
 
 }
 
 
 void GameEngine::destroyObject(Emerald* em) {
-	--numberOfEmeralds;
+    --numberOfEmeralds;
     emeralds[(em->getY() - GRID_START) / GRID_SIZE][em->getX() / GRID_SIZE] = nullptr;
     delete em;
 }
@@ -544,17 +544,17 @@ void GameEngine::destroyObject(Gold* el) {
 
 void GameEngine::destroyObject(Object* obj) {
 
-	switch (obj->getType()) {
-		case EMERALD:
-			destroyObject(dynamic_cast<Emerald*>(obj));
-			break;
-		case GOLD:
-			destroyObject(dynamic_cast<Gold*>(obj));
-			break;
-		default:
-			destroyObject(obj->getId());
-			break;
-	}
+    switch (obj->getType()) {
+        case EMERALD:
+            destroyObject(dynamic_cast<Emerald*>(obj));
+            break;
+        case GOLD:
+            destroyObject(dynamic_cast<Gold*>(obj));
+            break;
+        default:
+            destroyObject(obj->getId());
+            break;
+    }
 
 }
 
@@ -569,18 +569,18 @@ void GameEngine::destroyObject(size_t id) {
         delete dynamic_cast<Bag*>(*o);
         *o = nullptr;
     } else if ((*o)->getType() == ENEMY) {
-		delete dynamic_cast<Enemy*>(*o);
-		*o = nullptr;
-		--currNumOfEnemies;
+        delete dynamic_cast<Enemy*>(*o);
+        *o = nullptr;
+        --currNumOfEnemies;
     } else if ((*o)->getType() == SPAWNER) {
-		delete dynamic_cast<Spawner*>(*o);
-		*o = nullptr;
-	} else if ((*o)->getType() == FIREBALL) {
-		delete dynamic_cast<Fireball*>(*o);
-		*o = nullptr;
+        delete dynamic_cast<Spawner*>(*o);
+        *o = nullptr;
+    } else if ((*o)->getType() == FIREBALL) {
+        delete dynamic_cast<Fireball*>(*o);
+        *o = nullptr;
     } else if ((*o)->getType() == DIGGER) {
-		delete dynamic_cast<Digger*>(*o);
-		*o = nullptr;
+        delete dynamic_cast<Digger*>(*o);
+        *o = nullptr;
     }
 
 }
@@ -588,15 +588,15 @@ void GameEngine::destroyObject(size_t id) {
 
 Object* GameEngine::getAtPosition(const ObjectType& type, int x, int y) {
 
-	if (type == DIGGER && x >= player->getX() && x < player->getX() + GRID_SIZE
-		&& y >= player->getY() && y < player->getY() + GRID_SIZE)
-			return player;
+    if (type == DIGGER && x >= player->getX() && x < player->getX() + GRID_SIZE
+        && y >= player->getY() && y < player->getY() + GRID_SIZE)
+            return player;
 
     if (type == ENEMY || type == BAG || type == SPAWNER)
         for (auto& i : objects)
             if (i && i->getType() == type && x >= i->getX() && x < i->getX() + GRID_SIZE
-				&& y >= i->getY() && y < i->getY() + GRID_SIZE)
-					return i;
+                && y >= i->getY() && y < i->getY() + GRID_SIZE)
+                    return i;
 
     return nullptr;
 
@@ -618,33 +618,33 @@ ObjectPoolType::iterator GameEngine::getObjectById(size_t id) {
 
 void GameEngine::destroyEnemies() {
 
-	for (auto obj : objects)
-		if (obj && obj->getType() == ENEMY)
-			destroyObject(obj);
+    for (auto obj : objects)
+        if (obj && obj->getType() == ENEMY)
+            destroyObject(obj);
 
-	currNumOfEnemies = 0;
-	enemiesToSpawn = 6 + level;
-	spawner->setActive();
+    currNumOfEnemies = 0;
+    enemiesToSpawn = 6 + level;
+    spawner->setActive();
 
 }
 
 
 bool GameEngine::spawnEnemy(int x, int y) {
 
-	if (enemiesToSpawn == 0) {
-		// TODO: Create cherry
-		spawner->setInactive();
-		return false;
-	}
+    if (enemiesToSpawn == 0) {
+        // TODO: Create cherry
+        spawner->setInactive();
+        return false;
+    }
 
-	if (currNumOfEnemies < MAX_ENEMIES_ONSCREEN) {
-		createObject(ENEMY, x, y, ENEMY_SPRITE);
-		--enemiesToSpawn;
-		++currNumOfEnemies;
-		return true;
-	}
+    if (currNumOfEnemies < MAX_ENEMIES_ONSCREEN) {
+        createObject(ENEMY, x, y, ENEMY_SPRITE);
+        --enemiesToSpawn;
+        ++currNumOfEnemies;
+        return true;
+    }
 
-	return false;
+    return false;
 
 }
 

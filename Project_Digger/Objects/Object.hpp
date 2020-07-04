@@ -14,7 +14,7 @@ enum ObjectType {
     ANY = -1,
     DIGGER,
     DIRT,
-	TUNNEL,
+    TUNNEL,
     EMERALD,
     BAG,
     GOLD,
@@ -24,11 +24,11 @@ enum ObjectType {
 };
 
 enum Direction {
-	D_NONE = -1,
-	D_RIGHT,
-	D_DOWN,
-	D_LEFT,
-	D_UP
+    D_NONE = -1,
+    D_RIGHT,
+    D_DOWN,
+    D_LEFT,
+    D_UP
 };
 
 class Object {
@@ -43,9 +43,9 @@ public:
     virtual void update();
     virtual void draw();
 
-	SDL_Texture* getSprite() const { return sprite; }
-	SDL_Rect& getSrcRect() { return srcRect; }
-	SDL_Rect& getDestRect() { return destRect; }
+    SDL_Texture* getSprite() const { return sprite; }
+    SDL_Rect& getSrcRect() { return srcRect; }
+    SDL_Rect& getDestRect() { return destRect; }
     ObjectType getType() const { return type; }
     size_t getId() const { return id; }
     int getX() const { return x; }

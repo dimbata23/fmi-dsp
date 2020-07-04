@@ -13,8 +13,8 @@ Bag::Bag(int x, int y, SDL_Texture* texture, SDL_Renderer* renderer) :
     moveDir(D_NONE),
     time(DEFAULT_WOBBLE_FRAMES),
     startFallY(y),
-	realX(x),
-	excited(false),
+    realX(x),
+    excited(false),
     falling(false)
 {}
 
@@ -33,13 +33,13 @@ void Bag::update() {
 
     else if (falling) {
 
-		Digger* o = dynamic_cast<Digger*>(GameEngine::i()->getAtPosition(DIGGER, x + GRID_SIZE/2, y + GRID_SIZE - 1));
-		if (o)
-			o->kill();
+        Digger* o = dynamic_cast<Digger*>(GameEngine::i()->getAtPosition(DIGGER, x + GRID_SIZE/2, y + GRID_SIZE - 1));
+        if (o)
+            o->kill();
 
-		Enemy* e = dynamic_cast<Enemy*>(GameEngine::i()->getAtPosition(ENEMY, x + GRID_SIZE/2, y + GRID_SIZE - 1));
-		if (e)
-			e->kill();
+        Enemy* e = dynamic_cast<Enemy*>(GameEngine::i()->getAtPosition(ENEMY, x + GRID_SIZE/2, y + GRID_SIZE - 1));
+        if (e)
+            e->kill();
 
         destRect.h = GRID_SIZE + FALL_STRETCH;
         destRect.x = x + FALL_STRETCH / 2;
@@ -49,7 +49,7 @@ void Bag::update() {
 
         if (y >= GRID_SIZE * GRID_ROWS + GRID_START - GRID_SIZE) {
             falling = false;
-			y = GRID_SIZE * GRID_ROWS + GRID_START - GRID_SIZE;
+            y = GRID_SIZE * GRID_ROWS + GRID_START - GRID_SIZE;
         } else {
             Dirt* d = GameEngine::i()->getDirtAt((y - GRID_START) / GRID_SIZE + 1, x / GRID_SIZE);
             if (!d->isEmpty()) {
@@ -84,16 +84,16 @@ void Bag::update() {
             realX += MOVE_SPEED;
         }
 
-		x = round(realX);
+        x = round(realX);
 
-		// Fix for uneven movement
-		if (x % 2 != 0)
-			x += (moveDir == D_LEFT) ? 1 : -1;
+        // Fix for uneven movement
+        if (x % 2 != 0)
+            x += (moveDir == D_LEFT) ? 1 : -1;
         
-		if (x < 0)
-			x = 0;
-		if (x > GRID_COLS * GRID_SIZE - GRID_SIZE)
-			x = GRID_COLS * GRID_SIZE - GRID_SIZE;
+        if (x < 0)
+            x = 0;
+        if (x > GRID_COLS * GRID_SIZE - GRID_SIZE)
+            x = GRID_COLS * GRID_SIZE - GRID_SIZE;
 
         if (x % GRID_SIZE == 0) {
             moveDir = D_NONE;
@@ -114,7 +114,7 @@ void Bag::update() {
         destRect.w = GRID_SIZE;
     }
 
-	destRect.y = y;
+    destRect.y = y;
 
 }
 
@@ -139,25 +139,25 @@ void Bag::releaseCoins() {
 
 bool Bag::canMove(const Direction dir) const {
 
-	if (falling || excited)
-		return false;
+    if (falling || excited)
+        return false;
 
-	Bag* adj = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, (x + ((dir == D_LEFT) ? -1 : GRID_SIZE)), y));
-	if (adj)
-		return adj->canMove(dir);
+    Bag* adj = dynamic_cast<Bag*>(GameEngine::i()->getAtPosition(BAG, (x + ((dir == D_LEFT) ? -1 : GRID_SIZE)), y));
+    if (adj)
+        return adj->canMove(dir);
     
     Object* o = GameEngine::i()->getAtPosition(DIGGER, x + ((dir == D_LEFT) ? -1 : GRID_SIZE), y);
     if (o)
         return false;
 
     Enemy* e = dynamic_cast<Enemy*>(GameEngine::i()->getAtPosition(ENEMY, x + ((dir == D_LEFT) ? -1 : GRID_SIZE), y));
-	if (e)
-		return false;
+    if (e)
+        return false;
 
-	if (dir == D_LEFT && x > 0)
-		return true;
-	if (dir == D_RIGHT && x < GRID_COLS * GRID_SIZE - GRID_SIZE)
-		return true;
+    if (dir == D_LEFT && x > 0)
+        return true;
+    if (dir == D_RIGHT && x < GRID_COLS * GRID_SIZE - GRID_SIZE)
+        return true;
 
-	return false;
+    return false;
 }

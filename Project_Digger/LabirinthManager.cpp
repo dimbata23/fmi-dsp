@@ -23,7 +23,7 @@ LabirinthManager::LabirinthManager() :
     finishX(-GRID_SIZE),
     finishY(-GRID_SIZE),
     startTime(SDL_GetTicks()),
-	playerCanMove(false)
+    playerCanMove(false)
 {}
 
 
@@ -52,8 +52,8 @@ void LabirinthManager::clear() {
 
 LabirinthMode LabirinthManager::update() {
 
-	if (!GameEngine::i()->isRunning())
-		return LAB_OFF;
+    if (!GameEngine::i()->isRunning())
+        return LAB_OFF;
 
     player->update(true);
     if (distance(player->getX(), player->getY(), finishX, finishY) <= GRID_SIZE / 2)
@@ -81,14 +81,14 @@ void LabirinthManager::draw() {
 
 void LabirinthManager::drawGUI() {
 
-	if (playerCanMove) {
-		size_t timeLeft = (SONG_LENGTH - (SDL_GetTicks() - startTime));
-		if (timeLeft > 6000) {
-			TextManager::i()->drawText(std::to_string(timeLeft / 1000).c_str(), GRID_SIZE*GRID_COLS / 2, -4, GameEngine::i()->getRenderer());
+    if (playerCanMove) {
+        size_t timeLeft = (SONG_LENGTH - (SDL_GetTicks() - startTime));
+        if (timeLeft > 6000) {
+            TextManager::i()->drawText(std::to_string(timeLeft / 1000).c_str(), GRID_SIZE*GRID_COLS / 2, -4, GameEngine::i()->getRenderer());
         } else {
             std::string leftStr = std::to_string(timeLeft / 1000.0);
             leftStr.resize(4);
-			TextManager::i()->drawText(leftStr.c_str(), GRID_SIZE*GRID_COLS / 2 - 8, -4, GameEngine::i()->getRenderer(), {200, 100, 100, 255});
+            TextManager::i()->drawText(leftStr.c_str(), GRID_SIZE*GRID_COLS / 2 - 8, -4, GameEngine::i()->getRenderer(), {200, 100, 100, 255});
         }
     }
 
@@ -108,9 +108,9 @@ void LabirinthManager::createLabirinth() {
     player = dynamic_cast<Digger*>(GameEngine::i()->createObject(DIGGER, LABIRINTH_START_X, LABIRINTH_START_Y, PLAYER_SPRITE));
 
     randomizedKruskal();
-	createFinish();
+    createFinish();
 
-	playerCanMove = true;
+    playerCanMove = true;
 
 }
 
@@ -154,7 +154,7 @@ void LabirinthManager::randomizedKruskal() {
                 GameEngine::i()->draw();
                 GameEngine::i()->drawGUI();
                 endDelay = SDL_GetTicks();
-				GameEngine::i()->wait(CREATION_DELAY - (endDelay - startDelay));
+                GameEngine::i()->wait(CREATION_DELAY - (endDelay - startDelay));
                 startDelay = SDL_GetTicks();
             }
 
@@ -163,7 +163,7 @@ void LabirinthManager::randomizedKruskal() {
                 GameEngine::i()->draw();
                 GameEngine::i()->drawGUI();
                 endDelay = SDL_GetTicks();
-				GameEngine::i()->wait(CREATION_DELAY - (endDelay - startDelay));
+                GameEngine::i()->wait(CREATION_DELAY - (endDelay - startDelay));
                 startDelay = SDL_GetTicks();
             }
 
@@ -172,7 +172,7 @@ void LabirinthManager::randomizedKruskal() {
                 GameEngine::i()->draw();
                 GameEngine::i()->drawGUI();
                 endDelay = SDL_GetTicks();
-				GameEngine::i()->wait(CREATION_DELAY - (endDelay - startDelay));
+                GameEngine::i()->wait(CREATION_DELAY - (endDelay - startDelay));
                 startDelay = SDL_GetTicks();
             }
 

@@ -35,7 +35,7 @@ TextureManager::~TextureManager() {
 SDL_Texture* TextureManager::sprite(const char* file, SDL_Renderer* ren) {
 
     SDL_Texture* result = nullptr;
-	TexturesPoolType::iterator it = textures.find(file);
+    TexturesPoolType::iterator it = textures.find(file);
     if (it == textures.end()) {
         result = TextureManager::loadTexture(file, ren);
         textures.insert(std::make_pair(file, result));
