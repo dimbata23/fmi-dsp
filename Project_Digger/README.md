@@ -2,6 +2,32 @@
 
 *Tested with **g++** as well as **VC++**, either with **-std=c++11** and **-std=c++14***
 
+## Preview
+<details>
+  <summary>Shooting</summary>
+
+  ![image](https://drive.google.com/uc?export=view&id=1S9mvtLPLUn8IeS_yJ5iZpQteJ6_4kLTq)
+
+</details>
+<details>
+  <summary>Pushing Bags</summary>
+
+  ![image](https://drive.google.com/uc?export=view&id=14sZrSlVncnCmMWvKfaO8_Jk5zF9U5Wl0)
+
+</details>
+<details>
+  <summary>Collecting Emerals</summary>
+
+  ![image](https://drive.google.com/uc?export=view&id=1luBwbrtDcYGAy3c8uhzdLz_9GxRc8Ju8)
+
+</details>
+<details>
+  <summary>Randomized Kruskal Maze Generation</summary>
+
+  ![image](https://drive.google.com/uc?export=view&id=10rptlZB-rLrg5I-OMwX-YSLv1a9FOBK3)
+
+</details>
+
 ## Initial setup instructions
 **[Linux]**
  - Install **SDL2**, as stated in [their site](https://wiki.libsdl.org/Installation)  
